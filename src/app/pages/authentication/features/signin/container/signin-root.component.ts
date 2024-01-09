@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+
+import { AddressFormComponent } from '@app-shared-forms/components/address-form/address-form.component';
 
 @Component({
   selector: 'app-signin-root',
@@ -6,5 +8,9 @@ import { Component } from '@angular/core';
   styleUrl: './signin-root.component.scss'
 })
 export class SigninRootComponent {
+
+  @ViewChild(AddressFormComponent, { static: true })
+  addressForm!: AddressFormComponent | undefined;
+  
 
 }

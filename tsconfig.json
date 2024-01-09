@@ -28,6 +28,9 @@
       "@environments/*": [
         "environments/*"
       ],
+      "@app-shared-forms/*": [
+        "app/shared/forms/*"
+      ],
     }
   },
   "angularCompilerOptions": {

@@ -1,0 +1,66 @@
+@import 'material-icons/iconfont/material-icons.css';
+
+@import 'primeng/resources/primeng.min.css';
+@import 'primeicons/primeicons.css';
+@import 'primeflex/primeflex.css';
+
+// @import 'quill/dist/quill.snow.css';
+
+body {
+
+    margin: 0;
+
+    --header-height: 7vh;
+    --sidebar-width: 15vw;
+    --margin-top-from-header: 20px;
+
+    color: var(--text-color);
+    background-color: var(--surface-ground);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    @media screen and (max-width: 950px) {
+
+        --header-height: 10vh;
+    }
+}
+
+// --------------------------------------------------------------------------------- custom components
+
+.p-tooltip {
+    font-size: 0.8rem;
+}
+
+// --------------------------------------------------------------------------------- custom themes
+
+._theme_vela-blue {
+    --app-border: 1px solid #304562;
+}
+
+._theme_saga-blue {
+    --app-border: 1px solid #dee2e6;
+}
+
+._theme_dark-purple {
+    --app-border: 1px solid #3f4b5b;
+}
+
+// --------------------------------------------------------------------------------- custom scrollbar
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--surface-ground);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--surface-ground);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}

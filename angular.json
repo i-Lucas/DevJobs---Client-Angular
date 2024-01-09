@@ -40,7 +40,22 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/assets/scss/styles.scss",
+              {
+                "input": "src/assets/scss/theme-saga-blue.scss",
+                "bundleName": "saga-blue",
+                "inject": false
+              },
+              {
+                "input": "src/assets/scss/theme-vela-blue.scss",
+                "bundleName": "vela-blue",
+                "inject": false
+              },
+              {
+                "input": "src/assets/scss/theme-dark-purple.scss",
+                "bundleName": "dark-purple",
+                "inject": false
+              }
             ],
             "scripts": []
           },

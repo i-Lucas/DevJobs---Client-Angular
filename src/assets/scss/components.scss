@@ -1,0 +1,14 @@
+header {
+
+    height: var(--header-height);
+    border-bottom: var(--app-border);
+    background-color: var(--surface-ground);
+
+    position: sticky;
+    top: 0;
+
+    div {
+
+        height: calc(var(--header-height) - 3px); // p-progressbar
+    }
+}

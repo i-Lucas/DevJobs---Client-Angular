@@ -1,24 +1,27 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { Subject, debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { takeUntil } from 'rxjs';
 
 import { HttpService } from '@app-services/http/http.service';
+import { BaseFormService } from '@app-shared-forms/services/base-form.service';
 
 @Component({
   selector: 'app-address-form',
   templateUrl: './address-form.component.html',
 })
-export class AddressFormComponent implements OnInit, OnDestroy {
+export class AddressFormComponent extends BaseFormService implements OnInit, OnDestroy {
 
   protected addressForm!: FormGroup;
-  private destroy$ = new Subject<void>();
 
   @Output() cepExternApiError = new EventEmitter<ApiError>();
 
   constructor(
     private formBuilder: FormBuilder,
     private httpService: HttpService
-  ) { }
+  ) {
+
+    super()
+  }
 
   ngOnInit(): void {
 
@@ -32,37 +35,20 @@ export class AddressFormComponent implements OnInit, OnDestroy {
       state: ['', [Validators.required]],
     })
 
-    if (this.addressForm) {
-      this.cepControlListener();
-    }
+    this.setFormControlListener({
+      formControl: this.addressForm.get('cep'),
+      callbackFunction: formControl => this.getAddressFromCep(formControl)
+    })
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+  private getAddressFromCep(cepControl: AbstractControl) {
 
-  private cepControlListener() {
-
-    const cepControl = this.addressForm.get('cep');
-
-    cepControl?.valueChanges
-      .pipe(
-        debounceTime(800),
-        distinctUntilChanged(),
-        filter(() => cepControl.valid),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(() => this.getAddressFromCep(cepControl.value));
-  }
-
-  private getAddressFromCep(cep: string) {
-
+    const cep = cepControl.value;
     const EXTERNAL_REQUEST: boolean = true;
-    const apiurl = 'https://brasilapi.com.br/api/cep/v1/';
+    const url = 'https://brasilapi.com.br/api/cep/v1/'.concat(cep.replace(/-/g, ''))
 
     this.httpService
-      .get<ApiResponseAddressData>(apiurl.concat(cep.replace(/-/g, "")), EXTERNAL_REQUEST)
+      .get<ApiResponseAddressData>(url, EXTERNAL_REQUEST)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
 

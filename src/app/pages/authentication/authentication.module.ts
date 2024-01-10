@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 import { AuthHeaderComponent } from './components/auth-header/auth-header.component';
 import { AuthRootComponent } from './container/auth-root.component';
 
+import { ProgressBarModule } from 'primeng/progressbar';
+
 @NgModule({
   declarations: [
     AuthHeaderComponent,
@@ -12,6 +14,9 @@ import { AuthRootComponent } from './container/auth-root.component';
   ],
   imports: [
     CommonModule,
+
+    ProgressBarModule,
+
     RouterModule.forChild([
       {
         path: '',

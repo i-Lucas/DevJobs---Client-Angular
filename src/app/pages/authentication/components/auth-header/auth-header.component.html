@@ -1,3 +1,24 @@
 <header class="border-round">
-    <p>auth-header</p>
+
+    <main class="flex justify-content-around align-items-center">
+
+        <section routerLink="/">
+            <h5 class="cursor-pointer">Início</h5>
+        </section>
+
+        <section *ngIf="isRoute('/auth/signup')" routerLink="/auth/signin">
+            <h5 class="cursor-pointer">Entrar</h5>
+        </section>
+
+        <section *ngIf="isRoute('/auth/signin')" routerLink="/auth/signup">
+            <h5 class="cursor-pointer">Cadastrar-se</h5>
+        </section>
+
+    </main>
+
+    @if (loading) {
+
+        <p-progressBar mode="indeterminate" [style]="{ height: '3px' }"></p-progressBar>
+
+    }
 </header>

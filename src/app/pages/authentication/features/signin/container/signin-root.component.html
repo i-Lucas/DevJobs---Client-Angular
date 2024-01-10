@@ -1,5 +1,6 @@
 <section class="w-8 m-auto">
-    <app-address-form />
+    
+    <app-address-form (cepExternApiError)="onCepExternApiError($event)" />
 
     <button [disabled]="addressForm?.getForm()?.invalid" pButton label="Avançar" icon="pi pi-arrow-right"
         class="w-full mt-3 mb-1 p-button-primary"></button>

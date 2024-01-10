@@ -12,5 +12,8 @@ export class SigninRootComponent {
   @ViewChild(AddressFormComponent, { static: true })
   addressForm!: AddressFormComponent | undefined;
   
+  protected onCepExternApiError(error: ApiError) {
+    console.log(error.message);
+  }
 
 }

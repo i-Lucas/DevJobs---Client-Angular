@@ -1,11 +1,77 @@
-<p>company-signup works!</p>
+<main class="p-4 flex justify-content-center align-items-center">
+    <div class="flex flex-column gap-4 w-20rem sm:w-30rem">
 
-<form [formGroup]="accountForm">
+        <div class="text-center mb-5">
+            <h1 class="line-height-3 text-lg font-medium">{{stepMessages[currentStep]}}</h1>
+        </div>
 
-    <label class="block font-medium mb-1">Nome Completo</label>
-    <input formControlName="name" type="text" pInputText class="w-full mb-3">
+        @switch (currentStep) {
 
-    <app-email-form (emailAvailabilityError)="onEmailAvailabilityError($event)" />
-    <app-password-form />
+            @case (0) {
+                
+                <app-company-account-form (emailAvailabilityError)="onEmailAvailabilityError($event)" />
+                <app-step-buttons
+                    [loading]="loading"
+                    [showPreviousButton]="false"
+                    [disabled]="accountForm.invalid"
+                    (nextClick)="changeStep('NEXT')" 
+                />
+            }
 
-</form>
+            @case (1) {
+
+                <app-company-details-form />
+                <app-step-buttons
+                    [loading]="loading" 
+                    [disabled]="detailsForm.invalid"
+                    (nextClick)="changeStep('NEXT')" 
+                    (previousClick)="changeStep('PREVIOUS')"
+                />
+            }
+
+            @case (2) {
+
+                <app-address-form (cepExternApiError)="onCepExternApiError($event)" />
+                <app-step-buttons
+                    [loading]="loading" 
+                    [disabled]="addressForm.invalid"
+                    (nextClick)="changeStep('NEXT')"
+                    (previousClick)="changeStep('PREVIOUS')"
+                />
+            }
+
+            @case (3) {
+                
+                <app-company-social-network-form />
+                <app-step-buttons
+                    [loading]="loading" 
+                    (nextClick)="changeStep('NEXT')"
+                    [disabled]="socialNetworkForm.invalid"
+                    (previousClick)="changeStep('PREVIOUS')"
+                />
+            }
+
+            @case (4) {
+                
+                <app-company-contact-form />
+
+                <button 
+                    pButton 
+                    [loading]="loading" 
+                    icon="pi pi-arrow-right" 
+                    label="Finalizar Cadastro"
+                    [disabled]="contactForm.invalid" 
+                    (click)="finalizeRegistration()" 
+                    class="w-full mb-1 p-button-success">
+                </button>
+
+                <app-step-buttons
+                    [loading]="loading" 
+                    [showNextButton]="false"
+                    (previousClick)="changeStep('PREVIOUS')"
+                />
+            }
+        }
+
+    </div>
+</main>

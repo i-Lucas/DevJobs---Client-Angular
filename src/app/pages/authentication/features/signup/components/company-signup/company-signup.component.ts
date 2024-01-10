@@ -1,17 +1,18 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AppService } from '@app-services/app/app.service';
+import { BaseComponentService } from '@app-services/components/base-component.service';
 
-import { BaseFormService } from '@app-shared-forms/services/base-form.service';
-import { EmailFormComponent } from '@app-shared-forms/components/email-form/email-form.component';
-import { PasswordFormComponent } from '@app-shared-forms/components/password-form/password-form.component';
+import { CommonFormService } from '@app-shared-forms/services/builder/commom-forms/common-forms.service';
+import { CompanyFormService } from '@app-shared-forms/services/builder/company-forms/company-form.service';
 
 @Component({
   selector: 'app-company-signup',
-  templateUrl: './company-signup.component.html',
-  styleUrl: './company-signup.component.scss'
+  templateUrl: './company-signup.component.html'
 })
-export class CompanySignupComponent extends BaseFormService {
+export class CompanySignupComponent extends BaseComponentService {
 
   protected currentStep: number = 0;
 
@@ -23,29 +24,35 @@ export class CompanySignupComponent extends BaseFormService {
     'Ótimo, e agora para finalizar forneça as informações de contato da sua empresa.',
   ];
 
-  @ViewChild(PasswordFormComponent, { static: true })
-  passwordForm!: PasswordFormComponent | undefined;
-
-  @ViewChild(EmailFormComponent, { static: true })
-  emailForm!: EmailFormComponent | undefined;
-
-  protected accountForm: FormGroup;
-
-  constructor(private formBuilder: FormBuilder) {
-
-    super()
-
-    this.accountForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
-      email: this.emailForm?.getForm(),
-      phone: ['', [Validators.required, Validators.minLength(11)]],
-      password: this.passwordForm?.getForm()
-    })
-
+  constructor(
+    private commomForm: CommonFormService,
+    protected override appService: AppService,
+    private companyFormService: CompanyFormService,
+    protected override messageService: MessageService,
+  ) {
+    super(appService, messageService);
   }
 
+  protected addressForm: FormGroup = this.commomForm.getAddressForm();
+  protected accountForm: FormGroup = this.companyFormService.getCompanyAccountForm();
+  protected detailsForm: FormGroup = this.companyFormService.getCompanyDetailsForm();
+  protected contactForm: FormGroup = this.companyFormService.getCompanyContactForm();
+  protected socialNetworkForm: FormGroup = this.companyFormService.getCompanySocialNetworkForm();
+
   protected onEmailAvailabilityError(error: ApiError) {
-    console.log(error.message);
+    this.showMessage({ type: 'error', detail: error.message })
+  }
+
+  protected onCepExternApiError(error: ApiError) {
+    this.showMessage({ type: 'error', detail: error.message })
+  }
+
+  protected changeStep(step: 'NEXT' | 'PREVIOUS') {
+    step === 'NEXT' ? this.currentStep++ : this.currentStep--;
+  }
+
+  protected finalizeRegistration() {
+
   }
 
 }

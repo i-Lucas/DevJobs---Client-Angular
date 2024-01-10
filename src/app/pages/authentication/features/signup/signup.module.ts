@@ -5,24 +5,34 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { SignupRootComponent } from './container/signup-root.component';
 import { SharedFormsModule } from '@app-shared-forms/shared-forms.module';
-import { DeveloperSignupComponent } from './components/developer-signup/developer-signup.component';
 import { CompanySignupComponent } from './components/company-signup/company-signup.component';
+import { DeveloperSignupComponent } from './components/developer-signup/developer-signup.component';
 
+import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+
+import { StepButtonsComponent } from './components/step-buttons/step-buttons.component';
 
 @NgModule({
   declarations: [
     SignupRootComponent,
     DeveloperSignupComponent,
-    CompanySignupComponent
+    CompanySignupComponent,
+    StepButtonsComponent
   ],
+
   imports: [
     CommonModule,
     SharedFormsModule,
     ReactiveFormsModule,
 
     InputTextModule,
-    
+    ButtonModule,
+    ToastModule,
+    ConfirmPopupModule,
+
     RouterModule.forChild([
       {
         path: '',

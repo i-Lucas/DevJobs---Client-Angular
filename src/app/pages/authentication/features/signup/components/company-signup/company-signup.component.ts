@@ -5,7 +5,6 @@ import { MessageService } from 'primeng/api';
 import { AppService } from '@app-services/app/app.service';
 import { BaseComponentService } from '@app-services/components/base-component.service';
 
-import { CommonFormService } from '@app-shared-forms/services/builder/commom-forms/common-forms.service';
 import { CompanyFormService } from '@app-shared-forms/services/builder/company-forms/company-form.service';
 
 @Component({
@@ -25,7 +24,6 @@ export class CompanySignupComponent extends BaseComponentService {
   ];
 
   constructor(
-    private commomForm: CommonFormService,
     protected override appService: AppService,
     private companyFormService: CompanyFormService,
     protected override messageService: MessageService,
@@ -33,7 +31,7 @@ export class CompanySignupComponent extends BaseComponentService {
     super(appService, messageService);
   }
 
-  protected addressForm: FormGroup = this.commomForm.getAddressForm();
+  protected addressForm: FormGroup = this.companyFormService.getAddressForm();
   protected accountForm: FormGroup = this.companyFormService.getCompanyAccountForm();
   protected detailsForm: FormGroup = this.companyFormService.getCompanyDetailsForm();
   protected contactForm: FormGroup = this.companyFormService.getCompanyContactForm();

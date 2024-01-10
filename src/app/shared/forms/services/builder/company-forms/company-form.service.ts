@@ -4,15 +4,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonFormService } from '../commom-forms/common-forms.service';
 import { BaseFormService } from '@app-shared-forms/services/base/base-form.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CompanyFormService extends BaseFormService {
 
   private detailsForm: FormGroup;
-  private companyAccountForm: FormGroup;
-  private socialNetworkForm: FormGroup;
   private contactForm: FormGroup;
+  private socialNetworkForm: FormGroup;
+  private companyAccountForm: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -58,19 +56,24 @@ export class CompanyFormService extends BaseFormService {
 
   }
 
-  public getCompanyAccountForm() {
+  public getCompanyAccountForm(): FormGroup {
     return this.companyAccountForm
   }
 
-  public getCompanyDetailsForm() {
+  public getCompanyDetailsForm(): FormGroup {
     return this.detailsForm
   }
 
-  public getCompanySocialNetworkForm() {
+  public getCompanySocialNetworkForm(): FormGroup {
     return this.socialNetworkForm
   }
 
-  public getCompanyContactForm() {
+  public getCompanyContactForm(): FormGroup {
     return this.contactForm
   }
+
+  public getAddressForm(): FormGroup {
+    return this.commomFormService.getAddressForm();
+  }
+
 }

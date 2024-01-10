@@ -17,6 +17,8 @@ import { CompanyDetailsFormComponent } from './components/company-details-form/c
 import { CompanyContactFormComponent } from './components/company-contact-form/company-contact-form.component';
 import { CompanyAccountFormComponent } from './components/company-account-form/company-account-form.component';
 import { CompanySocialNetworkFormComponent } from './components/company-social-network-form/company-social-network-form.component';
+import { CommonFormService } from './services/builder/commom-forms/common-forms.service';
+import { CompanyFormService } from './services/builder/company-forms/company-form.service';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,10 @@ import { CompanySocialNetworkFormComponent } from './components/company-social-n
     CompanyContactFormComponent,
     CompanySocialNetworkFormComponent,
     CompanyAccountFormComponent,
+  ],
+  providers: [
+    CommonFormService,
+    CompanyFormService
   ],
   imports: [
     CommonModule,

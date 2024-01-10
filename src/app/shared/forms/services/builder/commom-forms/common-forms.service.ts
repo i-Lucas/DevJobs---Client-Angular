@@ -3,9 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { BaseFormService } from '@app-shared-forms/services/base/base-form.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CommonFormService extends BaseFormService {
 
   protected addressForm!: FormGroup;

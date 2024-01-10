@@ -28,6 +28,9 @@
       "@environments/*": [
         "environments/*"
       ],
+      "@app-services/*": [
+        "app/shared/services/*"
+      ],
       "@app-shared-forms/*": [
         "app/shared/forms/*"
       ],

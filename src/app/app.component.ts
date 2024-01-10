@@ -5,7 +5,7 @@ import { ThemeService } from './shared/services/theme/theme.service';
 
 @Component({
   selector: 'app-root',
-  template: '<router-outlet />',
+  template: '<p-toast /><p-confirmPopup /><router-outlet />',
 })
 export class AppComponent implements OnInit {
 

@@ -8,10 +8,8 @@ import { SharedFormsModule } from '@app-shared-forms/shared-forms.module';
 import { CompanySignupComponent } from './components/company-signup/company-signup.component';
 import { DeveloperSignupComponent } from './components/developer-signup/developer-signup.component';
 
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 import { StepButtonsComponent } from './components/step-buttons/step-buttons.component';
 
@@ -30,9 +28,6 @@ import { StepButtonsComponent } from './components/step-buttons/step-buttons.com
 
     InputTextModule,
     ButtonModule,
-    ToastModule,
-    ConfirmPopupModule,
-
     RouterModule.forChild([
       {
         path: '',

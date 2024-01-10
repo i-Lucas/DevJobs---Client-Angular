@@ -14,7 +14,6 @@ import { ProgressBarModule } from 'primeng/progressbar';
   ],
   imports: [
     CommonModule,
-
     ProgressBarModule,
 
     RouterModule.forChild([

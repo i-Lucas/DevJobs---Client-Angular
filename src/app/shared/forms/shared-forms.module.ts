@@ -1,16 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { DividerModule } from 'primeng/divider';
 
+import { EmailFormComponent } from './components/email-form/email-form.component';
 import { AddressFormComponent } from './components/address-form/address-form.component';
-import { HttpClientModule } from '@angular/common/http';
+import { PasswordFormComponent } from './components/password-form/password-form.component';
 
 @NgModule({
   declarations: [
-    AddressFormComponent
+    AddressFormComponent,
+    PasswordFormComponent,
+    EmailFormComponent
   ],
   imports: [
     CommonModule,
@@ -18,10 +24,14 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
 
     InputTextModule,
-    InputMaskModule
+    InputMaskModule,
+    PasswordModule,
+    DividerModule
   ],
   exports: [
-    AddressFormComponent
+    AddressFormComponent,
+    PasswordFormComponent,
+    EmailFormComponent
   ]
 })
 

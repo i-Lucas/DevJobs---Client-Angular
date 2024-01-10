@@ -14,7 +14,7 @@ export class BaseComponentService implements OnDestroy {
   /** global application state loading changed by appService -> getIsRequestInProgress */
   protected loading: boolean = false;
 
-  private destroy$ = new Subject<void>();
+  protected destroy$ = new Subject<void>();
 
   constructor(
     protected appService: AppService,

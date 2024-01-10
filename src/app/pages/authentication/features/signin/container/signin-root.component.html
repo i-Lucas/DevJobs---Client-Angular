@@ -1,8 +1,33 @@
-<section class="w-8 m-auto">
-    
-    <app-address-form (cepExternApiError)="onCepExternApiError($event)" />
+<main class="flex justify-content-center align-items-center">
 
-    <button [disabled]="addressForm?.getForm()?.invalid" pButton label="Avançar" icon="pi pi-arrow-right"
-        class="w-full mt-3 mb-1 p-button-primary"></button>
+    <div class="py-6 border-round w-20rem sm:w-30rem">
+        <div class="text-center mb-5">
+            <h1 class="text-3xl font-medium mb-3">Fazer Login</h1>
+        </div>
 
-</section>
+        <div class="flex flex-column gap-2">
+            <label class="block font-medium mb-2">Email</label>
+            <input [(ngModel)]="email" type="text" pInputText class="w-full mb-3">
+
+            <label class="block font-medium mb-2">Senha</label>
+            <input [(ngModel)]="password" type="password" pInputText class="w-full mb-3">
+
+            <div class="flex align-items-center justify-content-between mb-2">
+                <div class="flex align-items-center">
+                    <p-checkbox [binary]="true" [(ngModel)]="rememberEmail" styleClass="mr-2" />
+                    <label>Lembrar Email</label>
+                </div>
+                <a class="font-medium ml-2 text-blue-500 text-xs cursor-pointer">Esqueceu sua senha ?</a>
+            </div>
+
+            <div class="flex align-items-center">
+                <p-checkbox [binary]="true" [(ngModel)]="stayConnected" styleClass="mr-2" />
+                <label>Permanecer Conectado</label>
+            </div>
+
+            <button [loading]="loading" pButton (click)="signin()" pRipple label="Entrar" icon="pi pi-user"
+                class="w-full mt-6"></button>
+        </div>
+    </div>
+
+</main>

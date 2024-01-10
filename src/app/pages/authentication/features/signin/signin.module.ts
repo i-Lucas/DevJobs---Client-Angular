@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SigninRootComponent } from './container/signin-root.component';
 import { SharedFormsModule } from '@app-shared-forms/shared-forms.module';
 
 import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { PasswordModule } from 'primeng/password';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   declarations: [
@@ -14,10 +17,14 @@ import { ButtonModule } from 'primeng/button';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     SharedFormsModule,
     ReactiveFormsModule,
 
     ButtonModule,
+    CheckboxModule,
+    PasswordModule,
+    InputTextModule,
     
     RouterModule.forChild([
       {

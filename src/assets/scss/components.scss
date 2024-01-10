@@ -5,10 +5,11 @@ header {
     background-color: var(--surface-ground);
 
     position: sticky;
+    z-index: 99;
     top: 0;
 
-    div {
+    main {
 
-        height: calc(var(--header-height) - 3px); // p-progressbar
+        height: calc(var(--header-height) - 3px); // p-progressbar        
     }
 }

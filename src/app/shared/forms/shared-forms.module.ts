@@ -7,16 +7,20 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { DividerModule } from 'primeng/divider';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 import { EmailFormComponent } from './components/email-form/email-form.component';
 import { AddressFormComponent } from './components/address-form/address-form.component';
 import { PasswordFormComponent } from './components/password-form/password-form.component';
+import { CompanyDetailsFormComponent } from './components/company-details-form/company-details-form.component';
 
 @NgModule({
   declarations: [
     AddressFormComponent,
     PasswordFormComponent,
-    EmailFormComponent
+    EmailFormComponent,
+    CompanyDetailsFormComponent
   ],
   imports: [
     CommonModule,
@@ -26,7 +30,9 @@ import { PasswordFormComponent } from './components/password-form/password-form.
     InputTextModule,
     InputMaskModule,
     PasswordModule,
-    DividerModule
+    DividerModule,
+    DropdownModule,
+    InputTextareaModule
   ],
   exports: [
     AddressFormComponent,

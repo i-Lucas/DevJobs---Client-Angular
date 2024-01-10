@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subject, debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs';
+
+import { HttpService } from '@app-services/http/http.service';
 
 @Component({
   selector: 'app-address-form',
@@ -12,21 +13,14 @@ export class AddressFormComponent implements OnInit, OnDestroy {
   protected addressForm!: FormGroup;
   private destroy$ = new Subject<void>();
 
+  @Output() cepExternApiError = new EventEmitter<ApiError>();
+
   constructor(
     private formBuilder: FormBuilder,
-    private httpClient: HttpClient
+    private httpService: HttpService
   ) { }
 
   ngOnInit(): void {
-    this.initializeForm();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  private initializeForm() {
 
     this.addressForm = this.formBuilder.group({
       cep: ['', [Validators.required, Validators.minLength(8)]],
@@ -43,6 +37,11 @@ export class AddressFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   private cepControlListener() {
 
     const cepControl = this.addressForm.get('cep');
@@ -54,15 +53,25 @@ export class AddressFormComponent implements OnInit, OnDestroy {
         filter(() => cepControl.valid),
         takeUntil(this.destroy$)
       )
-      .subscribe(() => {
+      .subscribe(() => this.getAddressFromCep(cepControl.value));
+  }
 
-        const url = 'https://brasilapi.com.br/api/cep/v1/'.concat(cepControl.value);
+  private getAddressFromCep(cep: string) {
 
-        this.httpClient
-          .get<ApiResponseAddressData>(url)
-          .subscribe(response => {
-            if (response) { this.updateFormValues(response) }
-          });
+    const EXTERNAL_REQUEST: boolean = true;
+    const apiurl = 'https://brasilapi.com.br/api/cep/v1/';
+
+    this.httpService
+      .get<ApiResponseAddressData>(apiurl.concat(cep.replace(/-/g, "")), EXTERNAL_REQUEST)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+
+        next: (response) => {
+          if (response) { this.updateFormValues(response) }
+        },
+        error: (error: ApiError) => {
+          this.cepExternApiError.emit(error);
+        }
       })
   }
 

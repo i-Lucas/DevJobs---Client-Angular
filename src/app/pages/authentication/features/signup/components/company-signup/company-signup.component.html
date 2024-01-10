@@ -1,0 +1,11 @@
+<p>company-signup works!</p>
+
+<form [formGroup]="accountForm">
+
+    <label class="block font-medium mb-1">Nome Completo</label>
+    <input formControlName="name" type="text" pInputText class="w-full mb-3">
+
+    <app-email-form (emailAvailabilityError)="onEmailAvailabilityError($event)" />
+    <app-password-form />
+
+</form>

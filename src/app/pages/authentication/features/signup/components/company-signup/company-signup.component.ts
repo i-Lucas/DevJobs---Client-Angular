@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 
-import { AppService } from '@app-services/app/app.service';
+import { AppStateService } from '@app-services/app/app.service';
 import { BaseComponentService } from '@app-services/components/base-component.service';
 
 import { CompanyFormService } from '@app-shared-forms/services/builder/company-forms/company-form.service';
@@ -24,7 +24,7 @@ export class CompanySignupComponent extends BaseComponentService {
   ];
 
   constructor(
-    protected override appService: AppService,
+    protected override appService: AppStateService,
     private companyFormService: CompanyFormService,
     protected override messageService: MessageService,
   ) {

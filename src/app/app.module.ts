@@ -10,7 +10,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { AppService } from '@app-services/app/app.service';
+import { AppStateService } from '@app-services/app/app.service';
 import { HttpService } from '@app-services/http/http.service';
 import { AuthenticationService } from '@app-services/auth/auth.service';
 
@@ -28,7 +28,7 @@ import { AuthenticationService } from '@app-services/auth/auth.service';
     ConfirmPopupModule,
   ],
   providers: [
-    AppService,
+    AppStateService,
     HttpService,
     MessageService,
     ConfirmationService,

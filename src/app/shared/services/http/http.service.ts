@@ -16,7 +16,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
-import { AppService } from '@app-services/app/app.service';
+import { AppStateService } from '@app-services/app/app.service';
 import { AuthenticationService } from '@app-services/auth/auth.service';
 
 @Injectable({
@@ -28,7 +28,7 @@ export class HttpService implements HttpInterceptor {
 
   constructor(
     private http: HttpClient,
-    private appService: AppService,
+    private appService: AppStateService,
     private authService: AuthenticationService
   ) { }
 

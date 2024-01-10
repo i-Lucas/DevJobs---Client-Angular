@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs';
 
 import { MessageService } from 'primeng/api';
 
-import { AppService } from '@app-services/app/app.service';
+import { AppStateService } from '@app-services/app/app.service';
 import { HttpService } from '@app-services/http/http.service';
 import { AuthenticationService } from '@app-services/auth/auth.service';
 import { BaseComponentService } from '@app-services/components/base-component.service';
@@ -25,7 +25,7 @@ export class SigninRootComponent extends BaseComponentService implements OnInit 
     private router: Router,
     private httpService: HttpService,
     private authService: AuthenticationService,
-    protected override appService: AppService,
+    protected override appService: AppStateService,
     protected override messageService: MessageService
   ) {
 

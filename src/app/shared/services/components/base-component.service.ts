@@ -4,7 +4,7 @@ import { MessageService } from 'primeng/api';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AppService } from '@app-services/app/app.service';
+import { AppStateService } from '@app-services/app/app.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class BaseComponentService implements OnDestroy {
   protected destroy$ = new Subject<void>();
 
   constructor(
-    protected appService: AppService,
+    protected appService: AppStateService,
     protected messageService: MessageService,
   ) {
 

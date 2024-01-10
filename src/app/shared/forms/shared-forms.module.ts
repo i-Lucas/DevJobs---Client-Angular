@@ -3,24 +3,30 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
-import { InputMaskModule } from 'primeng/inputmask';
-import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
+import { PasswordModule } from 'primeng/password';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 
 import { EmailFormComponent } from './components/email-form/email-form.component';
 import { AddressFormComponent } from './components/address-form/address-form.component';
 import { PasswordFormComponent } from './components/password-form/password-form.component';
 import { CompanyDetailsFormComponent } from './components/company-details-form/company-details-form.component';
+import { CompanyContactFormComponent } from './components/company-contact-form/company-contact-form.component';
+import { CompanyAccountFormComponent } from './components/company-account-form/company-account-form.component';
+import { CompanySocialNetworkFormComponent } from './components/company-social-network-form/company-social-network-form.component';
 
 @NgModule({
   declarations: [
     AddressFormComponent,
     PasswordFormComponent,
     EmailFormComponent,
-    CompanyDetailsFormComponent
+    CompanyDetailsFormComponent,
+    CompanyContactFormComponent,
+    CompanySocialNetworkFormComponent,
+    CompanyAccountFormComponent,
   ],
   imports: [
     CommonModule,
@@ -37,7 +43,11 @@ import { CompanyDetailsFormComponent } from './components/company-details-form/c
   exports: [
     AddressFormComponent,
     PasswordFormComponent,
-    EmailFormComponent
+    EmailFormComponent,
+    CompanyDetailsFormComponent,
+    CompanyContactFormComponent,
+    CompanySocialNetworkFormComponent,
+    CompanyAccountFormComponent
   ]
 })
 

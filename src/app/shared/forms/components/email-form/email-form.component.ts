@@ -7,9 +7,7 @@ import {
 } from '@angular/core';
 
 import {
-  Validators,
   FormGroup,
-  FormBuilder,
   AbstractControl,
 } from '@angular/forms';
 
@@ -18,7 +16,9 @@ import {
 } from 'rxjs';
 
 import { HttpService } from '@app-services/http/http.service';
-import { BaseFormService } from '@app-shared-forms/services/base-form.service';
+
+import { BaseFormService } from '@app-shared-forms/services/base/base-form.service';
+import { CommonFormService } from '@app-shared-forms/services/builder/commom-forms/common-forms.service';
 
 @Component({
   selector: 'app-email-form',
@@ -26,24 +26,15 @@ import { BaseFormService } from '@app-shared-forms/services/base-form.service';
 })
 export class EmailFormComponent extends BaseFormService implements OnInit, OnDestroy {
 
-  protected emailForm!: FormGroup;
-  private emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  protected emailForm: FormGroup = this.formService.getEmailForm()
 
   @Output() emailAvailabilityError = new EventEmitter<ApiError>();
 
-  constructor(
-    private formBuilder: FormBuilder,
-    protected httpService: HttpService
-  ) {
-
+  constructor(protected httpService: HttpService, private formService: CommonFormService) {
     super()
   }
 
   ngOnInit(): void {
-
-    this.emailForm = this.formBuilder.group({
-      email: ['', [Validators.required, this.validatePattern(this.emailPattern)]],
-    })
 
     this.setFormControlListener({
       formControl: this.emailForm.get('email'),
@@ -67,10 +58,6 @@ export class EmailFormComponent extends BaseFormService implements OnInit, OnDes
           this.emailAvailabilityError.emit(error);
         }
       });
-  }
-
-  public getForm() {
-    return this.emailForm
   }
 
 }

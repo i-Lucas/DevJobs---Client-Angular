@@ -1,9 +1,10 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 
 import { HttpService } from '@app-services/http/http.service';
-import { BaseFormService } from '@app-shared-forms/services/base-form.service';
+import { BaseFormService } from '@app-shared-forms/services/base/base-form.service';
+import { CommonFormService } from '@app-shared-forms/services/builder/commom-forms/common-forms.service';
 
 @Component({
   selector: 'app-address-form',
@@ -11,29 +12,15 @@ import { BaseFormService } from '@app-shared-forms/services/base-form.service';
 })
 export class AddressFormComponent extends BaseFormService implements OnInit, OnDestroy {
 
-  protected addressForm!: FormGroup;
+  protected addressForm: FormGroup = this.formService.getAddressForm();
 
   @Output() cepExternApiError = new EventEmitter<ApiError>();
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private httpService: HttpService
-  ) {
-
+  constructor(private httpService: HttpService, private formService: CommonFormService) {
     super()
   }
 
   ngOnInit(): void {
-
-    this.addressForm = this.formBuilder.group({
-      cep: ['', [Validators.required, Validators.minLength(8)]],
-      address: ['', [Validators.required, Validators.minLength(10)]],
-      number: ['', [Validators.required]],
-      neighborhood: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      complement: ['', [Validators.required]],
-      state: ['', [Validators.required]],
-    })
 
     this.setFormControlListener({
       formControl: this.addressForm.get('cep'),
@@ -67,10 +54,6 @@ export class AddressFormComponent extends BaseFormService implements OnInit, OnD
     this.addressForm.get('state')?.setValue(response.state);
     this.addressForm.get('address')?.setValue(response.street);
     this.addressForm.get('neighborhood')?.setValue(response.neighborhood);
-  }
-
-  public getForm() {
-    return this.addressForm
   }
 
 }

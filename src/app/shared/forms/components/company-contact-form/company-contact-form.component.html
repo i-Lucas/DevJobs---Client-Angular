@@ -1,0 +1,19 @@
+<form class="flex flex-column gap-2 m-auto text-sm w-20rem sm:w-30rem"  [formGroup]="contactForm">
+
+    <label class="block font-medium mb-1">Email do RH</label>
+    <input formControlName="rhEmail" type="text" pInputText class="w-full">
+    <small class="mb-3 text-xs">Canal para atualizações sobre oportunidades e comunicação com candidatos</small>
+
+    <label class="block font-medium mb-1">Telefone de Contato</label>
+    <p-inputMask formControlName="phone" mask="(99)-9-9999-9999" styleClass="w-full mb-3"
+        placeholder="(99)-9-9999-9999" />
+
+    <label class="block font-medium mb-1">Contato Whatsapp</label>
+    <p-inputMask formControlName="whatsapp" mask="(99)-9-9999-9999" styleClass="w-full mb-3"
+        placeholder="(99)-9-9999-9999" />
+
+    <label class="block font-medium mb-1">Email do Suporte</label>
+    <input formControlName="supportEmail" type="text" pInputText class="w-full">
+    <small class="mb-3 text-xs">Principal canal para comunicação em caso de problemas ou assistência</small>
+
+</form>

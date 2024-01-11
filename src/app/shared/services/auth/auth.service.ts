@@ -42,8 +42,7 @@ export class AuthenticationService {
   }
 
   public checkAutomaticLogin(): boolean {
-    const isEnabled = localStorage.getItem(this.LOCAL_STORAGE_AUTOMATIC_LOGIN);
-    return isEnabled ? true : false;
+    return localStorage.getItem(this.LOCAL_STORAGE_AUTOMATIC_LOGIN) ? true : false;
   }
 
   public enableAutomaticLogin(): void {

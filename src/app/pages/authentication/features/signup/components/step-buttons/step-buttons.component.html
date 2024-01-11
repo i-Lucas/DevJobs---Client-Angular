@@ -1,15 +1,25 @@
-<div class="flex gap-2">
+<div class="flex flex-column gap-2">
 
-    @if (showPreviousButton) {
+    @if (showSaveButton) {
 
-        <button (click)="onPreviousClick()" pButton label="Voltar" icon="pi pi-arrow-left"
-            class="w-full mb-1 p-button-secondary"></button>
+        <button [loading]="loading" [disabled]="disabled" (click)="onSave()" pButton label="Salvar" icon="pi pi-plus"
+            class="w-full mb-1 p-button-success"></button>
     }
 
-    @if(showNextButton) {
+    <div class="flex gap-2">
 
-        <button [loading]="loading" [disabled]="disabled" (click)="onNextClick()" pButton label="Avançar"
-            icon="pi pi-arrow-right" class="w-full mb-1 p-button-primary"></button>
-    }
+        @if (showPreviousButton) {
+
+            <button (click)="onPreviousClick()" pButton label="Voltar" icon="pi pi-arrow-left"
+                class="w-full mb-1 p-button-secondary"></button>
+        }
+
+        @if(showNextButton) {
+
+            <button [loading]="loading" [disabled]="disabled" (click)="onNextClick()" pButton label="Avançar"
+                icon="pi pi-arrow-right" class="w-full mb-1 p-button-primary"></button>
+        }
+
+    </div>
 
 </div>

@@ -1,6 +1,7 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+
+import { CommonSignupService } from '../../services/common-signup.service';
 
 import { BaseComponentService } from '@app-services/components/base-component.service';
 import { CompanyFormService } from '@app-shared-forms/services/builder/company-forms/company-form.service';
@@ -9,12 +10,9 @@ import { CompanyFormService } from '@app-shared-forms/services/builder/company-f
   selector: 'app-company-signup',
   templateUrl: './company-signup.component.html'
 })
-export class CompanySignupComponent implements OnDestroy {
+export class CompanySignupComponent extends CommonSignupService {
 
   protected currentStep: number = 0;
-
-  protected loading: boolean = false;
-  protected destroy$ = new Subject<void>();
 
   protected stepMessages: string[] = [
     'Vamos lá! Primeiro, iremos criar a sua conta',
@@ -25,20 +23,11 @@ export class CompanySignupComponent implements OnDestroy {
   ];
 
   constructor(
-    private componentService: BaseComponentService,
+    protected override componentService: BaseComponentService,
     private companyFormService: CompanyFormService,
-
   ) {
 
-    this.componentService
-      .getLoading()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((state) => this.loading = state)
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+    super(componentService);
   }
 
   protected addressForm: FormGroup = this.companyFormService.getAddressForm();
@@ -47,18 +36,10 @@ export class CompanySignupComponent implements OnDestroy {
   protected contactForm: FormGroup = this.companyFormService.getCompanyContactForm();
   protected socialNetworkForm: FormGroup = this.companyFormService.getCompanySocialNetworkForm();
 
-  protected onEmailAvailabilityError(error: ApiError) {
-    this.componentService.showMessage({ type: 'error', detail: error.message })
-  }
-
-  protected onCepExternApiError(error: ApiError) {
-    this.componentService.showMessage({ type: 'error', detail: error.message })
-  }
-
   protected changeStep(step: 'NEXT' | 'PREVIOUS') {
     step === 'NEXT' ? this.currentStep++ : this.currentStep--;
   }
-
+  
   protected finalizeRegistration() {
 
   }

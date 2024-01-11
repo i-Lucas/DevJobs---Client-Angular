@@ -1,1 +1,145 @@
-<p>developer-signup works!</p>
+<main class="p-4 flex justify-content-center align-items-center">
+    <div class="flex flex-column gap-4 w-20rem sm:w-30rem">
+
+        <div class="text-center mb-5">
+            <h1 class="line-height-3 text-lg font-medium">{{stepMessages[currentStep]}}</h1>
+        </div>
+
+        @switch (currentStep) {
+
+            @case (0) {
+                
+                <app-developer-about-form />
+                <app-step-buttons
+                    [loading]="loading"
+                    [showPreviousButton]="false"
+                    [disabled]="aboutForm.invalid"
+                    (nextClick)="changeStep('NEXT')" 
+                />
+            }
+
+            @case (1) {
+                
+                <app-developer-contact-form />
+                <app-step-buttons
+                    [loading]="loading" 
+                    [disabled]="addressForm.invalid"
+                    (nextClick)="changeStep('NEXT')"
+                    (previousClick)="changeStep('PREVIOUS')"
+                />
+            }
+            
+            @case (2) {
+                
+                <app-address-form />
+                <app-step-buttons
+                    [loading]="loading"
+                    [disabled]="addressForm.invalid"
+                    (nextClick)="changeStep('NEXT')"
+                    (previousClick)="changeStep('PREVIOUS')"
+                />
+            }
+            
+            @case (3) {
+                
+                <app-developer-academic-education-form />
+                <app-step-buttons
+                    [loading]="loading"
+                    [showSaveButton]="true"
+                    (nextClick)="changeStep('NEXT')"
+                    (previousClick)="changeStep('PREVIOUS')"
+                    (saveClick)="onSave(academicEducationForm)"
+                    [disabled]="academicEducationForm.invalid"
+                />
+          
+            }
+
+            @case (4) {
+                
+                <app-developer-job-experiences-form />
+                <app-step-buttons
+                    [loading]="loading"
+                    [showSaveButton]="true"
+                    (nextClick)="changeStep('NEXT')"
+                    (previousClick)="changeStep('PREVIOUS')"
+                    (saveClick)="onSave(jobExperiencesForm)"
+                    [disabled]="jobExperiencesForm.invalid"
+                />
+            }
+
+            @case (5) {
+                
+                <app-developer-certificates-form />
+                <app-step-buttons
+                    [loading]="loading"
+                    [showSaveButton]="true"
+                    (nextClick)="changeStep('NEXT')"
+                    (previousClick)="changeStep('PREVIOUS')"
+                    (saveClick)="onSave(certificatesForm)"
+                    [disabled]="certificatesForm.invalid"
+                />
+            }
+
+            @case (6) {
+                
+                <app-developer-projects-form />
+                <app-step-buttons
+                    [loading]="loading"
+                    [showSaveButton]="true"
+                    (nextClick)="changeStep('NEXT')"
+                    (previousClick)="changeStep('PREVIOUS')"
+                    (saveClick)="onSave(projectsForm)"
+                    [disabled]="projectsForm.invalid"
+                />
+            }
+
+            @case (7) {
+                
+                <app-developer-languages-form />
+                <app-step-buttons
+                    [loading]="loading"
+                    [showSaveButton]="true"
+                    (nextClick)="changeStep('NEXT')"
+                    (previousClick)="changeStep('PREVIOUS')"
+                    (saveClick)="onSave(languagesForm)"
+                    [disabled]="languagesForm.invalid"
+                />
+            }
+
+            @case (8) {
+                
+                <app-developer-stacklist-form />
+                <app-step-buttons
+                    [loading]="loading"
+                    [showSaveButton]="true"
+                    (nextClick)="changeStep('NEXT')"
+                    (previousClick)="changeStep('PREVIOUS')"
+                    (saveClick)="onSave(stackListForm)"
+                    [disabled]="stackListForm.invalid"
+                />
+            }
+            
+            @case (9) {
+                
+                <app-password-form />
+
+                <button 
+                    pButton 
+                    [loading]="loading" 
+                    icon="pi pi-arrow-right" 
+                    label="Finalizar Cadastro"
+                    [disabled]="contactForm.invalid" 
+                    (click)="finalizeRegistration()" 
+                    class="w-full p-button-success">
+                </button>
+
+                <app-step-buttons
+                    [loading]="loading" 
+                    [showNextButton]="false"
+                    (previousClick)="changeStep('PREVIOUS')"
+                />
+            }
+        }
+
+    </div>
+</main>

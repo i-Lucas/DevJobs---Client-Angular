@@ -10,10 +10,12 @@ export class StepButtonsComponent {
   @Input() disabled: boolean = true;
 
   @Input() showNextButton: boolean = true;
+  @Input() showSaveButton: boolean = false;
   @Input() showPreviousButton: boolean = true;
 
-  @Output() previousClick = new EventEmitter<void>();
+  @Output() saveClick = new EventEmitter<void>();
   @Output() nextClick = new EventEmitter<void>();
+  @Output() previousClick = new EventEmitter<void>();
 
   protected onPreviousClick() {
     this.previousClick.emit();
@@ -21,6 +23,10 @@ export class StepButtonsComponent {
 
   protected onNextClick() {
     this.nextClick.emit();
+  }
+
+  protected onSave() {
+    this.saveClick.emit();
   }
 
 }

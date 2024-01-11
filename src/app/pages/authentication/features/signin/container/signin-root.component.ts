@@ -1,10 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { takeUntil } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 
-import { MessageService } from 'primeng/api';
-
-import { AppStateService } from '@app-services/app/app.service';
 import { HttpService } from '@app-services/http/http.service';
 import { AuthenticationService } from '@app-services/auth/auth.service';
 import { BaseComponentService } from '@app-services/components/base-component.service';
@@ -13,26 +9,30 @@ import { BaseComponentService } from '@app-services/components/base-component.se
   selector: 'app-signin-root',
   templateUrl: './signin-root.component.html'
 })
-export class SigninRootComponent extends BaseComponentService implements OnInit {
+export class SigninRootComponent implements OnInit , OnDestroy {
 
   protected email: string = '';
   protected password: string = '';
+
+  protected loading: boolean = false;
+  protected destroy$ = new Subject<void>();
 
   protected rememberEmail: boolean = true;
   protected stayConnected: boolean = false;
 
   constructor(
-    private router: Router,
     private httpService: HttpService,
     private authService: AuthenticationService,
-    protected override appService: AppStateService,
-    protected override messageService: MessageService
+    private componentService: BaseComponentService 
   ) {
-
-    super(appService, messageService)
 
     this.email = this.authService.getUserEmailFromLocalStorage();
     this.stayConnected = this.authService.checkAutomaticLogin();
+
+    this.componentService
+      .getLoading()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((state) => this.loading = state)
   }
 
   ngOnInit(): void {
@@ -40,16 +40,21 @@ export class SigninRootComponent extends BaseComponentService implements OnInit 
       this.handleStayConnected();
     }
   }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
   
   private handleStayConnected() {
 
     if (this.authService.isAuthenticated()) {
-      this.showMessage({ type: 'success', detail: 'Login Automático' });
-      this.router.navigate(['/dashboard'])
+      this.componentService.showMessage({ type: 'success', detail: 'Login Automático' });
+      this.componentService.goTo('/dashboard')
 
     } else {
       this.authService.disableAutomaticLogin();
-      this.showMessage({ type: 'info', detail: 'Sessão Expirada' });
+      this.componentService.showMessage({ type: 'info', detail: 'Sessão Expirada' });
     }
   }
   
@@ -68,13 +73,13 @@ export class SigninRootComponent extends BaseComponentService implements OnInit 
   private handleSignInResponse(response: ApiResponse<UserToken>) {
     if (response.data) {
       this.processSignInConfiguration(response.data.token);
-      this.showMessage({ type: 'success', detail: response.message })
-      this.router.navigate(['/dashboard']);
+      this.componentService.showMessage({ type: 'success', detail: response.message })
+      this.componentService.goTo('/dashboard')
     }
   }
 
   private handleSignInError(error: ApiError) {
-    this.showMessage({ type: 'error', detail: error.message });
+    this.componentService.showMessage({ type: 'error', detail: error.message });
   }
 
   private processSignInConfiguration(token: string) {
@@ -93,6 +98,10 @@ export class SigninRootComponent extends BaseComponentService implements OnInit 
     this.stayConnected ?
       this.authService.enableAutomaticLogin() :
       this.authService.disableAutomaticLogin();
+  }
+
+  protected disableBtn() {
+    return this.email.length === 0 || this.password.length === 0
   }
 
 }

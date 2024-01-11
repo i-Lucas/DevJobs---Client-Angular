@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
 
 import { SignupRootComponent } from './container/signup-root.component';
 import { SharedFormsModule } from '@app-shared-forms/shared-forms.module';
@@ -11,7 +11,31 @@ import { DeveloperSignupComponent } from './components/developer-signup/develope
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 
+import { CommonSignupService } from './services/common-signup.service';
+
 import { StepButtonsComponent } from './components/step-buttons/step-buttons.component';
+import { DeveloperFormService } from '@app-shared-forms/services/builder/developer-forms/developer-form.service';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: SignupRootComponent,
+    children: [
+      {
+        path: 'developer',
+        component: DeveloperSignupComponent
+      },
+      {
+        path: 'company',
+        component: CompanySignupComponent
+      },
+      {
+        path: '**',
+        redirectTo: 'developer'
+      }
+    ]
+  },
+]
 
 @NgModule({
   declarations: [
@@ -20,34 +44,19 @@ import { StepButtonsComponent } from './components/step-buttons/step-buttons.com
     CompanySignupComponent,
     StepButtonsComponent
   ],
-
+  providers: [
+    CommonSignupService,
+    DeveloperFormService
+  ],
   imports: [
     CommonModule,
     SharedFormsModule,
     ReactiveFormsModule,
 
-    InputTextModule,
     ButtonModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: SignupRootComponent,
-        children: [
-          {
-            path: 'developer',
-            component: DeveloperSignupComponent
-          },
-          {
-            path: 'company',
-            component: CompanySignupComponent
-          },
-          {
-            path: '**',
-            redirectTo: 'developer'
-          }
-        ]
-      },
-    ])
+    InputTextModule,
+
+    RouterModule.forChild(routes)
   ]
 })
 export default class SignupModule { }

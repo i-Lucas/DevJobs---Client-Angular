@@ -1,0 +1,33 @@
+@if (languagesList.length > 0) {
+
+    <p-accordion>
+        <p-accordionTab>
+
+            <ng-template pTemplate="header">
+                <div class="flex flex-column w-full">
+                    <div class="flex gap-2 align-items-center">
+                        <i class="material-icons">public</i>
+                        <span>Idiomas</span>
+                    </div>                 
+                </div>
+            </ng-template>
+
+            <p-tabView>
+
+                @for (item of languagesList; track item) {
+
+                    <p-tabPanel header="{{item.language}}">
+
+                        <p><span class="font-semibold">Idioma</span>: {{item.language}}</p>
+                        <p><span class="font-semibold">Nível</span>: {{item.level}}</p>
+
+                        <dev-option-buttons [item]="item" (deleteClick)="onDeleteClick(item)" (editClick)="onEditClick(item)" />
+
+                    </p-tabPanel>
+                }
+
+            </p-tabView>
+        </p-accordionTab>
+    </p-accordion>
+
+}

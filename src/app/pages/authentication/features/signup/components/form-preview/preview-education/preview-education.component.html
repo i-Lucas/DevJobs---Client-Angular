@@ -1,0 +1,38 @@
+@if (academicEducationList.length > 0) {
+
+    <p-accordion>
+        <p-accordionTab>
+
+            <ng-template pTemplate="header">
+                <div class="flex flex-column w-full">
+                    <div class="flex gap-2 align-items-center">
+                        <i class="material-icons">school</i>
+                        <span>Formação Acadêmica</span>
+                    </div>                 
+                </div>
+            </ng-template>
+
+            <p-tabView>
+
+                @for (item of academicEducationList; track item) {
+
+                    <p-tabPanel header="{{item.institution}}">
+
+                        <p><span class="font-semibold">Instituição</span>: {{item.institution}}</p>
+                        <p><span class="font-semibold">Curso</span>: {{item.course}}</p>
+                        <p><span class="font-semibold">Tipo</span>: {{item.type}}</p>
+                        <p><span class="font-semibold">Modalidade</span>: {{item.modality}}</p>
+                        <p><span class="font-semibold">Status</span>: {{item.status}}</p>
+                        <p><span class="font-semibold">Início</span>: {{item.from | msToMMyyyy}}</p>
+                        <p><span class="font-semibold">Término</span>: {{item.to | msToMMyyyy }}</p>
+
+                        <dev-option-buttons [item]="item" (deleteClick)="onDeleteClick(item)" (editClick)="onEditClick(item)" />
+
+                    </p-tabPanel>
+                }
+
+            </p-tabView>
+        </p-accordionTab>
+    </p-accordion>
+
+}

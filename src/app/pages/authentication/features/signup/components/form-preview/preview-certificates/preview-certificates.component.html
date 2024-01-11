@@ -1,0 +1,35 @@
+@if (certificatesList.length > 0) {
+
+    <p-accordion>
+        <p-accordionTab>
+
+            <ng-template pTemplate="header">
+                <div class="flex flex-column w-full">
+                    <div class="flex gap-2 align-items-center">
+                        <i class="material-icons">workspace_premium</i>
+                        <span>Certificados</span>
+                    </div>                 
+                </div>
+            </ng-template>
+
+            <p-tabView>
+
+                @for (item of certificatesList; track item) {
+
+                    <p-tabPanel header="{{item.institution}}">
+
+                        <p><span class="font-semibold">Curso</span>: {{item.course}}</p>
+                        <p><span class="font-semibold">Instituição</span>: {{item.institution}}</p>
+                        <p><span class="font-semibold">Carga Horária</span>: {{item.workload}}</p>
+                        <p class="cursor-pointer hover:underline">Link</p>
+
+                        <dev-option-buttons [item]="item" (deleteClick)="onDeleteClick(item)" (editClick)="onEditClick(item)" />
+
+                    </p-tabPanel>
+                }
+
+            </p-tabView>
+        </p-accordionTab>
+    </p-accordion>
+
+}

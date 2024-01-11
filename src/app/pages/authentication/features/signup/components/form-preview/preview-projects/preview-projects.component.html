@@ -1,0 +1,57 @@
+@if (projectsList.length > 0) {
+
+    <p-accordion class="w-full">
+        <p-accordionTab>
+
+            <ng-template pTemplate="header">
+                <div class="flex flex-column w-full">
+                    <div class="flex gap-2 align-items-center">
+                        <i class="material-icons">web</i>
+                        <span>Projetos</span>
+                    </div>                 
+                </div>
+            </ng-template>
+
+            <p-tabView>
+
+                @for (item of projectsList; track item) {
+
+                    <p-tabPanel header="{{item.title}}">
+
+                        <p><span class="font-semibold">Título</span>: {{item.title}}</p>
+                        <p class="font-semibold">Descrição:</p>
+                        <p class="max-w-30rem text-justify">{{ item.resume }}</p>
+                        <p class="cursor-pointer hover:underline" (click)="openNewWindow(item.link!)">Link</p>
+
+                        <dev-option-buttons [item]="item" (deleteClick)="onDeleteClick(item)" (editClick)="onEditClick(item)" />
+
+                    </p-tabPanel>
+                }
+
+            </p-tabView>
+
+        </p-accordionTab>
+</p-accordion>
+
+}
+
+
+<!-- 
+
+
+ -->
+
+
+<!-- 
+
+
+                 <ng-template pTemplate="header">
+                    <div class="flex flex-column w-full">
+                        <div class="flex gap-2 align-items-center">
+                            <span class="text-xl font-bold">Editar Perfil</span>
+                            <span class="pi pi-user-edit"></span>
+                        </div>
+                     
+                    </div>
+                </ng-template>
+ -->

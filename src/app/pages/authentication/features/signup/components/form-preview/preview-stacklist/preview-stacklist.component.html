@@ -1,0 +1,32 @@
+@if (stackList.length > 0) {
+
+    <p-accordion>
+        <p-accordionTab>
+
+            <ng-template pTemplate="header">
+                <div class="flex flex-column w-full">
+                    <div class="flex gap-2 align-items-center">
+                        <i class="material-icons">handyman</i>
+                        <span>Tecnologias</span>
+                    </div>                 
+                </div>
+            </ng-template>
+
+            <div class="flex gap-2 flex-wrap">
+
+                @for (item of stackList; track item) {
+
+                    <p-chip 
+                        (onRemove)="onDeleteClick(item)" 
+                        styleClass="px-3 py-2" 
+                        label={{item.name}} 
+                        [removable]="true" 
+                    />
+                }
+
+            </div>
+
+        </p-accordionTab>
+    </p-accordion>
+
+}

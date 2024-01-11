@@ -1,0 +1,10 @@
+@if (item) {
+    
+    <div class="flex mt-4 gap-4">
+        <p-button label="Excluir" (click)="onDeleteClick(item)" icon="pi pi-trash" severity="danger"
+            size="small"></p-button>
+            
+        <p-button label="Editar" (click)="onEditClick(item)" icon="pi pi-file-edit" severity="warning"
+            size="small"></p-button>
+    </div>
+}

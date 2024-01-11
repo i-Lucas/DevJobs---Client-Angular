@@ -49,4 +49,12 @@ export class BaseComponentService implements OnDestroy {
     this.messageService.add({ severity: type, summary: summary[type], detail });
   }
 
+  public convertToMilliseconds(date: string) {
+    return /^\d+$/.test(date) ? date : new Date(date).getTime().toString()
+  }
+
+  protected openNewWindow(url: string) {
+    window.open('https://' + url, "_blank");
+  }
+
 }

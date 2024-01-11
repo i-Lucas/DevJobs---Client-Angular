@@ -10,6 +10,7 @@
             @case (0) {
                 
                 <app-developer-about-form />
+                
                 <app-step-buttons
                     [loading]="loading"
                     [showPreviousButton]="false"
@@ -21,6 +22,7 @@
             @case (1) {
                 
                 <app-developer-contact-form />
+
                 <app-step-buttons
                     [loading]="loading" 
                     [disabled]="addressForm.invalid"
@@ -32,6 +34,7 @@
             @case (2) {
                 
                 <app-address-form />
+
                 <app-step-buttons
                     [loading]="loading"
                     [disabled]="addressForm.invalid"
@@ -41,8 +44,15 @@
             }
             
             @case (3) {
+
+                <dev-preview-education 
+                    [academicEducationList]="academicEducationList"
+                    (editClick)="onEdit($event)" 
+                    (deleteClick)="onDelete($event)"
+                />
                 
                 <app-developer-academic-education-form />
+
                 <app-step-buttons
                     [loading]="loading"
                     [showSaveButton]="true"
@@ -55,8 +65,15 @@
             }
 
             @case (4) {
+
+                <dev-preview-job
+                    [jobExperiencesList]="jobExperiencesList" 
+                    (editClick)="onEdit($event)" 
+                    (deleteClick)="onDelete($event)"
+                />
                 
                 <app-developer-job-experiences-form />
+
                 <app-step-buttons
                     [loading]="loading"
                     [showSaveButton]="true"
@@ -68,8 +85,15 @@
             }
 
             @case (5) {
+
+                <dev-preview-certificates 
+                    [certificatesList]="certificatesList"
+                    (editClick)="onEdit($event)" 
+                    (deleteClick)="onDelete($event)"
+                />
                 
                 <app-developer-certificates-form />
+
                 <app-step-buttons
                     [loading]="loading"
                     [showSaveButton]="true"
@@ -81,8 +105,15 @@
             }
 
             @case (6) {
+
+                <dev-preview-projects
+                    [projectsList]="projectsList"
+                    (editClick)="onEdit($event)" 
+                    (deleteClick)="onDelete($event)"
+                />
                 
                 <app-developer-projects-form />
+
                 <app-step-buttons
                     [loading]="loading"
                     [showSaveButton]="true"
@@ -95,7 +126,14 @@
 
             @case (7) {
                 
+                <dev-preview-languages 
+                    [languagesList]="languagesList"
+                    (editClick)="onEdit($event)" 
+                    (deleteClick)="onDelete($event)"
+                />
+                
                 <app-developer-languages-form />
+
                 <app-step-buttons
                     [loading]="loading"
                     [showSaveButton]="true"
@@ -108,7 +146,14 @@
 
             @case (8) {
                 
+                <dev-preview-stacklist 
+                    [stackList]="stackList"
+                    (editClick)="onEdit($event)" 
+                    (deleteClick)="onDelete($event)"
+                />
+
                 <app-developer-stacklist-form />
+
                 <app-step-buttons
                     [loading]="loading"
                     [showSaveButton]="true"

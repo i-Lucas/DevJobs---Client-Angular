@@ -14,6 +14,7 @@ import { ButtonModule } from 'primeng/button';
 import { TabViewModule } from 'primeng/tabview';
 import { InputTextModule } from 'primeng/inputtext';
 import { AccordionModule } from 'primeng/accordion';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 import { CommonSignupService } from './services/common-signup.service';
 
@@ -84,7 +85,8 @@ const routes: Routes = [
     TabViewModule,
     InputTextModule,
     AccordionModule,
-
+    ConfirmPopupModule,
+    
     RouterModule.forChild(routes)
   ]
 })

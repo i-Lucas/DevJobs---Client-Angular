@@ -3,7 +3,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { AppStateService } from '@app-services/app/app.service';
 
@@ -20,6 +20,7 @@ export class BaseComponentService implements OnDestroy {
     private router: Router,
     private appService: AppStateService,
     private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) {
 
     this.appService.getIsRequestInProgress()
@@ -57,4 +58,25 @@ export class BaseComponentService implements OnDestroy {
     window.open('https://' + url, "_blank");
   }
 
+  protected confirmEvent(
+    event: Event,
+    message: string = 'Você tem certeza ?',
+    acceptFunctionCallback?: () => void,
+    rejectFunctionCallback?: () => void,
+  ) {
+
+    this.confirmationService.confirm({
+
+      message,
+      rejectLabel: 'Não',
+      acceptLabel: 'Sim',
+      icon: 'pi pi-exclamation-triangle',
+      target: event.target as EventTarget,
+
+      accept: () => acceptFunctionCallback?.call(this),
+      reject: () => rejectFunctionCallback?.call(this)
+    })
+  }
+
 }
+

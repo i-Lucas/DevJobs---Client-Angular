@@ -1,0 +1,16 @@
+<form class="flex flex-column gap-2 m-auto text-sm w-20rem sm:w-30rem" [formGroup]="aboutForm">
+
+    <label class="block font-medium mb-1">Nome Completo</label>
+    <input formControlName="name" type="text" pInputText class="w-full mb-3">
+
+    <label class="block font-medium mb-1">Idade</label>
+    <input formControlName="age" pKeyFilter="int" type="text" pInputText class="w-full mb-3">
+
+    <label class="block font-medium mb-1">Cargo / Ocupação</label>
+    <input formControlName="occupation" type="text" pInputText class="w-full mb-3">
+
+    <label class="block font-medium mb-1">Resumo Profissional</label>
+    <textarea rows="4" formControlName="resume" cols="30" class="w-full mb-3" pInputTextarea
+        [autoResize]="true"></textarea>
+
+</form>

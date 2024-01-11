@@ -39,11 +39,11 @@ export class CommonFormService extends BaseFormService {
     return this.addressForm;
   }
 
-  public getPasswordForm() {
+  public getPasswordForm(): FormGroup {
     return this.passwordForm
   }
 
-  public getEmailForm() {
+  public getEmailForm(): FormGroup {
     return this.emailForm
   }
 

@@ -24,10 +24,14 @@ import {
 export class BaseFormService implements OnDestroy {
 
   protected destroy$ = new Subject<void>();
-  protected emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
+  protected workloadPattern = /^[1-9]\d{0,3}$/;  
   private strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/;
+  protected emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   private mediumPassword = /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/;
+
+  protected githubPattern = /^https:\/\/github\.com\/.+/;
+  protected linkedinPattern = /^https:\/\/www\.linkedin\.com\/.+/;
 
   ngOnDestroy(): void {
     this.destroy$.next();

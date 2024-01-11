@@ -1,0 +1,19 @@
+<form class="flex flex-column gap-2 m-auto text-sm w-20rem sm:w-30rem" [formGroup]="certificatesForm">
+
+    <label class="block font-medium mb-1">Instituição</label>
+    <input formControlName="institution" type="text" pInputText class="w-full mb-3">
+
+    <label class="block font-medium mb-1">Curso</label>
+    <input formControlName="course" type="text" pInputText class="w-full mb-3">
+
+    <label class="block font-medium mb-1">Carga Horária</label>
+    <div class="flex gap-4">
+        <input pKeyFilter="int" formControlName="workload" type="text" pInputText class="w-full mb-3">
+        <p-dropdown formControlName="workload_tmp" styleClass="mb-3 w-10rem" [options]="workload_tmp" optionValue="name"
+            optionLabel="name" placeholder="Selecione" />
+    </div>
+
+    <label class="block font-medium mb-1">Link</label>
+    <input formControlName="link" type="text" pInputText class="w-full mb-3">
+
+</form>

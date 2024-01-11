@@ -1,0 +1,34 @@
+<form class="flex flex-column gap-2 m-auto text-sm w-20rem sm:w-30rem" [formGroup]="getDeveloperAcademicEducationForm">
+
+    <label class="block font-medium mb-1">Instituição</label>
+    <input formControlName="institution" type="text" pInputText class="w-full mb-3">
+
+    <label class="block font-medium mb-1">Curso</label>
+    <input formControlName="course" type="text" pInputText class="w-full mb-3">
+
+    <label class="block font-medium mb-1">Tipo de curso</label>
+    <p-dropdown formControlName="type" styleClass="mb-3 w-20rem sm:w-30rem" [options]="courseTypes" optionValue="name"
+        optionLabel="name" placeholder="Selecione" />
+
+    <label class="block font-medium mb-1">Modalidade</label>
+    <p-dropdown formControlName="modality" styleClass="mb-3 w-20rem sm:w-30rem" [options]="courseModality"
+        optionValue="name" optionLabel="name" placeholder="Selecione" />
+
+    <label class="block font-medium mb-1">Status</label>
+    <p-dropdown formControlName="status" styleClass="mb-3 w-20rem sm:w-30rem" [options]="courseStatus"
+        optionValue="name" optionLabel="name" placeholder="Selecione" />
+
+    <div class="flex gap-2 mb-3 justify-content-around sm:justify-content-start">
+        <div>
+            <label class="block font-medium mb-1">Início</label>
+            <p-calendar [showIcon]="true" class="p-inputtext-sm" view="month" dateFormat="mm/yy" [readonlyInput]="true"
+                formControlName="from" />
+        </div>
+        <div>
+            <label class="block font-medium mb-1">Término</label>
+            <p-calendar [showIcon]="true" class="p-inputtext-sm" view="month" dateFormat="mm/yy" [readonlyInput]="true"
+                formControlName="to" />
+        </div>
+    </div>
+
+</form>

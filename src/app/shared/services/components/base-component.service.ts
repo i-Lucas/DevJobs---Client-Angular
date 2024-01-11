@@ -1,9 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 import { MessageService } from 'primeng/api';
 
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { AppStateService } from '@app-services/app/app.service';
 
 @Injectable({
@@ -12,18 +13,18 @@ import { AppStateService } from '@app-services/app/app.service';
 export class BaseComponentService implements OnDestroy {
 
   /** global application state loading changed by appService -> getIsRequestInProgress */
-  protected loading: boolean = false;
-
-  protected destroy$ = new Subject<void>();
+  public loading$ = new Subject<boolean>();
+  private destroy$ = new Subject<void>();
 
   constructor(
-    protected appService: AppStateService,
-    protected messageService: MessageService,
+    private router: Router,
+    private appService: AppStateService,
+    private messageService: MessageService,
   ) {
 
     this.appService.getIsRequestInProgress()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((state) => this.loading = state);
+      .subscribe((state) => this.loading$.next(state))
   }
 
   ngOnDestroy() {
@@ -31,12 +32,19 @@ export class BaseComponentService implements OnDestroy {
     this.destroy$.complete();
   }
 
-  protected isRoute(path: string): boolean {
+  public getLoading() {
+    return this.loading$.asObservable();
+  }
+
+  public isRoute(path: string): boolean {
     return location.pathname.includes(path)
   }
 
-  protected showMessage({ type, detail }: ToastProps) {
+  public goTo(path: string) {
+    this.router.navigate([path])
+  }
 
+  public showMessage({ type, detail }: ToastProps) {
     const summary = { success: 'Sucesso', error: "Algo deu errado", warn: 'Atenção', info: 'Aviso' }
     this.messageService.add({ severity: type, summary: summary[type], detail });
   }

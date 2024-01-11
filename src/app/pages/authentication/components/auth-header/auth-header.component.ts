@@ -1,21 +1,32 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 
-import { MessageService } from 'primeng/api';
-
-import { AppStateService } from '@app-services/app/app.service';
 import { BaseComponentService } from '@app-services/components/base-component.service';
 
 @Component({
   selector: 'app-auth-header',
   templateUrl: './auth-header.component.html',
 })
-export class AuthHeaderComponent extends BaseComponentService {
+export class AuthHeaderComponent implements OnDestroy {
 
-  constructor(
-    protected override messageService: MessageService,
-    protected override appService: AppStateService,
-  ) {
-    super(appService, messageService);
+  protected loading: boolean = false;
+  protected destroy$ = new Subject<void>();
+
+  constructor(private componentService: BaseComponentService) {
+
+    this.componentService
+      .getLoading()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((state) => this.loading = state)
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  protected isRoute(path: string): boolean {
+    return this.componentService.isRoute(path);
   }
 
 }

@@ -10,15 +10,16 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 
-import { EmailFormComponent } from './components/email-form/email-form.component';
-import { AddressFormComponent } from './components/address-form/address-form.component';
-import { PasswordFormComponent } from './components/password-form/password-form.component';
-import { CompanyDetailsFormComponent } from './components/company-details-form/company-details-form.component';
-import { CompanyContactFormComponent } from './components/company-contact-form/company-contact-form.component';
-import { CompanyAccountFormComponent } from './components/company-account-form/company-account-form.component';
-import { CompanySocialNetworkFormComponent } from './components/company-social-network-form/company-social-network-form.component';
 import { CommonFormService } from './services/builder/commom-forms/common-forms.service';
 import { CompanyFormService } from './services/builder/company-forms/company-form.service';
+
+import { EmailFormComponent } from './components/common-forms/email-form/email-form.component';
+import { AddressFormComponent } from './components/common-forms/address-form/address-form.component';
+import { PasswordFormComponent } from './components/common-forms/password-form/password-form.component';
+import { CompanyDetailsFormComponent } from './components/company-forms/company-details-form/company-details-form.component';
+import { CompanyContactFormComponent } from './components/company-forms/company-contact-form/company-contact-form.component';
+import { CompanyAccountFormComponent } from './components/company-forms/company-account-form/company-account-form.component';
+import { CompanySocialNetworkFormComponent } from './components/company-forms/company-social-network-form/company-social-network-form.component';
 
 @NgModule({
   declarations: [

@@ -11,7 +11,7 @@
                 
                 <app-developer-about-form />
                 
-                <app-step-buttons
+                <signup-step-buttons
                     [loading]="loading"
                     [showPreviousButton]="false"
                     [disabled]="aboutForm.invalid"
@@ -21,11 +21,11 @@
 
             @case (1) {
                 
-                <app-developer-contact-form />
+                <app-developer-contact-form (emailAvailabilityError)="onEmailAvailabilityError($event)" />
 
-                <app-step-buttons
+                <signup-step-buttons
                     [loading]="loading" 
-                    [disabled]="addressForm.invalid"
+                    [disabled]="contactForm.invalid"
                     (nextClick)="changeStep('NEXT')"
                     (previousClick)="changeStep('PREVIOUS')"
                 />
@@ -35,7 +35,7 @@
                 
                 <app-address-form />
 
-                <app-step-buttons
+                <signup-step-buttons
                     [loading]="loading"
                     [disabled]="addressForm.invalid"
                     (nextClick)="changeStep('NEXT')"
@@ -45,122 +45,121 @@
             
             @case (3) {
 
-                <dev-preview-education 
+                <dev-academic-form-preview
                     [academicEducationList]="academicEducationList"
-                    (editClick)="onEdit($event)" 
-                    (deleteClick)="onDelete($event)"
+                    (onChange)="handlePreviewChanges($event)"
                 />
-                
+
                 <app-developer-academic-education-form />
 
-                <app-step-buttons
+                <signup-step-buttons
+                    [optional]="true"
                     [loading]="loading"
                     [showSaveButton]="true"
                     (nextClick)="changeStep('NEXT')"
                     (previousClick)="changeStep('PREVIOUS')"
-                    (saveClick)="onSave(academicEducationForm)"
-                    [disabled]="academicEducationForm.invalid"
+                    (saveClick)="onSave('ACADEMIC_EDUCATION')"
+                    [disabled]="academicEducationForm.invalid"        
                 />
-          
             }
 
             @case (4) {
 
-                <dev-preview-job
-                    [jobExperiencesList]="jobExperiencesList" 
-                    (editClick)="onEdit($event)" 
-                    (deleteClick)="onDelete($event)"
+                <job-experience-form-preview
+                    [jobExperiencesList]="jobExperiencesList"
+                    (onChange)="handlePreviewChanges($event)"
                 />
-                
+
                 <app-developer-job-experiences-form />
 
-                <app-step-buttons
+                <signup-step-buttons
+                    [optional]="true"
                     [loading]="loading"
                     [showSaveButton]="true"
                     (nextClick)="changeStep('NEXT')"
                     (previousClick)="changeStep('PREVIOUS')"
-                    (saveClick)="onSave(jobExperiencesForm)"
-                    [disabled]="jobExperiencesForm.invalid"
+                    (saveClick)="onSave('JOB_EXPERIENCES')"
+                    [disabled]="jobExperiencesForm.invalid"  
                 />
             }
 
             @case (5) {
 
-                <dev-preview-certificates 
+                <certificates-form-preview 
                     [certificatesList]="certificatesList"
-                    (editClick)="onEdit($event)" 
-                    (deleteClick)="onDelete($event)"
+                    (onChange)="handlePreviewChanges($event)"
                 />
                 
                 <app-developer-certificates-form />
 
-                <app-step-buttons
+                <signup-step-buttons
+                    [optional]="true"
                     [loading]="loading"
                     [showSaveButton]="true"
                     (nextClick)="changeStep('NEXT')"
-                    (previousClick)="changeStep('PREVIOUS')"
-                    (saveClick)="onSave(certificatesForm)"
                     [disabled]="certificatesForm.invalid"
+                    (saveClick)="onSave('CERTIFICATES')"
+                    (previousClick)="changeStep('PREVIOUS')"
                 />
             }
 
             @case (6) {
 
-                <dev-preview-projects
+                <projects-form-preview
                     [projectsList]="projectsList"
-                    (editClick)="onEdit($event)" 
-                    (deleteClick)="onDelete($event)"
+                    (onChange)="handlePreviewChanges($event)"
                 />
-                
+
                 <app-developer-projects-form />
 
-                <app-step-buttons
+                <signup-step-buttons
+                    [optional]="true"
                     [loading]="loading"
                     [showSaveButton]="true"
                     (nextClick)="changeStep('NEXT')"
-                    (previousClick)="changeStep('PREVIOUS')"
-                    (saveClick)="onSave(projectsForm)"
                     [disabled]="projectsForm.invalid"
-                />
+                    (saveClick)="onSave('PROJECTS')"
+                    (previousClick)="changeStep('PREVIOUS')"
+                />            
             }
 
             @case (7) {
-                
-                <dev-preview-languages 
+        
+                <languages-form-preview 
                     [languagesList]="languagesList"
-                    (editClick)="onEdit($event)" 
-                    (deleteClick)="onDelete($event)"
+                    (onChange)="handlePreviewChanges($event)"
                 />
-                
+
                 <app-developer-languages-form />
 
-                <app-step-buttons
+                <signup-step-buttons
+                    [optional]="true"
                     [loading]="loading"
                     [showSaveButton]="true"
                     (nextClick)="changeStep('NEXT')"
-                    (previousClick)="changeStep('PREVIOUS')"
-                    (saveClick)="onSave(languagesForm)"
                     [disabled]="languagesForm.invalid"
+                    (saveClick)="onSave('LANGUAGES')"
+                    (previousClick)="changeStep('PREVIOUS')"
                 />
             }
 
             @case (8) {
-                
-                <dev-preview-stacklist 
+                                
+                <stacklist-form-preview
                     [stackList]="stackList"
-                    (editClick)="onEdit($event)" 
-                    (deleteClick)="onDelete($event)"
+                    (onChange)="handlePreviewChanges($event)"
                 />
 
                 <app-developer-stacklist-form />
 
-                <app-step-buttons
+                <signup-step-buttons
+                    [optional]="true"
                     [loading]="loading"
                     [showSaveButton]="true"
                     (nextClick)="changeStep('NEXT')"
-                    (previousClick)="changeStep('PREVIOUS')"
-                    (saveClick)="onSave(stackListForm)"
                     [disabled]="stackListForm.invalid"
+                    (saveClick)="onSave('STACKLIST')"
+                    (previousClick)="changeStep('PREVIOUS')"
                 />
             }
             
@@ -173,12 +172,12 @@
                     [loading]="loading" 
                     icon="pi pi-arrow-right" 
                     label="Finalizar Cadastro"
-                    [disabled]="contactForm.invalid" 
+                    [disabled]="passwordForm.invalid" 
                     (click)="finalizeRegistration()" 
                     class="w-full p-button-success">
                 </button>
 
-                <app-step-buttons
+                <signup-step-buttons
                     [loading]="loading" 
                     [showNextButton]="false"
                     (previousClick)="changeStep('PREVIOUS')"

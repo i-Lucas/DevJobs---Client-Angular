@@ -1,7 +1,7 @@
 <form class="flex flex-column gap-2 m-auto text-sm w-20rem sm:w-30rem" [formGroup]="contactForm">
 
     <label class="block font-medium mb-1">Email</label>
-    <input formControlName="email" type="text" pInputText class="w-full mb-3">
+    <app-email-form (emailAvailabilityError)="onEmailAvailabilityError($event)" />
 
     <label class="block font-medium mb-1">Github</label>
     <input formControlName="github" type="text" pInputText class="w-full mb-3">

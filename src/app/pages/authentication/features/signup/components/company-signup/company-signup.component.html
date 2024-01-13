@@ -10,7 +10,8 @@
             @case (0) {
                 
                 <app-company-account-form (emailAvailabilityError)="onEmailAvailabilityError($event)" />
-                <app-step-buttons
+
+                <signup-step-buttons
                     [loading]="loading"
                     [showPreviousButton]="false"
                     [disabled]="accountForm.invalid"
@@ -21,7 +22,8 @@
             @case (1) {
 
                 <app-company-details-form />
-                <app-step-buttons
+
+                <signup-step-buttons
                     [loading]="loading" 
                     [disabled]="detailsForm.invalid"
                     (nextClick)="changeStep('NEXT')" 
@@ -32,7 +34,8 @@
             @case (2) {
 
                 <app-address-form (cepExternApiError)="onCepExternApiError($event)" />
-                <app-step-buttons
+
+                <signup-step-buttons
                     [loading]="loading" 
                     [disabled]="addressForm.invalid"
                     (nextClick)="changeStep('NEXT')"
@@ -43,7 +46,8 @@
             @case (3) {
                 
                 <app-company-social-network-form />
-                <app-step-buttons
+                
+                <signup-step-buttons
                     [loading]="loading" 
                     (nextClick)="changeStep('NEXT')"
                     [disabled]="socialNetworkForm.invalid"
@@ -65,7 +69,7 @@
                     class="w-full p-button-success">
                 </button>
 
-                <app-step-buttons
+                <signup-step-buttons
                     [loading]="loading" 
                     [showNextButton]="false"
                     (previousClick)="changeStep('PREVIOUS')"

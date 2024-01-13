@@ -8,7 +8,7 @@
                     <div class="flex gap-2 align-items-center">
                         <i class="material-icons">web</i>
                         <span>Projetos</span>
-                    </div>                 
+                    </div>
                 </div>
             </ng-template>
 
@@ -21,37 +21,22 @@
                         <p><span class="font-semibold">Título</span>: {{item.title}}</p>
                         <p class="font-semibold">Descrição:</p>
                         <p class="max-w-30rem text-justify">{{ item.resume }}</p>
-                        <p class="cursor-pointer hover:underline" (click)="openNewWindow(item.link!)">Link</p>
 
-                        <dev-option-buttons [item]="item" (deleteClick)="onDeleteClick(item)" (editClick)="onEditClick(item)" />
+                        <div class="flex gap-2 align-items-center">
+                            <i class="material-icons">link</i>
+                            <p class="cursor-pointer font-bold hover:underline" (click)="openNewWindow(item.link!)">Link</p>
+                        </div>
+
+                        <form-edit-buttons 
+                            [item]="item" 
+                            (deleteClick)="onAction('remove', item)"
+                            (editClick)="onAction('edit', item)" 
+                        />
 
                     </p-tabPanel>
                 }
 
             </p-tabView>
-
         </p-accordionTab>
-</p-accordion>
-
+    </p-accordion>
 }
-
-
-<!-- 
-
-
- -->
-
-
-<!-- 
-
-
-                 <ng-template pTemplate="header">
-                    <div class="flex flex-column w-full">
-                        <div class="flex gap-2 align-items-center">
-                            <span class="text-xl font-bold">Editar Perfil</span>
-                            <span class="pi pi-user-edit"></span>
-                        </div>
-                     
-                    </div>
-                </ng-template>
- -->

@@ -11,6 +11,7 @@ import { DeveloperSignupComponent } from './components/developer-signup/develope
 import { TagModule } from 'primeng/tag';
 import { ChipModule } from 'primeng/chip';
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 import { TabViewModule } from 'primeng/tabview';
 import { InputTextModule } from 'primeng/inputtext';
 import { AccordionModule } from 'primeng/accordion';
@@ -23,13 +24,13 @@ import { StepButtonsComponent } from './components/step-buttons/step-buttons.com
 import { SharedComponentsModule } from 'app/shared/components/shared-components.module';
 import { DeveloperFormService } from '@app-shared-forms/services/builder/developer-forms/developer-form.service';
 
-import { PreviewJobComponent } from './components/form-preview/preview-job/preview-job.component';
-import { OptionButtonsComponent } from './components/form-preview/option-buttons/option-buttons.component';
-import { PreviewEducationComponent } from './components/form-preview/preview-education/preview-education.component';
-import { PreviewCertificatesComponent } from './components/form-preview/preview-certificates/preview-certificates.component';
-import { PreviewProjectsComponent } from './components/form-preview/preview-projects/preview-projects.component';
-import { PreviewStacklistComponent } from './components/form-preview/preview-stacklist/preview-stacklist.component';
-import { PreviewLanguagesComponent } from './components/form-preview/preview-languages/preview-languages.component';
+import { ProjectsComponent } from './components/form-preview/projects/projects.component';
+import { StacklistComponent } from './components/form-preview/stacklist/stacklist.component';
+import { LanguagesComponent } from './components/form-preview/languages/languages.component';
+import { EditButtonsComponent } from './components/form-preview/edit-buttons/edit-buttons.component';
+import { CertificatesComponent } from './components/form-preview/certificates/certificates.component';
+import { JobExperienceComponent } from './components/form-preview/job-experience/job-experience.component';
+import { AcademicEducationComponent } from './components/form-preview/academic-education/academic-education.component';
 
 const routes: Routes = [
   {
@@ -58,14 +59,14 @@ const routes: Routes = [
     DeveloperSignupComponent,
     CompanySignupComponent,
     StepButtonsComponent,
-    
-    PreviewEducationComponent,
-    PreviewJobComponent,
-    PreviewCertificatesComponent,
-    OptionButtonsComponent,
-    PreviewProjectsComponent,
-    PreviewStacklistComponent,
-    PreviewLanguagesComponent,
+
+    ProjectsComponent,
+    StacklistComponent,
+    LanguagesComponent,
+    EditButtonsComponent,
+    CertificatesComponent,
+    JobExperienceComponent,
+    AcademicEducationComponent,
   ],
   providers: [
     CommonSignupService,
@@ -82,11 +83,12 @@ const routes: Routes = [
     TagModule,
     ChipModule,
     ButtonModule,
+    TooltipModule,
     TabViewModule,
     InputTextModule,
     AccordionModule,
     ConfirmPopupModule,
-    
+
     RouterModule.forChild(routes)
   ]
 })

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PreviewJobComponent } from './preview-job.component';
+import { EditButtonsComponent } from './edit-buttons.component';
 
-describe('PreviewJobComponent', () => {
-  let component: PreviewJobComponent;
-  let fixture: ComponentFixture<PreviewJobComponent>;
+describe('EditButtonsComponent', () => {
+  let component: EditButtonsComponent;
+  let fixture: ComponentFixture<EditButtonsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PreviewJobComponent]
+      declarations: [EditButtonsComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(PreviewJobComponent);
+    fixture = TestBed.createComponent(EditButtonsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

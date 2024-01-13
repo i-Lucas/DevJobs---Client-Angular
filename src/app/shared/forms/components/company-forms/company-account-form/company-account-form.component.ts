@@ -9,9 +9,8 @@ import { CompanyFormService } from '@app-shared-forms/services/builder/company-f
 })
 export class CompanyAccountFormComponent {
 
-  protected accountForm: FormGroup = this.companyFormService.getCompanyAccountForm();
-
   @Output() emailAvailabilityError = new EventEmitter<ApiError>();
+  protected accountForm: FormGroup = this.companyFormService.getCompanyAccountForm();
 
   constructor(private companyFormService: CompanyFormService) { }
 

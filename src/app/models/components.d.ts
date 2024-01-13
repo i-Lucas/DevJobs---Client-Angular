@@ -8,9 +8,7 @@ interface ToastProps {
     type: 'info' | 'warn' | 'success' | 'error';
 }
 
-interface DevSignupFormPreviewEvent {
-
-    identifier:
+type DeveloperProfileListFieldsIdentifier =
     'ACADEMIC_EDUCATION' |
     'JOB_EXPERIENCES' |
     'CERTIFICATES' |
@@ -18,11 +16,11 @@ interface DevSignupFormPreviewEvent {
     'LANGUAGES' |
     'STACKLIST';
 
-    item:
-    DeveloperProfileAcademicEducation |
-    DeveloperProfileJobExperiences |
-    DeveloperProfileCertificates |
-    DeveloperProfileProjects |
-    DeveloperProfileLanguages |
-    DeveloperProfileStackList;
+interface DevSignupFormPreviewEvent {
+
+    option: 'edit' | 'remove';
+    item: DeveloperProfileListFields;
+    identifier: DeveloperProfileListFieldsIdentifier
 }
+
+

@@ -8,7 +8,7 @@
                     <div class="flex gap-2 align-items-center">
                         <i class="material-icons">workspace_premium</i>
                         <span>Certificados</span>
-                    </div>                 
+                    </div>
                 </div>
             </ng-template>
 
@@ -23,7 +23,11 @@
                         <p><span class="font-semibold">Carga Horária</span>: {{item.workload}}</p>
                         <p class="cursor-pointer hover:underline">Link</p>
 
-                        <dev-option-buttons [item]="item" (deleteClick)="onDeleteClick(item)" (editClick)="onEditClick(item)" />
+                        <form-edit-buttons 
+                            [item]="item" 
+                            (deleteClick)="onAction('remove', item)"
+                            (editClick)="onAction('edit', item)" 
+                        />
 
                     </p-tabPanel>
                 }
@@ -31,5 +35,4 @@
             </p-tabView>
         </p-accordionTab>
     </p-accordion>
-
 }

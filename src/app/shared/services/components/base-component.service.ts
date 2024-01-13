@@ -79,4 +79,3 @@ export class BaseComponentService implements OnDestroy {
   }
 
 }
-

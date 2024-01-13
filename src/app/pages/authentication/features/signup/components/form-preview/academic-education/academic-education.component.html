@@ -8,7 +8,7 @@
                     <div class="flex gap-2 align-items-center">
                         <i class="material-icons">school</i>
                         <span>Formação Acadêmica</span>
-                    </div>                 
+                    </div>
                 </div>
             </ng-template>
 
@@ -26,7 +26,11 @@
                         <p><span class="font-semibold">Início</span>: {{item.from | msToMMyyyy}}</p>
                         <p><span class="font-semibold">Término</span>: {{item.to | msToMMyyyy }}</p>
 
-                        <dev-option-buttons [item]="item" (deleteClick)="onDeleteClick(item)" (editClick)="onEditClick(item)" />
+                        <form-edit-buttons 
+                            [item]="item" 
+                            (deleteClick)="onAction('remove', item)"
+                            (editClick)="onAction('edit', item)" 
+                        />
 
                     </p-tabPanel>
                 }
@@ -34,5 +38,4 @@
             </p-tabView>
         </p-accordionTab>
     </p-accordion>
-
 }

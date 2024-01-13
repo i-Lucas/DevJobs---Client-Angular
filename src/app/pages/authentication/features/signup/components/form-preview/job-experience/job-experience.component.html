@@ -13,7 +13,7 @@
             </ng-template>
 
             <p-tabView>
-                
+
                 @for (item of jobExperiencesList; track item) {
 
                     <p-tabPanel header="{{item.company}}">
@@ -27,15 +27,17 @@
 
                         <p><span class="font-semibold">Início</span>: {{item.from | msToMMyyyy}}</p>
                         <p><span class="font-semibold">Término</span>: {{item.to | msToMMyyyy }}</p>
+                        
+                        <form-edit-buttons 
+                            [item]="item" 
+                            (deleteClick)="onAction('remove', item)"
+                            (editClick)="onAction('edit', item)" 
+                        />
 
-                        <dev-option-buttons [item]="item" (deleteClick)="onDeleteClick(item)" (editClick)="onEditClick(item)" />
-
-                    </p-tabPanel>                    
+                    </p-tabPanel>
                 }
 
             </p-tabView>
-
         </p-accordionTab>
     </p-accordion>
-
 }

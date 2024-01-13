@@ -3,10 +3,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { BaseComponentService } from '@app-services/components/base-component.service';
 
 @Component({
-  selector: 'dev-option-buttons',
-  templateUrl: './option-buttons.component.html',
+  selector: 'form-edit-buttons',
+  templateUrl: './edit-buttons.component.html',
 })
-export class OptionButtonsComponent<T> extends BaseComponentService {
+export class EditButtonsComponent<T> extends BaseComponentService {
 
   @Input() item: T | undefined
 

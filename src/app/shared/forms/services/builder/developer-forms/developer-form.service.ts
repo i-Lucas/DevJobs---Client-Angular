@@ -34,33 +34,27 @@ export class DeveloperFormService extends BaseFormService {
       phone: ['', [Validators.required, Validators.minLength(11)]],
       github: ['', [Validators.required, this.validatePattern(this.githubPattern)]],
       linkedin: ['', [Validators.required, this.validatePattern(this.linkedinPattern)]],
-      email: ['', [Validators.required, this.validatePattern(this.emailPattern)]]
+      email: this.commomFormService.getEmailForm(),
     })
 
-    // the id is necessary, because when edited the form must receive the id again
-
     this.projectsForm = this.formBuilder.group({
-      id: new Date().getTime().toString(),
       title: ['', [Validators.required, Validators.minLength(3)]],
       resume: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(600)]],
       link: ['', [Validators.required]],
     })
 
     this.languagesForm = this.formBuilder.group({
-      id: new Date().getTime().toString(),
       language: ['', [Validators.required, Validators.minLength(3)]],
       level: ['', [Validators.required]],
     })
 
     this.stackListForm = this.formBuilder.group({
-      id: new Date().getTime().toString(),
       name: ['', [Validators.required, Validators.minLength(3)]],
       workload: ['', [Validators.required, Validators.pattern(this.workloadPattern)]],
       workload_tmp: ['', [Validators.required]],
     })
 
     this.certificatesForm = this.formBuilder.group({
-      id: new Date().getTime().toString(),
       course: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
       institution: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
       workload: ['', [Validators.required, Validators.pattern(this.workloadPattern)]],
@@ -69,7 +63,6 @@ export class DeveloperFormService extends BaseFormService {
     })
 
     this.jobExperiencesForm = this.formBuilder.group({
-      id: new Date().getTime().toString(),
       company: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
       occupation: ['', [Validators.required, Validators.maxLength(30)]],
       resume: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(600)]],
@@ -79,7 +72,6 @@ export class DeveloperFormService extends BaseFormService {
     })
 
     this.academicEducationForm = this.formBuilder.group({
-      id: new Date().getTime().toString(),
       institution: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
       course: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
       modality: ['', [Validators.required]],
@@ -88,7 +80,6 @@ export class DeveloperFormService extends BaseFormService {
       from: ['', [Validators.required]],
       to: ['', [Validators.required]],
     })
-
   }
 
   public getDeveloperWorkload(): DropdownOptionsList[] {

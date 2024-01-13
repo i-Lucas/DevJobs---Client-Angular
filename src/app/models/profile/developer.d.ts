@@ -76,7 +76,7 @@ interface DeveloperProfileLanguages {
     id?: string;
 
     language: string;
-    level: string;
+    level: string; // 'Básico' | 'Intermediário' | 'Avançado' | 'Proficiente';
 
     createdAt: string;
     updatedAt: string;
@@ -148,3 +148,11 @@ interface DeveloperProfile {
     createdAt: string;
     updatedAt: string;
 }
+
+type DeveloperProfileListFields =
+    DeveloperProfileAcademicEducation |
+    DeveloperProfileJobExperiences |
+    DeveloperProfileCertificates |
+    DeveloperProfileProjects |
+    DeveloperProfileLanguages |
+    DeveloperProfileStackList;

@@ -2,24 +2,43 @@
 
     @if (showSaveButton) {
 
-        <button [loading]="loading" [disabled]="disabled" (click)="onSave()" pButton label="Salvar" icon="pi pi-plus"
-            class="w-full mb-1 p-button-success"></button>
+        <button 
+            type="submit"
+            icon="pi pi-plus"
+            [loading]="loading"
+            [disabled]="disabled"
+            (click)="onSave()" 
+            pButton label="Salvar" 
+            class="w-full mb-1 p-button-success">
+        </button>
     }
 
     <div class="flex gap-2">
 
         @if (showPreviousButton) {
 
-            <button (click)="onPreviousClick()" pButton label="Voltar" icon="pi pi-arrow-left"
-                class="w-full mb-1 p-button-secondary"></button>
+            <button 
+                type="submit"
+                [loading]="loading"
+                pButton label="Voltar" 
+                icon="pi pi-arrow-left"
+                (click)="onPreviousClick()" 
+                class="w-full mb-1 p-button-secondary">
+            </button>
         }
 
         @if(showNextButton) {
 
-            <button [loading]="loading" [disabled]="disabled" (click)="onNextClick()" pButton label="Avançar"
-                icon="pi pi-arrow-right" class="w-full mb-1 p-button-primary"></button>
+            <button 
+                type="submit"
+                [loading]="loading"
+                [disabled]="optional ? false : disabled"
+                pButton label="Avançar" 
+                icon="pi pi-arrow-right"
+                (click)="onNextClick()" 
+                class="w-full mb-1 p-button-primary">
+            </button>
         }
 
     </div>
-
 </div>

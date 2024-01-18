@@ -32,9 +32,9 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.setupRequestInProgressSubscription();
-    this.setupSidebarStateSubscription();
     this.getAccountData();
+    this.setupSidebarStateSubscription();
+    this.setupRequestInProgressSubscription();
   }
 
   ngOnDestroy() {
@@ -85,8 +85,7 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
   }
 
   private handleGetAccountError(error: ApiError) {
-    this.authService.removeToken();
-    this.componentService.goTo('/auth');
+    this.disconnect();
     this.componentService.showMessage({ detail: error.message, type: 'error' });
   }
 
@@ -112,16 +111,16 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
         this.appService.toggleSidebar();
         break;
       case 'LOGOUT':
-        this.logout();
+        this.disconnect();
+        this.componentService.showMessage({ type: 'info', detail: 'Até Logo !' });
         break;
     }
   }
 
-  private logout() {
+  private disconnect() {
     this.authService.removeToken();
     this.dashboardService.logout();
     this.componentService.goTo('/auth');
-    this.componentService.showMessage({ type: 'info', detail: 'Até Logo !' });
   }
 
 }

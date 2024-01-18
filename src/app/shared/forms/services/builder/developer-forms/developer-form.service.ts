@@ -66,7 +66,7 @@ export class DeveloperFormService extends BaseFormService {
       company: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
       occupation: ['', [Validators.required, Validators.maxLength(30)]],
       resume: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(600)]],
-      current_job: ['true', [Validators.required]],
+      current_job: ['', [Validators.required]],
       from: ['', [Validators.required]],
       to: ['', [Validators.required]]
     })

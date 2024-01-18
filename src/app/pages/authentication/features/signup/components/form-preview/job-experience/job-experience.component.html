@@ -18,7 +18,10 @@
 
                     <p-tabPanel header="{{item.company}}">
 
-                        <p-tag *ngIf="item.current_job" value="Emprego Atual"></p-tag>
+                        @if (item.current_job) {
+                            <p-tag value="Emprego Atual" />
+                        }
+
                         <p><span class="font-semibold">Empresa</span>: {{item.company}}</p>
                         <p><span class="font-semibold">Cargo</span>: {{item.occupation}}</p>
 

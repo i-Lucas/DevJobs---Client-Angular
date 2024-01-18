@@ -42,11 +42,12 @@ export default class MockService {
         ];
     }
 
-    private getLorem() {
+    private getLorem(): string {
 
-        return 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'.concat(
-            ' Ipsa, quasi. Officia doloremque quasi nemo rem perferendis recusandae voluptas aliquam,').concat(
-                ' ratione, harum excepturi in laudantium praesentium dolorem ipsa nostrum accusantium quaerat!')
+        const a = 'Lorem ipsum dolor sit amet consectetur adipisicing elit ';
+        const b = 'Ipsa, quasi. Officia doloremque quasi nemo rem perferendis recusandae voluptas aliquam, ';
+        const c = 'ratione, harum excepturi in laudantium praesentium dolorem ipsa nostrum accusantium quaerat!';
+        return a.concat(b).concat(c);
     }
 
     public getEducation(count: number): DeveloperProfileAcademicEducation[] {
@@ -100,14 +101,12 @@ export default class MockService {
         const lorem = this.getLorem();
         const random = (array: string[]) => this.getRandomElement(array);
 
-        const current_job = "false" as unknown as boolean; // workaround
-
         function jobFactory(id: number): DeveloperProfileJobExperiences {
 
             return {
                 to: now,
                 from: now,
-                current_job,
+                current_job: true,
                 resume: lorem,
                 updatedAt: now,
                 createdAt: now,

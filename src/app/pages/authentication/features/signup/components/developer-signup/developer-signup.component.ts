@@ -5,7 +5,6 @@ import { HttpService } from '@app-services/http/http.service';
 import { CommonSignupService } from '../../services/common-signup.service';
 import { BaseComponentService } from '@app-services/components/base-component.service';
 import { DeveloperFormService } from '@app-shared-forms/services/builder/developer-forms/developer-form.service';
-import MockService from '../../services/mock.service';
 
 type FormMap = {
   [key in DeveloperProfileListFieldsIdentifier]: () => void;
@@ -29,22 +28,22 @@ export class DeveloperSignupComponent extends CommonSignupService {
   protected aboutForm: FormGroup = this.developerFormService.getDeveloperAboutForm();
   protected contactForm: FormGroup = this.developerFormService.getDeveloperContactForm();
 
-  protected stackList: DeveloperProfileStackList[] = this.mock.getStackList(20);
+  protected stackList: DeveloperProfileStackList[] = [];
   protected stackListForm: FormGroup = this.developerFormService.getDeveloperStacklistForm();
 
-  protected languagesList: DeveloperProfileLanguages[] = this.mock.getLanguages(10);
+  protected languagesList: DeveloperProfileLanguages[] = [];
   protected languagesForm: FormGroup = this.developerFormService.getDeveloperLanguagesForm();
 
-  protected projectsList: DeveloperProfileProjects[] = this.mock.getProjects(10);
+  protected projectsList: DeveloperProfileProjects[] = [];
   protected projectsForm: FormGroup = this.developerFormService.getDeveloperProjectsForm();
 
-  protected certificatesList: DeveloperProfileCertificates[] = this.mock.getCertificates(10);
+  protected certificatesList: DeveloperProfileCertificates[] = [];
   protected certificatesForm: FormGroup = this.developerFormService.getDeveloperCertificatesForm();
 
-  protected jobExperiencesList: DeveloperProfileJobExperiences[] = this.mock.getJobs(10);
+  protected jobExperiencesList: DeveloperProfileJobExperiences[] = [];
   protected jobExperiencesForm: FormGroup = this.developerFormService.getDeveloperJobExperiencesForm();
 
-  protected academicEducationList: DeveloperProfileAcademicEducation[] = this.mock.getEducation(10);
+  protected academicEducationList: DeveloperProfileAcademicEducation[] = [];
   protected academicEducationForm: FormGroup = this.developerFormService.getDeveloperAcademicEducationForm();
 
   protected stepMessages: string[] = [
@@ -63,7 +62,6 @@ export class DeveloperSignupComponent extends CommonSignupService {
   protected override currentStep: number = 0;
 
   constructor(
-    private mock: MockService,
     private cdRef: ChangeDetectorRef,
     protected override httpService: HttpService,
     private developerFormService: DeveloperFormService,
@@ -143,10 +141,13 @@ export class DeveloperSignupComponent extends CommonSignupService {
   }
 
   private addFormToList(form: FormGroup, list: DeveloperProfileListFields[]) {
+    list.push(this.manipulateFormValue(form.value));
+    form.reset();
+  }
 
-    const formValue = form.value;
+  private manipulateFormValue(formValue: FormGroup['value']) {
+
     const now = new Date().getTime().toString();
-    const strToBool = (value: string): boolean => JSON.parse(value.toLowerCase());
 
     const formData = {
       id: now,
@@ -155,10 +156,9 @@ export class DeveloperSignupComponent extends CommonSignupService {
       ...formValue,
     };
 
-    if (form.value.from) {
+    if (formData.from) {
       formData.to = this.componentService.convertToMilliseconds(formValue.to);
       formData.from = this.componentService.convertToMilliseconds(formValue.from);
-      form.value.current_job && (formData.current_job = strToBool(form.value.current_job));
     }
 
     if (formData.workload) {
@@ -166,8 +166,7 @@ export class DeveloperSignupComponent extends CommonSignupService {
       formData.workload = formValue.workload.concat(' ', formValue.workload_tmp);
     }
 
-    list.push(formData);
-    form.reset();
+    return formData
   }
 
   protected finalizeRegistration() {

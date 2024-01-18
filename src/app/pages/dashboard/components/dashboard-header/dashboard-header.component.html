@@ -1,1 +1,78 @@
-<p>dashboard-header works!</p>
+<header class="border-round">
+
+    <main class="flex justify-content-between align-items-center w-full py-4 px-2 md:px-4 md:py-0">
+
+        <section class="flex gap-2 md:gap-4">
+
+            <p-button
+                [disabled]="loading"
+                [loading]="loading"
+                (click)="toggleSidebar()"
+                icon="pi pi-bars" size="small"
+                styleClass="p-button-rounded w-2rem h-2rem"
+            />
+
+            <p-button 
+                size="small"
+                icon="pi pi-sun"
+                (click)="changeTheme()"
+                styleClass="p-button-rounded w-2rem h-2rem"
+            />
+                
+        </section>
+
+        <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input 
+                type="text"
+                pInputText 
+                placeholder="Pesquisar" 
+                class="p-inputtext-sm"
+            />
+        </span>
+
+        <section class="flex align-items-center gap-2 md:gap-4">
+
+            @if (!loading && props) {
+
+                <h1
+                    class="hidden text-sm md:block">
+                    {{props.userName}}
+                </h1>
+
+                <p-avatar
+                    size="normal"
+                    shape="circle"
+                    pTooltip="Opções"
+                    image={{props.userPicture}}
+                    (click)="menu.toggle($event)"
+                    styleClass="mr-2 cursor-pointer"
+                />
+
+            } @else {
+
+                <p-skeleton width="5rem" />
+                <p-skeleton
+                    size="2rem"
+                    shape="circle"
+                    styleClass="mr-2"
+                />
+            }
+
+        </section>
+    </main>
+
+    @if (loading) {
+
+        <p-progressBar
+            mode="indeterminate"
+            [style]="{ height: '3px' }"
+        />
+    }
+
+</header>
+
+<p-tieredMenu #menu
+    [model]="menuOptions"
+    [popup]="true"
+/>

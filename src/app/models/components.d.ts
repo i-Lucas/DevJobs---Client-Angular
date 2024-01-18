@@ -23,4 +23,19 @@ interface DevSignupFormPreviewEvent {
     identifier: DeveloperProfileListFieldsIdentifier
 }
 
+interface DashboardHeaderProps {
 
+    userName: string;
+    userPicture: string;
+}
+
+interface DashboardHeaderEvents {
+    action: 'TOGGLE_SIDEBAR' | 'CHANGE_THEME' | 'LOGOUT'
+}
+
+interface PMenuOptions {
+
+    label: string;
+    icon: string;
+    command?: () => void;
+}

@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard-sidebar',
   templateUrl: './dashboard-sidebar.component.html',
-  styleUrl: './dashboard-sidebar.component.scss'
 })
 export class DashboardSidebarComponent {
 
-  protected sidebarVisible: boolean = false
+  @Input() isOpen: boolean = false;
+  @Output() onHide = new EventEmitter<void>()
 
 }

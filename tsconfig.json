@@ -31,6 +31,9 @@
       "@app-pipes/*": [
         "app/pipes/*"
       ],
+      "@app-guards/*": [
+        "app/guards/*"
+      ],
       "@app-services/*": [
         "app/shared/services/*"
       ],

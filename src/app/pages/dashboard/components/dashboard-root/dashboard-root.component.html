@@ -1,8 +1,12 @@
-<app-dashboard-header />
+<app-dashboard-header 
+    [loading]="loading"
+    [props]="headerProps"
+    (onAction)="handleAction($event)"
+/>
 <main>
-    <app-dashboard-sidebar />
-    <section>
-        <p>dashboard-root works!</p>
-        <router-outlet />
-    </section>
+    <router-outlet />
+    <app-dashboard-sidebar 
+        [isOpen]="sidebarOpen"
+        (onHide)="handleAction({ action: 'TOGGLE_SIDEBAR'})"
+    />
 </main>

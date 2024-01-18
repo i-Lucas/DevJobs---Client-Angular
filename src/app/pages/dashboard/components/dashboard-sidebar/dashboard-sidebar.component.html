@@ -1,5 +1,3 @@
-<p-sidebar [(visible)]="sidebarVisible">
+<p-sidebar [(visible)]="isOpen" (onHide)="onHide.emit()">
     <h3>Sidebar</h3>
 </p-sidebar>
-
-<button (click)="sidebarVisible = true">open</button>

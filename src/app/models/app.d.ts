@@ -1,0 +1,1 @@
+type AppProfile = CompanyProfile | DeveloperProfile

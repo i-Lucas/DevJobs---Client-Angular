@@ -3,7 +3,7 @@ interface UserToken {
     token: string;
 }
 
-interface User {
+interface AppUser  {
 
     id: string;
     name: string;

@@ -22,7 +22,15 @@ const routes: Routes = [
     path: '',
     component: DashboardRootComponent,
     canActivate: [AuthGuard],
-  }
+  },
+  {
+    path: 'developer',
+    loadChildren: () => import('./features/developer/developer.module')
+  },
+  {
+    path: 'company',
+    loadChildren: () => import('./features/company/company.module')
+  },
 ]
 
 @NgModule({

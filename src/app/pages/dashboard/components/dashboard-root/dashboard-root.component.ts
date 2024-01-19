@@ -19,6 +19,7 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
   protected sidebarOpen: boolean = false;
   protected destroy$ = new Subject<void>();
 
+  protected sidebarProps: SidebarProps | null = null;
   protected headerProps: DashboardHeaderProps | null = null;
 
   constructor(
@@ -77,29 +78,20 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
     }
   }
 
-  private updateData(data: GetAccountDataResponse) {
-    this.updateHeaderProps(data.user);
-    this.dashboardService.updateUser(data.user);
-    this.dashboardService.updateAccount(data.account);
-    this.dashboardService.updateProfile(data.profile);
+  private updateData({ account, profile, user }: GetAccountDataResponse) {
+    this.updateHeaderProps(user);
+    this.dashboardService.updateUser(user);
+    this.dashboardService.updateAccount(account);
+    this.dashboardService.updateProfile(profile);
+    this.sidebarProps = {
+      profileId: profile.id,
+      mode: account.accountType,
+    }
   }
 
   private handleGetAccountError(error: ApiError) {
     this.disconnect();
     this.componentService.showMessage({ detail: error.message, type: 'error' });
-  }
-
-  private updateHeaderProps(user: AppUser) {
-
-    function getFirstName(name: string): string {
-      const firstSpace = name.indexOf(' ');
-      return firstSpace !== -1 ? name.substring(0, firstSpace) : name;
-    }
-
-    this.headerProps = {
-      userPicture: user.photo,
-      userName: getFirstName(user.name),
-    }
   }
 
   protected handleAction({ action }: DashboardHeaderEvents): void {
@@ -114,6 +106,18 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
         this.disconnect();
         this.componentService.showMessage({ type: 'info', detail: 'Até Logo !' });
         break;
+    }
+  }
+
+  private updateHeaderProps(user: AppUser) {
+    function getFirstName(name: string): string {
+      const firstSpace = name.indexOf(' ');
+      return firstSpace !== -1 ? name.substring(0, firstSpace) : name;
+    }
+
+    this.headerProps = {
+      userPicture: user.photo,
+      userName: getFirstName(user.name),
     }
   }
 

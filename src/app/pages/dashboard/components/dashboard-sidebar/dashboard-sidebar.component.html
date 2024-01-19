@@ -1,3 +1,24 @@
-<p-sidebar [(visible)]="isOpen" (onHide)="onHide.emit()">
-    <h3>Sidebar</h3>
-</p-sidebar>
+@if (isOpen && props) {
+
+    <p-sidebar [(visible)]="isOpen" (onHide)="onHide.emit()">
+
+        @for (option of getSidebarOptions(); track option) {
+    
+            <section
+                pTooltip={{option.tooltip}}
+                class="flex py-2 hover:bg-primary cursor-pointer"
+                [routerLink]="option.link.sub_path ? [option.link.path, option.link.sub_path] : [option.link.path]" 
+            >
+    
+                <div class="flex justify-content-center align-items-center w-15rem">
+                    <span class="material-icons">{{option.icon}}</span>
+                </div>
+                <div class="flex justify-content-start align-items-center w-full pr-4">
+                    <p>{{option.label}}</p>
+                </div>
+    
+            </section>
+        }
+        
+    </p-sidebar>
+}

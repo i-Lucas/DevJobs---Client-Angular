@@ -39,3 +39,18 @@ interface PMenuOptions {
     icon: string;
     command?: () => void;
 }
+
+interface SidebarOptions {
+    icon: string,
+    label: string,
+    tooltip: string,
+    link: {
+        path: string,
+        sub_path?: string
+    }
+}
+
+interface SidebarProps {
+    mode: AccountType
+    profileId: string
+}

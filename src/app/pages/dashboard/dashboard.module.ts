@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from '@app-guards/auth.guard';
+import { SidebarService } from './services/sidebar.service';
 import { DashboardService } from './services/dashboard.service';
 
 import { DashboardRootComponent } from './components/dashboard-root/dashboard-root.component';
@@ -22,14 +23,16 @@ const routes: Routes = [
     path: '',
     component: DashboardRootComponent,
     canActivate: [AuthGuard],
-  },
-  {
-    path: 'developer',
-    loadChildren: () => import('./features/developer/developer.module')
-  },
-  {
-    path: 'company',
-    loadChildren: () => import('./features/company/company.module')
+    children: [
+      {
+        path: 'developer',
+        loadChildren: () => import('./features/developer/developer.module')
+      },
+      {
+        path: 'company',
+        loadChildren: () => import('./features/company/company.module')
+      },
+    ]
   },
 ]
 
@@ -40,8 +43,9 @@ const routes: Routes = [
     DashboardSidebarComponent
   ],
   providers: [
+    AuthGuard,
+    SidebarService,
     DashboardService,
-    AuthGuard
   ],
   imports: [
     CommonModule,

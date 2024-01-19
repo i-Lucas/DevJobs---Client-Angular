@@ -8,6 +8,7 @@ import { AuthenticationService } from '@app-services/auth/auth.service';
 
 import { DashboardService } from '../../services/dashboard.service';
 import { BaseComponentService } from '@app-services/components/base-component.service';
+import { SidebarService } from '../../services/sidebar.service';
 
 @Component({
   selector: 'app-dashboard-root',
@@ -19,13 +20,13 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
   protected sidebarOpen: boolean = false;
   protected destroy$ = new Subject<void>();
 
-  protected sidebarProps: SidebarProps | null = null;
   protected headerProps: DashboardHeaderProps | null = null;
 
   constructor(
     private httpService: HttpService,
     private themeService: ThemeService,
     private appService: AppStateService,
+    private sidebarService: SidebarService,
     private authService: AuthenticationService,
     private dashboardService: DashboardService,
     private componentService: BaseComponentService,
@@ -83,10 +84,10 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
     this.dashboardService.updateUser(user);
     this.dashboardService.updateAccount(account);
     this.dashboardService.updateProfile(profile);
-    this.sidebarProps = {
+    this.sidebarService.updateSidebarProps({
       profileId: profile.id,
       mode: account.accountType,
-    }
+    })
   }
 
   private handleGetAccountError(error: ApiError) {

@@ -1,9 +1,9 @@
-@if (isOpen && props) {
+@if (isOpen) {
 
     <p-sidebar [(visible)]="isOpen" (onHide)="onHide.emit()">
 
-        @for (option of getSidebarOptions(); track option) {
-    
+        @for (option of sidebarList; track option) {
+            
             <section
                 pTooltip={{option.tooltip}}
                 class="flex py-2 hover:bg-primary cursor-pointer"

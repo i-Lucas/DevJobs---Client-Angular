@@ -7,7 +7,6 @@
     <router-outlet />
     <app-dashboard-sidebar 
         [isOpen]="sidebarOpen"
-        [props]="sidebarProps"
         (onHide)="handleAction({ action: 'TOGGLE_SIDEBAR'})"
     />
 </main>

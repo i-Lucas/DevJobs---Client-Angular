@@ -1,19 +1,38 @@
-<p-dialog header="Header" [(visible)]="isOpen" [breakpoints]="{ '960px': '95vw' }" [style]="{ width: '50vw' }"
-    [draggable]="true" [resizable]="false" [closable]="false">
+<p-dialog 
+    [modal]="true"
+    header="Header"
+    [draggable]="true"
+    [closable]="false"
+    [resizable]="false"
+    [(visible)]="isOpen" 
+    [style]="{ width: '50vw' }"
+    [breakpoints]="{ '960px': '95vw' }">
 
     <ng-template pTemplate="header">
         <div class="flex flex-column w-full">
             <div class="flex gap-2 align-items-center">
-                <span class="text-xl font-bold">Título do Modal</span>
-                <i class="material-icons">school</i>
+                @if (icon) {
+                    <i class="material-icons">{{icon}}</i>
+                }
+                @if (title) {
+                    <span class="text-xl font-bold">{{title}}</span>
+                }
             </div>
             <p-divider />
         </div>
     </ng-template>
 
+    <ng-content />
 
-    <p class="m-0">
-        modal open !
-    </p>
-
+    <ng-template pTemplate="footer">
+        <p-button 
+            size="small"
+            label="Cancelar"
+            icon="pi pi-times"
+            [loading]="loading"
+            [disabled]="loading"
+            (click)="onClose.emit()"
+            styleClass="p-button-warning"
+        />
+    </ng-template>
 </p-dialog>

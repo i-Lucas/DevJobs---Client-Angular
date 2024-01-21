@@ -4,8 +4,8 @@ import { CommonModule } from '@angular/common';
 import { SharedModalComponent } from './shared-modal/shared-modal.component';
 
 import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
-
 
 @NgModule({
   declarations: [
@@ -14,8 +14,9 @@ import { DividerModule } from 'primeng/divider';
   imports: [
     CommonModule,
 
+    ButtonModule,
     DialogModule,
-    DividerModule
+    DividerModule,
   ],
   exports: [
     SharedModalComponent

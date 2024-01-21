@@ -1,4 +1,4 @@
-<form class="flex flex-column gap-2 m-auto text-sm w-20rem sm:w-30rem" [formGroup]="detailsForm">
+<form class="flex flex-column gap-2 m-auto text-sm" [formGroup]="detailsForm">
 
     <label class="block font-medium mb-1">Empresa</label>
     <input formControlName="fantasy_name" type="text" pInputText class="w-full">
@@ -14,7 +14,7 @@
     <input formControlName="foundedIn" pKeyFilter="int" type="text" pInputText class="w-full mb-3">
 
     <label class="block font-medium mb-1">Tamanho da Equipe</label>
-    <p-dropdown formControlName="teamSize" styleClass="mb-3 w-20rem sm:w-30rem" [options]="employeesSize"
+    <p-dropdown formControlName="teamSize" styleClass="mb-3 w-full" [options]="employeesSize"
         optionValue="name" optionLabel="name" placeholder="Selecione" />
 
     <label class="block font-medium mb-1">Mercado</label>
@@ -22,7 +22,7 @@
     <small class="mb-3 text-xs">Selecione o setor de atuação da empresa (ex: Mercado Imobiliário)</small>
 
     <label class="block font-medium mb-1">Natureza Jurídica</label>
-    <p-dropdown formControlName="legalNature" styleClass="mb-3 w-20rem sm:w-30rem" [options]="legalNature"
+    <p-dropdown formControlName="legalNature" styleClass="mb-3 w-full" [options]="legalNature"
         optionValue="name" optionLabel="name" placeholder="Selecione" />
 
     <label class="block font-medium mt-3 mb-1">CNPJ</label>

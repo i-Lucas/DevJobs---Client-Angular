@@ -16,7 +16,9 @@ export class AddressFormComponent extends BaseFormService implements OnInit, OnD
 
   @Output() cepExternApiError = new EventEmitter<ApiError>();
 
-  constructor(private httpService: HttpService, private formService: CommonFormService) {
+  constructor(
+    private httpService: HttpService,
+    private formService: CommonFormService) {
     super()
   }
 
@@ -38,18 +40,26 @@ export class AddressFormComponent extends BaseFormService implements OnInit, OnD
       .get<ApiResponseAddressData>(url, EXTERNAL_REQUEST)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-
         next: (response) => {
-          if (response) { this.updateFormValues(response) }
+          if (response) {
+            this.updateFormValues(response)
+          }
         },
         error: (error: ApiError) => {
+          this.clearFormFields();
           this.cepExternApiError.emit(error);
         }
       })
   }
 
-  private updateFormValues(response: ApiResponseAddressData) {
+  private clearFormFields() {
+    this.addressForm.get('city')?.setValue(null);
+    this.addressForm.get('state')?.setValue(null);
+    this.addressForm.get('address')?.setValue(null);
+    this.addressForm.get('neighborhood')?.setValue(null);
+  }
 
+  private updateFormValues(response: ApiResponseAddressData) {
     this.addressForm.get('city')?.setValue(response.city);
     this.addressForm.get('state')?.setValue(response.state);
     this.addressForm.get('address')?.setValue(response.street);

@@ -1,0 +1,82 @@
+@if (currentProfile) {
+
+    <div class="flex flex-column gap-2 relative">
+
+        @if (enableEditingMode) {
+            
+            <div class="absolute top-0 right-0 cursor-pointer">                                               
+                <p-badge 
+                    [value]="'Editar'"
+                    severity="warning"
+                    (click)="clickEdit.emit()"
+                    pTooltip="Editar Informações"
+                    styleClass="border-noround-right"
+                />
+            </div>
+        }
+
+        <p-image 
+            alt="Image"
+            src={{currentProfile.socialNetwork.banner}} 
+            imageClass="w-full max-h-15rem border-round" 
+        />
+
+        <p-image 
+            alt="Image"
+            imageClass="w-7 h-8rem"
+            src={{currentProfile.socialNetwork.picture}} 
+            styleClass="flex justify-content-center align-items-center mt-3"
+        />
+
+        <div class="gap-1">
+            <div class="text-center">
+                <p class="text-2xl">{{currentProfile.details.fantasy_name}}</p>
+            </div>
+            <div class="text-center line-height-3 px-4">
+                <p>{{currentProfile.details.description}}</p>
+            </div>
+            <div class="text-center">
+                <p  (click)="openNewWindow(currentProfile.socialNetwork.website)"                                
+                    class="hover:underline cursor-pointer font-semibold text-primary">
+                    {{currentProfile.socialNetwork.website}}
+                </p>
+            </div>
+            <div class="flex justify-content-center align-items-center gap-2">
+                <span class="material-icons small">flag</span>
+                <p class="text-xs cursor-pointer">Denunciar abuso</p>
+            </div>
+        </div>
+
+        <p-divider styleClass="w-10 m-auto" />
+
+        <div class="flex flex-wrap justify-content-center align-items-center gap-4 p-5">
+            <div class="flex justify-content-center align-items-center hover:text-primary gap-2">
+                <span class="material-icons">location_on</span>
+                <p class="text-xs font-semibold">{{currentProfile.address.city}}</p>
+            </div>
+            <div class="flex justify-content-center align-items-center hover:text-primary gap-2">
+                <span class="material-icons">cake</span>
+                <p class="text-xs font-semibold">{{currentProfile.details.foundedIn}}</p>
+            </div>
+            <div class="flex justify-content-center align-items-center hover:text-primary gap-2">
+                <span class="material-icons">apartment</span>
+                <p class="text-xs font-semibold">{{currentProfile.details.marketArea}}</p>
+            </div>
+            <div class="flex justify-content-center align-items-center hover:text-primary gap-2">
+                <span class="material-icons">groups_3</span>
+                <p class="text-xs font-semibold">{{currentProfile.details.teamSize}}</p>
+            </div>
+        </div>
+
+        <p-divider styleClass="w-10 m-auto" />
+
+        <h1 class="text-center">Links Sociais</h1>
+        <div class="flex flex-wrap justify-content-center align-items-center gap-6 p-5">
+            <i class="pi pi-linkedin cursor-pointer hover:text-primary"></i>
+            <i class="pi pi-github cursor-pointer hover:text-primary"></i>
+            <i class="pi pi-twitter cursor-pointer hover:text-primary"></i>
+            <i class="pi pi-facebook cursor-pointer hover:text-primary"></i>
+            <i class="pi pi-instagram cursor-pointer hover:text-primary"></i>
+        </div>
+    </div>
+}

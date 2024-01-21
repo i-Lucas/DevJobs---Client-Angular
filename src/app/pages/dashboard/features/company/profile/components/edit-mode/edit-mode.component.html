@@ -1,0 +1,89 @@
+<app-modal 
+    [isOpen]="isOpen"
+    [loading]="loading"
+    [icon]="'apartment'"
+    [title]="'Editar Empresa'"
+    (onClose)="onClose.emit()"
+>
+    @if(profile) {
+
+        <p-tabView>
+            <p-tabPanel header="Endereço">
+                <div class="my-4">
+
+                    <app-address-form 
+                        (cepExternApiError)="onCepExternApiError.emit($event)"
+                    />
+                    <div class="mt-4">
+                        <p-button 
+                            size="small"
+                            label="Salvar"
+                            icon="pi pi-check"
+                            [loading]="loading"
+                            [disabled]="addressForm.invalid || loading"
+                            (click)="onSave.emit({ form: addressForm, identifier: 'COMPAY_ADDRESS' })"                            
+                        />
+                    </div>
+                </div>     
+
+            </p-tabPanel>
+            <p-tabPanel header="Detalhes">
+                <div class="my-4">
+
+                    <app-company-details-form />
+                    <div class="mt-4">
+                        <p-button 
+                            size="small"
+                            label="Salvar"
+                            icon="pi pi-check"
+                            [loading]="loading"
+                            [disabled]="detailsForm.invalid || loading"
+                            (click)="onSave.emit({ form: detailsForm, identifier: 'COMPANY_DETAILS' })"
+                        />
+                    </div>
+                </div>
+
+            </p-tabPanel>
+            <p-tabPanel header="Redes Sociais">
+                <div class="my-4">
+
+                    <app-company-social-network-form />
+                    <div class="mt-4">
+                        <p-button 
+                            size="small"
+                            label="Salvar"
+                            icon="pi pi-check"
+                            [loading]="loading"
+                            [disabled]="socialNetworkForm.invalid || loading"
+                            (click)="onSave.emit({ form: socialNetworkForm,  identifier: 'COMPANY_SOCIAL' })"          
+                        />
+                    </div>
+                </div>
+
+            </p-tabPanel>
+            <p-tabPanel header="Contato">
+                <div class="my-4">
+
+                    <app-company-contact-form />
+                    <div class="mt-4">
+                        <p-button 
+                            size="small"
+                            label="Salvar"
+                            icon="pi pi-check"
+                            [loading]="loading"
+                            [disabled]="contactForm.invalid || loading"
+                            (click)="onSave.emit({ form: contactForm, identifier: 'COMPANY_CONTACT' })"                                                            
+                        />
+                    </div>
+                </div>
+
+            </p-tabPanel>
+            <p-tabPanel header="Permissões">
+                <div class="my-4 min-h-screen">
+                    <h3>em breve</h3>
+                </div>
+            </p-tabPanel>
+        </p-tabView>        
+    }
+
+</app-modal>

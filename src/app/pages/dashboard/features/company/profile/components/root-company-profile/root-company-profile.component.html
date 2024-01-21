@@ -1,1 +1,53 @@
-<p>root-company-profile works!</p>
+<main class="flex flex-column gap-4 md:flex-row-reverse min-h-screen">
+
+    <section class="md:max-w-23rem border-round pb-2">
+
+        @if (loading) {
+            
+            <div class="w-23rem h-full p-4">
+                <p-skeleton 
+                    styleClass="w-full h-full min-h-screen"
+                />
+            </div>
+        }
+
+        @else {
+
+            <company-profile-right-column 
+                [currentProfile]="currentProfile" 
+                [enableEditingMode]="enableEditingMode"
+                (clickEdit)="openEditModal = !openEditModal"
+            />
+        }
+
+    </section>
+
+    <section class="w-full p-4 border-round">
+
+        @if (loading) {
+            
+            <p-skeleton 
+                styleClass="w-full h-full min-h-screen"
+            />
+        }
+
+        @else {
+
+            <company-profile-left-column
+                [currentProfile]="currentProfile" 
+            />
+        }
+        
+    </section>
+</main>
+
+@if(enableEditingMode) {
+
+    <company-profile-edit-mode 
+        [isOpen]="openEditModal"
+        (onSave)="onSave($event)"
+        [profile]="currentProfile"
+        (onClose)="openEditModal = !openEditModal"
+        (onCepExternApiError)="onCepExternApiError($event)"
+    />
+}

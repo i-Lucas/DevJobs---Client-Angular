@@ -1,0 +1,26 @@
+@if(currentProfile) {
+
+    <div class="md:px-6">
+
+        <h2>Sobre a empresa</h2>
+        <div class="line-height-4" [innerHTML]="currentProfile.details.about"></div>
+        <p-divider styleClass="w-11 mt-6 m-auto" />
+
+        <h2>Ofertas em aberto</h2>
+
+        <div class="flex gap-2">
+            <button pButton [routerLink]="['/dashboard/company/profile', '1b1dd292-7815-4bbe-9551-2ee4410f57f0']">
+                Ver Empresa 1
+            </button>
+            <button pButton [routerLink]="['/dashboard/company/profile', '511a63ed-a096-4ee4-9a23-876bcc18afab']">
+                Ver Empresa 2
+            </button>
+        </div>
+    </div>
+}
+
+@else {
+
+    <h3>perfil não encontrado</h3>
+    <button pButton>buscar novos perfis []</button>
+}

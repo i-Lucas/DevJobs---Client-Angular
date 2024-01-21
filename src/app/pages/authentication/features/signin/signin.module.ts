@@ -12,20 +12,32 @@ import { PasswordModule } from 'primeng/password';
 import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
+  imports: [
+    ButtonModule,
+    CheckboxModule,
+    PasswordModule,
+    InputTextModule,
+  ],
+  exports: [
+    ButtonModule,
+    CheckboxModule,
+    PasswordModule,
+    InputTextModule,
+  ]
+})
+export class PrimeModule { }
+
+@NgModule({
   declarations: [
     SigninRootComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
+
+    PrimeModule,
     SharedFormsModule,
     ReactiveFormsModule,
-
-    ButtonModule,
-    CheckboxModule,
-    PasswordModule,
-    InputTextModule,
-    
     RouterModule.forChild([
       {
         path: '',

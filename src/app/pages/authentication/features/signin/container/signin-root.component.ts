@@ -2,14 +2,15 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 
 import { HttpService } from '@app-services/http/http.service';
+import { AppStateService } from '@app-services/app/app.service';
 import { AuthenticationService } from '@app-services/auth/auth.service';
-import { BaseComponentService } from '@app-services/components/base-component.service';
+import { CommonComponentService } from '@app-services/components/base-component.service';
 
 @Component({
   selector: 'app-signin-root',
   templateUrl: './signin-root.component.html'
 })
-export class SigninRootComponent implements OnInit , OnDestroy {
+export class SigninRootComponent implements OnInit, OnDestroy {
 
   protected email: string = '';
   protected password: string = '';
@@ -22,15 +23,16 @@ export class SigninRootComponent implements OnInit , OnDestroy {
 
   constructor(
     private httpService: HttpService,
+    private appService: AppStateService,
     private authService: AuthenticationService,
-    private componentService: BaseComponentService 
+    private componentService: CommonComponentService
   ) {
 
     this.email = this.authService.getUserEmailFromLocalStorage();
     this.stayConnected = this.authService.checkAutomaticLogin();
 
-    this.componentService
-      .getLoading()
+    this.appService
+      .getIsRequestInProgress()
       .pipe(takeUntil(this.destroy$))
       .subscribe((state) => this.loading = state)
   }
@@ -45,26 +47,24 @@ export class SigninRootComponent implements OnInit , OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  
+
   private handleStayConnected() {
 
     if (this.authService.isAuthenticated()) {
       this.componentService.showMessage({ type: 'success', detail: 'Login Automático' });
-      this.componentService.goTo('/dashboard')
+      this.componentService.goTo('/dashboard');
 
     } else {
       this.authService.disableAutomaticLogin();
       this.componentService.showMessage({ type: 'info', detail: 'Sessão Expirada' });
     }
   }
-  
+
   protected signin() {
 
     const body = { email: this.email, password: this.password };
-
     this.httpService.post<ApiResponse<UserToken>>('/auth/signin', body)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
+      .pipe(takeUntil(this.destroy$)).subscribe({
         next: (response) => this.handleSignInResponse(response),
         error: (error) => this.handleSignInError(error)
       });

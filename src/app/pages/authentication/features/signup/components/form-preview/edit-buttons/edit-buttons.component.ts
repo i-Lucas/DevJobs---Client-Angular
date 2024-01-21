@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { BaseComponentService } from '@app-services/components/base-component.service';
+import { CommonComponentService } from '@app-services/components/base-component.service';
 
 @Component({
   selector: 'form-edit-buttons',
   templateUrl: './edit-buttons.component.html',
 })
-export class EditButtonsComponent<T> extends BaseComponentService {
+export class EditButtonsComponent<T> extends CommonComponentService {
 
   @Input() item: T | undefined
 

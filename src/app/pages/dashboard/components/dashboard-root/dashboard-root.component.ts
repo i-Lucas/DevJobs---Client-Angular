@@ -7,7 +7,7 @@ import { ThemeService } from '@app-services/theme/theme.service';
 import { AuthenticationService } from '@app-services/auth/auth.service';
 
 import { DashboardService } from '../../services/dashboard.service';
-import { BaseComponentService } from '@app-services/components/base-component.service';
+import { CommonComponentService } from '@app-services/components/base-component.service';
 import { SidebarService } from '../../services/sidebar.service';
 
 @Component({
@@ -29,7 +29,7 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
     private sidebarService: SidebarService,
     private authService: AuthenticationService,
     private dashboardService: DashboardService,
-    private componentService: BaseComponentService,
+    private componentService: CommonComponentService,
   ) { }
 
   ngOnInit(): void {
@@ -83,7 +83,10 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
     this.updateHeaderProps(user);
     this.dashboardService.updateUser(user);
     this.dashboardService.updateAccount(account);
-    this.dashboardService.updateProfile(profile);
+    this.dashboardService.updateProfile({
+      ...profile,
+      type: account.accountType,
+    });
     this.sidebarService.updateSidebarProps({
       profileId: profile.id,
       mode: account.accountType,

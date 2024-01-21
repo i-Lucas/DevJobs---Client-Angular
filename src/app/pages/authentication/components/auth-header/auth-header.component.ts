@@ -1,7 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 
-import { BaseComponentService } from '@app-services/components/base-component.service';
+import { CommonComponentService } from '@app-services/components/base-component.service';
+import { AppStateService } from '@app-services/app/app.service';
 
 @Component({
   selector: 'app-auth-header',
@@ -12,10 +13,13 @@ export class AuthHeaderComponent implements OnDestroy {
   protected loading: boolean = false;
   protected destroy$ = new Subject<void>();
 
-  constructor(private componentService: BaseComponentService) {
+  constructor(
+    private appService: AppStateService,
+    private componentService: CommonComponentService
+  ) {
 
-    this.componentService
-      .getLoading()
+    this.appService
+      .getIsRequestInProgress()
       .pipe(takeUntil(this.destroy$))
       .subscribe((state) => this.loading = state)
   }

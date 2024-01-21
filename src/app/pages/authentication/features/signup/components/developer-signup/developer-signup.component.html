@@ -33,7 +33,7 @@
             
             @case (2) {
                 
-                <app-address-form />
+                <app-address-form (cepExternApiError)="onCepExternApiError($event)" />
 
                 <signup-step-buttons
                     [loading]="loading"

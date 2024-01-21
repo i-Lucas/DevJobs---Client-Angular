@@ -1,49 +1,33 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 
-import { BaseComponentService } from '@app-services/components/base-component.service';
 import { HttpService } from '@app-services/http/http.service';
+import { CommonComponentService } from '@app-services/components/base-component.service';
 
 @Injectable()
 export class CommonSignupService implements OnDestroy {
 
-  protected currentStep: number = 0;
-  protected loading: boolean = false;
   protected destroy$ = new Subject<void>();
 
   constructor(
     protected httpService: HttpService,
-    protected componentService: BaseComponentService
-  ) {
-
-    this.componentService
-      .getLoading()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((state) => this.loading = state)
-  }
+    protected componentService: CommonComponentService
+  ) { }
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  protected onEmailAvailabilityError(error: ApiError) {
-    this.componentService.showMessage({ type: 'error', detail: error.message })
+  public showMessage({ detail, type }: ToastProps) {
+    this.componentService.showMessage({ type, detail })
   }
 
-  protected onCepExternApiError(error: ApiError) {
-    this.componentService.showMessage({ type: 'error', detail: error.message })
+  protected openNewWindow(path: string) {
+    this.componentService.openInNewWindow(path);
   }
 
-  protected changeStep(step: 'NEXT' | 'PREVIOUS') {
-    step === 'NEXT' ? this.currentStep++ : this.currentStep--;
-  }
-
-  protected openNewWindow(url: string) {
-    window.open('https://' + url, "_blank");
-  }
-
-  protected performSignupRequest(body: Object, path: string) {
+  public performSignupRequest(body: Object, path: string) {
 
     this.httpService.post<ApiResponse<string>>(path, body)
       .pipe(takeUntil(this.destroy$))

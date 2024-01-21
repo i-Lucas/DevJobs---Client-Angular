@@ -1,20 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
-import { HttpService } from '@app-services/http/http.service';
 import { CommonSignupService } from '../../services/common-signup.service';
 
-import { BaseComponentService } from '@app-services/components/base-component.service';
+import { AppStateService } from '@app-services/app/app.service';
 import { CompanyFormService } from '@app-shared-forms/services/builder/company-forms/company-form.service';
 
 @Component({
   selector: 'app-company-signup',
   templateUrl: './company-signup.component.html'
 })
-export class CompanySignupComponent extends CommonSignupService {
+export class CompanySignupComponent implements OnDestroy {
 
-  protected override currentStep: number = 0;
+  protected currentStep: number = 0;
+
+  protected loading: boolean = false;
+  protected destroy$ = new Subject<void>();
 
   protected stepMessages: string[] = [
     'Vamos lá! Primeiro, iremos criar a sua conta',
@@ -25,12 +27,20 @@ export class CompanySignupComponent extends CommonSignupService {
   ];
 
   constructor(
-    protected override httpService: HttpService,
+    private appService: AppStateService,
     private companyFormService: CompanyFormService,
-    protected override componentService: BaseComponentService,
+    private commomSignupService: CommonSignupService
   ) {
 
-    super(httpService, componentService);
+    this.appService
+      .getIsRequestInProgress()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((state) => this.loading = state)
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   protected addressForm: FormGroup = this.companyFormService.getAddressForm();
@@ -56,34 +66,19 @@ export class CompanySignupComponent extends CommonSignupService {
       }
     }
 
-    this.performSignupRequest(body, '/account/create-company-account');
+    this.commomSignupService.performSignupRequest(body, '/account/create-company-account');
+  }
+
+  protected onEmailAvailabilityError(event: ApiError) {
+    this.commomSignupService.showMessage({ type: 'error', detail: event.message })
+  }
+
+  protected onCepExternApiError(event: ApiError) {
+    this.commomSignupService.showMessage({ type: 'error', detail: event.message })
+  }
+
+  protected changeStep(step: 'NEXT' | 'PREVIOUS') {
+    step === 'NEXT' ? this.currentStep++ : this.currentStep--;
   }
 
 }
-
-/*
-
-  {"details":
-    {
-      "fantasy_name":"Empresa Angular 17",
-      "description":"Descrição",
-      "foundedIn":"2024",
-      "teamSize":"(20 - 50 colaboradores)",
-      "marketArea":"Tech",
-      "legalNature":"ME",
-      "cnpj":"00.000.000/0000-00",
-      "socialReason":"Angular 17",
-      "about":"lucas@dev.com.br"
-    },
-      "address":
-      {
-        "cep":"41900-485",
-        "address":"Rua Brasília",
-        "number":"101",
-        "neighborhood":"Amaralina",
-        "city":"Salvador",
-        "complement":"Apt",
-        "state":"BA"
-      },"suport":{"whatsapp":"(00)-0-0000-0000","phone":"(00)-0-0000-0000","rhEmail":"lucas@dev.com.br","supportEmail":"lucas@dev.com.br"},"social":{"website":"https://www.google.com.br/","linkedin":"https://www.google.com.br/","facebook":"https://www.google.com.br/","twitter":"https://www.google.com.br/","instagram":"https://www.google.com.br/","github":"https://www.google.com.br/"},"account":{"name":"Lucas","email":"lucas@dev.com.br","phone":"(00)-0-0000-0000","password":"@LL123","confirm":"@LL123"}}
-
-*/

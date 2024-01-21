@@ -1,41 +1,18 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { takeUntil } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
-
-import { AppStateService } from '@app-services/app/app.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BaseComponentService implements OnDestroy {
-
-  /** global application state loading changed by appService -> getIsRequestInProgress */
-  public loading$ = new Subject<boolean>();
-  private destroy$ = new Subject<void>();
+export class CommonComponentService {
 
   constructor(
     private router: Router,
-    private appService: AppStateService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
-  ) {
-
-    this.appService.getIsRequestInProgress()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((state) => this.loading$.next(state))
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  public getLoading() {
-    return this.loading$.asObservable();
-  }
+  ) { }
 
   public isRoute(path: string): boolean {
     return location.pathname.includes(path)
@@ -54,7 +31,7 @@ export class BaseComponentService implements OnDestroy {
     return /^\d+$/.test(date) ? date : new Date(date).getTime().toString()
   }
 
-  protected openNewWindow(url: string) {
+  public openInNewWindow(url: string) {
     window.open('https://' + url, "_blank");
   }
 

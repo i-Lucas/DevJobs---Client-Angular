@@ -54,11 +54,35 @@ const routes: Routes = [
 ]
 
 @NgModule({
+  imports: [
+    TagModule,
+    ChipModule,
+    ButtonModule,
+    TooltipModule,
+    TabViewModule,
+    InputTextModule,
+    AccordionModule,
+    ConfirmPopupModule,
+  ],
+  exports: [
+    TagModule,
+    ChipModule,
+    ButtonModule,
+    TooltipModule,
+    TabViewModule,
+    InputTextModule,
+    AccordionModule,
+    ConfirmPopupModule,
+  ]
+})
+export class PrimeModule { }
+
+@NgModule({
   declarations: [
     SignupRootComponent,
-    DeveloperSignupComponent,
-    CompanySignupComponent,
     StepButtonsComponent,
+    CompanySignupComponent,
+    DeveloperSignupComponent,
 
     ProjectsComponent,
     StacklistComponent,
@@ -76,19 +100,10 @@ const routes: Routes = [
     CommonModule,
     ReactiveFormsModule,
 
+    PrimeModule,
     SharedFormsModule,
-    SharedComponentsModule,
     SharedModulesModule,
-
-    TagModule,
-    ChipModule,
-    ButtonModule,
-    TooltipModule,
-    TabViewModule,
-    InputTextModule,
-    AccordionModule,
-    ConfirmPopupModule,
-
+    SharedComponentsModule,
     RouterModule.forChild(routes)
   ]
 })

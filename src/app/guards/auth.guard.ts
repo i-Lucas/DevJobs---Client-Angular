@@ -2,14 +2,14 @@ import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from "@angular/router";
 
 import { AuthenticationService } from "@app-services/auth/auth.service";
-import { BaseComponentService } from "@app-services/components/base-component.service";
+import { CommonComponentService } from "@app-services/components/base-component.service";
 
 @Injectable()
 export class AuthGuard {
 
   constructor(
     private authService: AuthenticationService,
-    private componentService: BaseComponentService,
+    private componentService: CommonComponentService,
   ) { }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {

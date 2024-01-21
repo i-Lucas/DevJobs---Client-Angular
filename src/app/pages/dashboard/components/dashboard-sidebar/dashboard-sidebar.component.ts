@@ -13,7 +13,7 @@ export class DashboardSidebarComponent implements OnDestroy {
   @Output() onHide = new EventEmitter<void>();
 
   protected destroy$ = new Subject<void>();
-  protected sidebarList: SidebarOptions[] = []
+  protected sidebarList: SidebarListOptions[] = []
 
   constructor(private sidebarService: SidebarService) {
     this.sidebarService.getSidebarList()

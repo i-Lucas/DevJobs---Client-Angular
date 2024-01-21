@@ -34,7 +34,29 @@ const routes: Routes = [
       },
     ]
   },
-]
+];
+
+@NgModule({
+  imports: [
+    AvatarModule,
+    ButtonModule,
+    SidebarModule,
+    SkeletonModule,
+    InputTextModule,
+    TieredMenuModule,
+    ProgressBarModule,
+  ],
+  exports: [
+    AvatarModule,
+    ButtonModule,
+    SidebarModule,
+    SkeletonModule,
+    InputTextModule,
+    TieredMenuModule,
+    ProgressBarModule,
+  ]
+})
+export class PrimeModule { }
 
 @NgModule({
   declarations: [
@@ -49,16 +71,7 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
-
-    ProgressBarModule,
-    SidebarModule,
-    ButtonModule,
-    InputTextModule,
-    SkeletonModule,
-    AvatarModule,
-    // AvatarGroupModule,
-    TieredMenuModule,
-
+    PrimeModule,
     RouterModule.forChild(routes)
   ]
 })

@@ -5,9 +5,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class SidebarService {
 
   private sidebarProps = new BehaviorSubject<SidebarProps | null>(null);
-  private sidebarList = new BehaviorSubject<SidebarOptions[] | []>([]);
+  private sidebarList = new BehaviorSubject<SidebarListOptions[] | []>([]);
 
-  private getDefaultOptions(): SidebarOptions[] {
+  private getDefaultOptions(): SidebarListOptions[] {
     return [
       {
         link: { path: '/dashboard' },
@@ -36,9 +36,9 @@ export class SidebarService {
     ]
   }
 
-  private getProfileOption(mode: AccountType, profileId: string): SidebarOptions {
+  private getProfileOption(mode: AccountType, profileId: string): SidebarListOptions {
 
-    const option: SidebarOptions = {
+    const option: SidebarListOptions = {
       link: { path: '', sub_path: profileId },
       icon: '', label: '', tooltip: ''
     }
@@ -59,7 +59,7 @@ export class SidebarService {
     return option
   }
 
-  private getCompanyOptions(profileId: string): SidebarOptions[] {
+  private getCompanyOptions(profileId: string): SidebarListOptions[] {
     const profile_field = this.getProfileOption('COMPANY', profileId);
 
     return [
@@ -77,7 +77,7 @@ export class SidebarService {
     ]
   }
 
-  private getDeveloperOptions(profileId: string): SidebarOptions[] {
+  private getDeveloperOptions(profileId: string): SidebarListOptions[] {
     const profile_field = this.getProfileOption('CANDIDATE', profileId);
 
     return [
@@ -109,11 +109,11 @@ export class SidebarService {
     }
   }
 
-  private updateSidebarList(list: SidebarOptions[]): void {
+  private updateSidebarList(list: SidebarListOptions[]): void {
     this.sidebarList.next(list)
   }
 
-  public getSidebarList(): Observable<SidebarOptions[] | []> {
+  public getSidebarList(): Observable<SidebarListOptions[] | []> {
     return this.sidebarList.asObservable();
   }
 

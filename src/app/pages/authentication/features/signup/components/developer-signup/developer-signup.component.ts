@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Subject } from 'rxjs';
 
 import { HttpService } from '@app-services/http/http.service';
 import { CommonSignupService } from '../../services/common-signup.service';
-import { BaseComponentService } from '@app-services/components/base-component.service';
+import { CommonComponentService } from '@app-services/components/base-component.service';
 import { DeveloperFormService } from '@app-shared-forms/services/builder/developer-forms/developer-form.service';
 
 type FormMap = {
@@ -21,7 +22,10 @@ type OperationMap = {
   selector: 'app-developer-signup',
   templateUrl: './developer-signup.component.html',
 })
-export class DeveloperSignupComponent extends CommonSignupService {
+export class DeveloperSignupComponent implements OnDestroy {
+
+  protected loading: boolean = false;
+  protected destroy$ = new Subject<void>();
 
   protected addressForm: FormGroup = this.developerFormService.getAddressForm();
   protected passwordForm: FormGroup = this.developerFormService.getPasswordForm();
@@ -59,15 +63,19 @@ export class DeveloperSignupComponent extends CommonSignupService {
     'Quase lá! Defina sua senha e finalize o cadastro.'
   ];
 
-  protected override currentStep: number = 0;
+  protected currentStep: number = 0;
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    protected override httpService: HttpService,
+    private httpService: HttpService,
     private developerFormService: DeveloperFormService,
-    protected override componentService: BaseComponentService,
-  ) {
-    super(httpService, componentService);
+    private componentService: CommonComponentService,
+    private commomSignupService: CommonSignupService
+  ) { }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private removeItem(list: DeveloperProfileListFields[], id: string) {
@@ -193,7 +201,19 @@ export class DeveloperSignupComponent extends CommonSignupService {
       stack: purgeIds(this.stackList),
     }
 
-    this.performSignupRequest(body, '/account/create-dev-account');
+    this.commomSignupService.performSignupRequest(body, '/account/create-dev-account');
+  }
+
+  protected changeStep(step: 'NEXT' | 'PREVIOUS') {
+    step === 'NEXT' ? this.currentStep++ : this.currentStep--;
+  }
+
+  protected onEmailAvailabilityError(event: ApiError) {
+    this.commomSignupService.showMessage({ type: 'error', detail: event.message })
+  }
+
+  protected onCepExternApiError(event: ApiError) {
+    this.commomSignupService.showMessage({ type: 'error', detail: event.message })
   }
 
 }

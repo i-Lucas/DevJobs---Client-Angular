@@ -78,3 +78,10 @@ interface CompanyProfile {
     createdAt: string;
     updatedAt: string;
 }
+
+type CompanyProfileEditFieldsIdentifier =
+    'COMPAY_ADDRESS' |
+    'COMPANY_DETAILS' |
+    'COMPANY_CONTACT' |
+    'COMPANY_SOCIAL' |
+    'COMPANY_PERMISSIONS'; // TODO

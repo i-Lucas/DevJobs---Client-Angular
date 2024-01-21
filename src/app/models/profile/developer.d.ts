@@ -156,3 +156,11 @@ type DeveloperProfileListFields =
     DeveloperProfileProjects |
     DeveloperProfileLanguages |
     DeveloperProfileStackList;
+
+type DeveloperProfileListFieldsIdentifier =
+    'ACADEMIC_EDUCATION' |
+    'JOB_EXPERIENCES' |
+    'CERTIFICATES' |
+    'PROJECTS' |
+    'LANGUAGES' |
+    'STACKLIST';

@@ -1,1 +1,1 @@
-type AppProfile = CompanyProfile | DeveloperProfile
+type AppProfile = CompanyProfile & { type: AccountType } | DeveloperProfile & { type: AccountType }

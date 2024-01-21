@@ -8,14 +8,6 @@ interface ToastProps {
     type: 'info' | 'warn' | 'success' | 'error';
 }
 
-type DeveloperProfileListFieldsIdentifier =
-    'ACADEMIC_EDUCATION' |
-    'JOB_EXPERIENCES' |
-    'CERTIFICATES' |
-    'PROJECTS' |
-    'LANGUAGES' |
-    'STACKLIST';
-
 interface DevSignupFormPreviewEvent {
 
     option: 'edit' | 'remove';
@@ -40,7 +32,8 @@ interface PMenuOptions {
     command?: () => void;
 }
 
-interface SidebarOptions {
+interface SidebarListOptions {
+
     icon: string,
     label: string,
     tooltip: string,
@@ -51,6 +44,13 @@ interface SidebarOptions {
 }
 
 interface SidebarProps {
+
     mode: AccountType
     profileId: string
+}
+
+interface CompanyEditModeOnSave {
+
+    form: FormGroup;
+    identifier: CompanyProfileEditFieldsIdentifier;
 }

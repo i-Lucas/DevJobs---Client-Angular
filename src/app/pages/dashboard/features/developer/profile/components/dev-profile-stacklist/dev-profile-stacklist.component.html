@@ -1,1 +1,74 @@
-<p>dev-profile-stacklist works!</p>
+<dev-profile-panel 
+    [icon]="'handyman'"
+    [isOwner]="isOwner"
+    [loading]="loading"
+    [label]="'Tecnologias'"
+    (onEdit)="isModalOpen = true"
+    >
+
+    <div class="flex flex-column gap-4 md:pr-4 md:py-2">
+
+        @if (!(stackList && stackList.length > 0)) {
+
+            <h4>empty</h4>
+
+        } @else {
+
+            <section class="flex gap-2 flex-wrap">
+
+                @for (stack of stackList; track stack; let idx = $index) {
+
+                    <p-chip 
+                        [removable]="false"
+                        label={{stack.name}} 
+                        styleClass="px-3 py-2"
+                        pTooltip={{stack.workload}} 
+                    />
+                }
+
+            </section>
+        }
+
+    </div>
+
+</dev-profile-panel>
+
+<app-modal 
+    [icon]="'handyman'"
+    [loading]="loading"
+    [isOpen]="isModalOpen"
+    [title]="'Editar Tecnologias'"
+    (onClose)="isModalOpen = !isModalOpen">
+
+    <p-tabView>
+
+        @if(stackList) {
+
+            @for (currentForm of stackFormList; track currentForm; let idx = $index) {
+
+                <p-tabPanel header="{{stackList[idx].name}}">
+
+                    <div class="my-4">
+
+                        <app-developer-stacklist-form
+                            [stackListForm]="currentForm"
+                        />
+
+                        <div class="mt-4">
+                            <p-button 
+                                size="small"
+                                label="Salvar" 
+                                icon="pi pi-check"
+                                [loading]="loading"
+                                [disabled]="currentForm.invalid || loading"
+                                (click)="onSave.emit({ form: currentForm, identifier: 'DEVELOPER_STACKLIST' })"
+                            />
+                        </div>
+                    </div>
+    
+                </p-tabPanel>     
+            }
+        }
+
+    </p-tabView>
+</app-modal>

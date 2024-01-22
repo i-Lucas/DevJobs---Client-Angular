@@ -1,14 +1,17 @@
-<form class="flex flex-column gap-2 m-auto text-sm w-20rem sm:w-30rem" [formGroup]="stackListForm">
+@if (stackListForm) {
 
-    <label for="stack1" class="block font-medium mt-4 mb-1">Tecnologia</label>
-    <input formControlName="name" id="stack1" type="text" pInputText class="w-full mb-3">
+    <form class="flex flex-column gap-2 m-auto text-sm" [formGroup]="stackListForm">
 
-    <label for="stack2" class="block font-medium mb-1">Tempo de Experiência</label>
-
-    <div class="flex gap-4">
-        <input pKeyFilter="int" formControlName="workload" type="text" pInputText class="w-full mb-3">
-        <p-dropdown formControlName="workload_tmp" styleClass="mb-3 w-10rem" [options]="workload_tmp" optionValue="name"
-            optionLabel="name" placeholder="Selecione" />
-    </div>
-
-</form>
+        <label for="stack1" class="block font-medium mt-4 mb-1">Tecnologia</label>
+        <input formControlName="name" id="stack1" type="text" pInputText class="w-full mb-3">
+    
+        <label for="stack2" class="block font-medium mb-1">Tempo de Experiência</label>
+    
+        <div class="flex gap-4">
+            <input pKeyFilter="int" formControlName="workload" type="text" pInputText class="w-full mb-3">
+            <p-dropdown formControlName="workload_tmp" styleClass="mb-3 w-10rem" [options]="workload_tmp" optionValue="name"
+                optionLabel="name" placeholder="Selecione" />
+        </div>
+    
+    </form>
+}

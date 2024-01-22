@@ -12,6 +12,16 @@
 
     </ng-template>
 
+    @if (icon) {
+
+        <ng-template pTemplate="header">
+            <div class="flex align-items-center gap-2">
+                <i class="material-icons">{{ icon }}</i>
+                <p>{{ label }}</p>
+            </div>
+        </ng-template>
+    }
+
     @if (loading) {
 
         <p-skeleton styleClass="w-full h-20rem" />

@@ -1,1 +1,87 @@
-<p>dev-profile-certificates works!</p>
+<dev-profile-panel 
+    [isOwner]="isOwner"
+    [loading]="loading"
+    [label]="'Certificados'"
+    [icon]="'workspace_premium'"
+    (onEdit)="isModalOpen = true"
+    >
+
+    <div class="flex flex-column gap-4 md:pr-4 md:py-2">
+
+        @if (!(certificatesList && certificatesList.length > 0)) {
+
+            <h4>empty</h4>
+
+        } @else {
+
+            @for (certificate of certificatesList; track certificate; let idx = $index) {
+
+                <section class="flex flex-column gap-3">
+
+                    <div class="flex justify-content-between align-items-center">
+                        <span class="font-bold text-2xl">{{ certificate.institution }}</span>
+
+                        @if (certificate.link) {
+                            
+                            <span class=" flex gap-2 cursor-pointer hover:text-primary">
+                                <i class="pi pi-link"></i>
+                                <span (click)="openNewWindow(certificate.link)" class="text-xs">Link</span>
+                            </span>
+                        }
+
+                    </div>
+    
+                    <span class="mt-2 text-xs font-bold">{{ certificate.course }}</span>
+                    <span class="text-xs text-600">{{ certificate.workload }}</span>
+    
+                </section>
+
+                @if (idx < certificatesList.length - 1) { 
+                    <p-divider styleClass="m-0" />
+                }
+            }
+        }
+
+    </div>
+
+</dev-profile-panel>
+
+<app-modal 
+    [icon]="'workspace_premium'"
+    [loading]="loading"
+    [isOpen]="isModalOpen"
+    [title]="'Editar Certificados'"
+    (onClose)="isModalOpen = !isModalOpen">
+
+    <p-tabView>
+
+        @if(certificatesList) {
+
+            @for (currentForm of certificatesFormList; track currentForm; let idx = $index) {
+
+                <p-tabPanel header="{{certificatesList[idx].institution}}">
+
+                    <div class="my-4">
+
+                        <app-developer-certificates-form
+                            [certificatesForm]="currentForm"
+                        />
+
+                        <div class="mt-4">
+                            <p-button 
+                                size="small"
+                                label="Salvar" 
+                                icon="pi pi-check"
+                                [loading]="loading"
+                                [disabled]="currentForm.invalid || loading"
+                                (click)="onSave.emit({ form: currentForm, identifier: 'DEVELOPER_CERTIFICATES' })"
+                            />
+                        </div>
+                    </div>
+    
+                </p-tabPanel>     
+            }
+        }
+
+    </p-tabView>
+</app-modal>

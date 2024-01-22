@@ -1,10 +1,21 @@
-<form class="flex flex-column gap-2 m-auto text-sm w-20rem sm:w-30rem" [formGroup]="languagesForm">
+@if (languagesForm) {
 
-    <label class="block font-medium mb-1">Idioma</label>
-    <input formControlName="language" type="text" pInputText class="w-full mb-3">
+    <form class="flex flex-column gap-2 m-auto text-sm" [formGroup]="languagesForm">
 
-    <label class="block font-medium mb-1">Nível</label>
-    <p-dropdown formControlName="level" styleClass="mb-3 w-20rem sm:w-30rem" [options]="languageLevel"
-        optionValue="name" optionLabel="name" placeholder="Selecione" />
+        <label class="block font-medium mb-1">Idioma</label>
+        <input formControlName="language" type="text" pInputText class="w-full mb-3">
+    
+        <label class="block font-medium mb-1">Nível</label>
 
-</form>
+        <p-dropdown
+            optionValue="name"
+            optionLabel="name" 
+            [appendTo]="'body'" 
+            placeholder="Selecione"
+            formControlName="level" 
+            styleClass="mb-3 w-full" 
+            [options]="languageLevel"
+        />
+    
+    </form>
+}

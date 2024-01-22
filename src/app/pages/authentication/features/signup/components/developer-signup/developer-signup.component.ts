@@ -35,19 +35,19 @@ export class DeveloperSignupComponent implements OnDestroy {
   protected contactForm: FormGroup = this.developerFormService.getDeveloperContactForm();
 
   protected stackList: DeveloperProfileStackList[] = []
-  protected stackListForm: FormGroup = this.developerFormService.getDeveloperStacklistForm();
+  protected stackListForm: FormGroup = this.developerFormService.buildDeveloperStacklistForm();
 
   protected languagesList: DeveloperProfileLanguages[] = []
-  protected languagesForm: FormGroup = this.developerFormService.getDeveloperLanguagesForm();
+  protected languagesForm: FormGroup = this.developerFormService.buildDeveloperLanguagesForm();
 
   protected projectsList: DeveloperProfileProjects[] = []
-  protected projectsForm: FormGroup = this.developerFormService.getDeveloperProjectsForm();
+  protected projectsForm: FormGroup = this.developerFormService.buildDeveloperProjectsForm();
 
   protected certificatesList: DeveloperProfileCertificates[] = []
-  protected certificatesForm: FormGroup = this.developerFormService.getDeveloperCertificatesForm();
+  protected certificatesForm: FormGroup = this.developerFormService.buildDeveloperCertificatesForm();
 
   protected jobExperiencesList: DeveloperProfileJobExperiences[] = []
-  protected jobExperiencesForm: FormGroup = this.developerFormService.getDeveloperJobExperiencesForm();
+  protected jobExperiencesForm: FormGroup = this.developerFormService.buildDeveloperJobExperiencesForm();
 
   protected academicEducationList: DeveloperProfileAcademicEducation[] = []
   protected academicEducationForm: FormGroup = this.developerFormService.buildDeveloperAcademicEducationForm();
@@ -65,10 +65,10 @@ export class DeveloperSignupComponent implements OnDestroy {
     'Quase lá! Defina sua senha e finalize o cadastro.'
   ];
 
-  protected currentStep: number = 3;
+  protected currentStep: number = 9;
 
   constructor(
-    // private mock: MockService,
+    private mock: MockService,
     private cdRef: ChangeDetectorRef,
     private componentService: CommonComponentService,
     private commomSignupService: CommonSignupService,

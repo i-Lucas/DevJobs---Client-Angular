@@ -43,11 +43,11 @@ export class DevProfileEducationComponent implements OnChanges {
 
   private updateAcademicFormsList(educationList: DeveloperProfileAcademicEducation[]) {
     this.academicEducationFormList = educationList.map(education =>
-      this.createDeveloperAcademicEducationForm(education)
+      this.createAcademicEducationForm(education)
     );
   }
 
-  private createDeveloperAcademicEducationForm(education: DeveloperProfileAcademicEducation): FormGroup {
+  private createAcademicEducationForm(education: DeveloperProfileAcademicEducation): FormGroup {
 
     const EDIT_MODE: boolean = true;
     const form = this.formService.buildDeveloperAcademicEducationForm(EDIT_MODE);
@@ -59,6 +59,7 @@ export class DevProfileEducationComponent implements OnChanges {
     });
 
     return form;
-  }
 
+  }
+  
 }

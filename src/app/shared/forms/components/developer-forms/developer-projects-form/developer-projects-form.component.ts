@@ -1,7 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-
-import { DeveloperFormService } from '@app-shared-forms/services/builder/developer-forms/developer-form.service';
 
 @Component({
   selector: 'app-developer-projects-form',
@@ -9,7 +7,5 @@ import { DeveloperFormService } from '@app-shared-forms/services/builder/develop
 })
 export class DeveloperProjectsFormComponent {
 
-  protected projectsForm: FormGroup = this.devFormService.getDeveloperProjectsForm();
-
-  constructor(private devFormService: DeveloperFormService) { }
+  @Input() projectsForm: FormGroup | undefined;
 }

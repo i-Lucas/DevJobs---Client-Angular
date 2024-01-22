@@ -72,7 +72,9 @@
                     (onChange)="handlePreviewChanges($event)"
                 />
 
-                <app-developer-job-experiences-form />
+                <app-developer-job-experiences-form
+                    [jobExperiencesForm]="jobExperiencesForm"
+                />
 
                 <signup-step-buttons
                     [optional]="true"
@@ -92,7 +94,9 @@
                     (onChange)="handlePreviewChanges($event)"
                 />
                 
-                <app-developer-certificates-form />
+                <app-developer-certificates-form
+                    [certificatesForm]="certificatesForm"
+                />
 
                 <signup-step-buttons
                     [optional]="true"
@@ -112,7 +116,9 @@
                     (onChange)="handlePreviewChanges($event)"
                 />
 
-                <app-developer-projects-form />
+                <app-developer-projects-form
+                    [projectsForm]="projectsForm"
+                />
 
                 <signup-step-buttons
                     [optional]="true"
@@ -132,7 +138,9 @@
                     (onChange)="handlePreviewChanges($event)"
                 />
 
-                <app-developer-languages-form />
+                <app-developer-languages-form
+                    [languagesForm]="languagesForm"
+                />
 
                 <signup-step-buttons
                     [optional]="true"
@@ -152,7 +160,9 @@
                     (onChange)="handlePreviewChanges($event)"
                 />
 
-                <app-developer-stacklist-form />
+                <app-developer-stacklist-form
+                    [stackListForm]="stackListForm"
+                />
 
                 <signup-step-buttons
                     [optional]="true"

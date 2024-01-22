@@ -1,1 +1,86 @@
-<p>dev-profile-languages works!</p>
+<dev-profile-panel 
+    [icon]="'public'"
+    [isOwner]="isOwner"
+    [loading]="loading"
+    [label]="'Idiomas'"
+    (onEdit)="isModalOpen = true"
+    >
+
+    <div class="flex flex-column gap-4 md:pr-4 md:py-2">
+
+        @if (!(languagesList && languagesList.length > 0)) {
+
+            <h4>empty</h4>
+
+        } @else {
+
+            <div class="flex flex-column gap-4">
+
+                @for (language of languagesList; track language; let idx = $index) {
+
+                    <span pTooltip={{language.level}} tooltipPosition="bottom">
+                        <div class="flex justify-content-between align-items-center gap-3">
+
+                            <span class="font-bold text-2xl">{{language.language}}</span>
+            
+                            <p-rating 
+                                [stars]="5"
+                                [readonly]="true"
+                                [cancel]="false"
+                                [(ngModel)]="language.rating"           
+                            />
+
+                        </div>
+                    </span>
+
+                    @if (idx < languagesList.length - 1) { 
+                        <p-divider styleClass="m-0" />
+                    }
+                }
+
+            </div>
+        }
+
+    </div>
+
+</dev-profile-panel>
+
+<app-modal 
+    [icon]="'public'"
+    [loading]="loading"
+    [isOpen]="isModalOpen"
+    [title]="'Editar Idiomas'"
+    (onClose)="isModalOpen = !isModalOpen">
+
+    <p-tabView>
+
+        @if(languagesList) {
+
+            @for (currentForm of languagesFormList; track currentForm; let idx = $index) {
+
+                <p-tabPanel header="{{languagesList[idx].language}}">
+
+                    <div class="my-4">
+
+                        <app-developer-languages-form
+                            [languagesForm]="currentForm"
+                        />
+
+                        <div class="mt-4">
+                            <p-button 
+                                size="small"
+                                label="Salvar" 
+                                icon="pi pi-check"
+                                [loading]="loading"
+                                [disabled]="currentForm.invalid || loading"
+                                (click)="onSave.emit({ form: currentForm, identifier: 'DEVELOPER_LANGUAGES' })"
+                            />
+                        </div>
+                    </div>
+    
+                </p-tabPanel>     
+            }
+        }
+
+    </p-tabView>
+</app-modal>

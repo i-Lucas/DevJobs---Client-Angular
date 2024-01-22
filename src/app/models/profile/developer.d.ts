@@ -72,12 +72,13 @@ interface DeveloperProfileProjects {
 }
 
 interface DeveloperProfileLanguages {
-
+    
     id?: string;
-
+    
     language: string;
+    rating?: number; 
     level: string; // 'Básico' | 'Intermediário' | 'Avançado' | 'Proficiente';
-
+    
     createdAt: string;
     updatedAt: string;
 }
@@ -169,4 +170,9 @@ type DeveloperProfileEditFieldsIdentifier =
     'DEVELOPER_ABOUT' |
     'DEVELOPER_ADDRESS' |
     'DEVELOPER_CONTACT' |
-    'DEVELOPER_EDUCATION'
+    'DEVELOPER_PROJECTS' |
+    'DEVELOPER_EDUCATION' |
+    'DEVELOPER_LANGUAGES' |
+    'DEVELOPER_STACKLIST' |
+    'DEVELOPER_EXPERIENCES' |
+    'DEVELOPER_CERTIFICATES'

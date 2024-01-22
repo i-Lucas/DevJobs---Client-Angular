@@ -8,9 +8,12 @@ export class DevProfilePanelComponent {
 
   @Input() isOwner: boolean = false;
   @Input() loading: boolean = false;
-  
+
+  @Input() icon: string | undefined;
+  @Input() label: string | undefined;
+
   @Output() onEdit = new EventEmitter<void>();
-  
+
   protected menuOptions: PMenuOptions[] = [
     {
       label: 'Editar', icon: 'pi pi-file-edit',

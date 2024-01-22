@@ -1,4 +1,10 @@
-<dev-profile-panel [isOwner]="isOwner" [loading]="loading" (onEdit)="isModalOpen = true">
+<dev-profile-panel 
+    [icon]="'school'"
+    [isOwner]="isOwner"
+    [loading]="loading"
+    [label]="'Formação Acadêmica'"
+    (onEdit)="isModalOpen = true"
+    >
 
     <div class="flex flex-column gap-4 md:pr-4 md:py-2">
 
@@ -15,8 +21,8 @@
                     <span class="mt-2 text-xs font-bold">{{education.course}}</span>
 
                     <div class="mt-2 flex gap-2 text-xs text-600">
-                        <span>{{education.from | msToMMyyyy}}</span>
-                        <span>{{education.to | msToMMyyyy}}</span>
+                        <span>De: {{education.from | msToMMyyyy}}</span>
+                        <span>Até: {{education.to | msToMMyyyy}}</span>
                     </div>
 
                     <span class="text-xs font-bold mt-4">{{education.modality}}</span>
@@ -41,7 +47,7 @@
     [icon]="'school'"
     [loading]="loading"
     [isOpen]="isModalOpen"
-    [title]="'Formação Acadêmica'"
+    [title]="'Editar Formação Acadêmica'"
     (onClose)="isModalOpen = !isModalOpen">
 
     <p-tabView>

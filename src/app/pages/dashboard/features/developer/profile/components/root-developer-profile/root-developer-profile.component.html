@@ -14,43 +14,57 @@
         <!-- coluna da esquerda -->
         <section class="flex flex-column gap-3 w-full mt-3 lg:mt-0">
 
-            <dev-profile-education 
+            <dev-profile-experiences
                 [loading]="loading"
-                [isOwner]="enableEditingMode"
-                [educationList]="currentProfile?.academic_education"
                 (onSave)="onSave($event)"
+                [isOwner]="enableEditingMode"
+                [experiencesList]="currentProfile?.professional_experiences"
             />
 
-            <dev-profile-experiences />
-            <dev-profile-projects />
+            <dev-profile-education 
+                [loading]="loading"
+                (onSave)="onSave($event)"
+                [isOwner]="enableEditingMode"
+                [educationList]="currentProfile?.academic_education"
+            />
+
+            <dev-profile-projects
+                [loading]="loading"
+                (onSave)="onSave($event)"
+                [isOwner]="enableEditingMode"
+                [projectsList]="currentProfile?.projects"
+            />
+            
         </section>
 
         <p-divider class="hidden lg:block" layout="vertical" />
 
         <!-- coluna da direita -->
         <section class="flex flex-column gap-3 w-full mt-3 lg:mt-0 lg:w-6">
-            <dev-profile-languages />
-            <dev-profile-certificates />
-            <dev-profile-stacklist />
+
+            <dev-profile-languages
+                [loading]="loading"
+                (onSave)="onSave($event)"
+                [isOwner]="enableEditingMode"
+                [languagesList]="currentProfile?.languages"
+            />
+
+            <dev-profile-certificates
+                [loading]="loading"
+                (onSave)="onSave($event)"
+                [isOwner]="enableEditingMode"
+                [certificatesList]="currentProfile?.certificates"
+            />
+
+            <dev-profile-stacklist
+                [loading]="loading"
+                (onSave)="onSave($event)"
+                [isOwner]="enableEditingMode"
+                [stackList]="currentProfile?.stack"
+            />
+
         </section>
 
     </section>
 
- 
-
-
 </main>
-
-<!-- 
-
-
-       <div class="flex gap-2">
-        <button pButton [routerLink]="['/dashboard/developer/profile', 'e8fd3733-6b87-40fd-ad0b-269dcec05e65']">
-            ver perfil do saulo
-        </button>
-        <button pButton [routerLink]="['/dashboard/company/profile', '511a63ed-a096-4ee4-9a23-876bcc18afab']">
-            Ver Empresa 2
-        </button>
-    </div>
-
- -->

@@ -1,19 +1,14 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { BaseFormService } from '@app-shared-forms/services/base/base-form.service';
 import { CommonFormService } from '../commom-forms/common-forms.service';
+import { BaseFormService } from '@app-shared-forms/services/base/base-form.service';
 
 @Injectable()
 export class DeveloperFormService extends BaseFormService {
 
   private aboutForm: FormGroup;
   private contactForm: FormGroup;
-  private projectsForm: FormGroup;
-  private languagesForm: FormGroup;
-  private stackListForm: FormGroup;
-  private certificatesForm: FormGroup;
-  private jobExperiencesForm: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -36,39 +31,6 @@ export class DeveloperFormService extends BaseFormService {
       email: this.commomFormService.getEmailForm(),
     })
 
-    this.projectsForm = this.formBuilder.group({
-      title: ['', [Validators.required, Validators.minLength(3)]],
-      resume: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(600)]],
-      link: ['', [Validators.required]],
-    })
-
-    this.languagesForm = this.formBuilder.group({
-      language: ['', [Validators.required, Validators.minLength(3)]],
-      level: ['', [Validators.required]],
-    })
-
-    this.stackListForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      workload: ['', [Validators.required, Validators.pattern(this.workloadPattern)]],
-      workload_tmp: ['', [Validators.required]],
-    })
-
-    this.certificatesForm = this.formBuilder.group({
-      course: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-      institution: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-      workload: ['', [Validators.required, Validators.pattern(this.workloadPattern)]],
-      workload_tmp: ['', [Validators.required]],
-      link: ['', [Validators.required]],
-    })
-
-    this.jobExperiencesForm = this.formBuilder.group({
-      company: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
-      occupation: ['', [Validators.required, Validators.maxLength(30)]],
-      resume: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(600)]],
-      current_job: ['', [Validators.required]],
-      from: ['', [Validators.required]],
-      to: ['', [Validators.required]]
-    })
   }
 
   public getDeveloperWorkload(): DropdownOptionsList[] {
@@ -129,44 +91,88 @@ export class DeveloperFormService extends BaseFormService {
     return this.contactForm
   }
 
-  public getDeveloperProjectsForm(): FormGroup {
-    return this.projectsForm
+  public buildDeveloperProjectsForm(isEditMode: boolean = false): FormGroup {
+
+    const formGroupConfig = {
+      title: ['', [Validators.required, Validators.minLength(3)]],
+      resume: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(600)]],
+      link: ['', [Validators.required]],
+    }
+
+    if (isEditMode) {
+      this.addEditFieldsToFormGroup(formGroupConfig);
+    }
+
+    return this.formBuilder.group(formGroupConfig);
+    
   }
 
-  public getDeveloperLanguagesForm(): FormGroup {
-    return this.languagesForm
+  public buildDeveloperLanguagesForm(isEditMode: boolean = false): FormGroup {
+   
+    const formGroupConfig = {
+      language: ['', [Validators.required, Validators.minLength(3)]],
+      level: ['', [Validators.required]],
+    }
+
+    if (isEditMode) {
+      this.addEditFieldsToFormGroup(formGroupConfig);
+    }
+
+    return this.formBuilder.group(formGroupConfig);
   }
 
-  public getDeveloperStacklistForm(): FormGroup {
-    return this.stackListForm
+  public buildDeveloperStacklistForm(isEditMode: boolean = false): FormGroup {
+
+    const formGroupConfig = {
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      workload: ['', [Validators.required, Validators.pattern(this.workloadPattern)]],
+      workload_tmp: ['', [Validators.required]],
+    }
+
+    if (isEditMode) {
+      this.addEditFieldsToFormGroup(formGroupConfig);
+    }
+
+    return this.formBuilder.group(formGroupConfig);
+
   }
 
-  public getDeveloperCertificatesForm(): FormGroup {
-    return this.certificatesForm
+  public buildDeveloperCertificatesForm(isEditMode: boolean = false): FormGroup {
+
+    const formGroupConfig = {
+      course: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+      institution: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+      workload: ['', [Validators.required, Validators.pattern(this.workloadPattern)]],
+      workload_tmp: ['', [Validators.required]],
+      link: ['', [Validators.required]],
+    }
+
+    if (isEditMode) {
+      this.addEditFieldsToFormGroup(formGroupConfig);
+    }
+
+    return this.formBuilder.group(formGroupConfig);
+
   }
 
-  public getDeveloperJobExperiencesForm(): FormGroup {
-    return this.jobExperiencesForm
+  public buildDeveloperJobExperiencesForm(isEditMode: boolean = false): FormGroup {
+
+    const formGroupConfig = {
+      company: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
+      occupation: ['', [Validators.required, Validators.maxLength(30)]],
+      resume: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(600)]],
+      current_job: ['', [Validators.required]],
+      from: ['', [Validators.required]],
+      to: ['', [Validators.required]]
+    }
+
+    if (isEditMode) {
+      this.addEditFieldsToFormGroup(formGroupConfig);
+    }
+
+    return this.formBuilder.group(formGroupConfig);
+
   }
-
-  // public buildDeveloperAcademicEducationForm(): FormGroup {
-  //   return this.formBuilder.group({
-
-  //     // edit mode
-  //     id: [''],
-  //     createdAt: [''],
-  //     updatedAt: [''],
-  //     // ****
-
-  //     institution: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-  //     course: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-  //     modality: ['', [Validators.required]],
-  //     status: ['', [Validators.required]],
-  //     type: ['', [Validators.required]],
-  //     from: ['', [Validators.required]],
-  //     to: ['', [Validators.required]],
-  //   })
-  // };
 
   private addEditFieldsToFormGroup<T extends {}>(formGroupConfig: T): void {
     Object.assign(formGroupConfig, {
@@ -193,6 +199,7 @@ export class DeveloperFormService extends BaseFormService {
     }
 
     return this.formBuilder.group(formGroupConfig);
+
   }
 
   public getAddressForm(): FormGroup {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { BaseFormService } from '@app-shared-forms/services/base/base-form.service';
 import { CommonFormService } from '../commom-forms/common-forms.service';
@@ -14,7 +14,6 @@ export class DeveloperFormService extends BaseFormService {
   private stackListForm: FormGroup;
   private certificatesForm: FormGroup;
   private jobExperiencesForm: FormGroup;
-  private academicEducationForm: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -69,16 +68,6 @@ export class DeveloperFormService extends BaseFormService {
       current_job: ['', [Validators.required]],
       from: ['', [Validators.required]],
       to: ['', [Validators.required]]
-    })
-
-    this.academicEducationForm = this.formBuilder.group({
-      institution: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-      course: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
-      modality: ['', [Validators.required]],
-      status: ['', [Validators.required]],
-      type: ['', [Validators.required]],
-      from: ['', [Validators.required]],
-      to: ['', [Validators.required]],
     })
   }
 
@@ -160,8 +149,50 @@ export class DeveloperFormService extends BaseFormService {
     return this.jobExperiencesForm
   }
 
-  public getDeveloperAcademicEducationForm(): FormGroup {
-    return this.academicEducationForm
+  // public buildDeveloperAcademicEducationForm(): FormGroup {
+  //   return this.formBuilder.group({
+
+  //     // edit mode
+  //     id: [''],
+  //     createdAt: [''],
+  //     updatedAt: [''],
+  //     // ****
+
+  //     institution: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+  //     course: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+  //     modality: ['', [Validators.required]],
+  //     status: ['', [Validators.required]],
+  //     type: ['', [Validators.required]],
+  //     from: ['', [Validators.required]],
+  //     to: ['', [Validators.required]],
+  //   })
+  // };
+
+  private addEditFieldsToFormGroup<T extends {}>(formGroupConfig: T): void {
+    Object.assign(formGroupConfig, {
+      id: [''],
+      createdAt: [''],
+      updatedAt: [''],
+    });
+  }
+
+  public buildDeveloperAcademicEducationForm(isEditMode: boolean = false): FormGroup {
+
+    const formGroupConfig = {
+      institution: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+      course: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+      modality: ['', [Validators.required]],
+      status: ['', [Validators.required]],
+      type: ['', [Validators.required]],
+      from: ['', [Validators.required]],
+      to: ['', [Validators.required]],
+    };
+
+    if (isEditMode) {
+      this.addEditFieldsToFormGroup(formGroupConfig);
+    }
+
+    return this.formBuilder.group(formGroupConfig);
   }
 
   public getAddressForm(): FormGroup {

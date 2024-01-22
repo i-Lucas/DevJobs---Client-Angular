@@ -1,0 +1,118 @@
+<dev-profile-panel [isOwner]="isOwner" [loading]="loading" (onEdit)="isModalOpen = true">
+
+    @if (profile) {
+
+        <section class="flex flex-column gap-4 md:flex-row">
+
+            <div class="md:w-3 p-4">
+                <div class="flex justify-content-center align-items-center">
+                    <p-image src={{profile.about.picture}} alt="Image" imageClass="max-h-12rem border-circle" />
+                </div>
+            </div>
+
+            <div class="w-full md:p-4 md:px-6">
+                <div class="flex flex-column">
+                    <p class="text-4xl m-0">{{profile.about.name}}</p>
+                    <p class="mt-2 font-bold">{{profile.about.occupation}}</p>
+                    <p class="line-height-3 text-justify text-sm line-height-3">
+                        {{profile.about.resume}}
+                    </p>
+                </div>
+            </div>
+
+            <div class="white-space-nowrap md:px-6 md:w-min">
+                <div class="flex flex-column text-xs line-height-1">
+                    <span class="flex justify-content-start align-items-center gap-2">
+                        <i class="pi pi-map-marker"></i>
+                        <p>{{profile.address.city}} - {{profile.address.state}}
+                        </p>
+                    </span>
+                    <span class="flex justify-content-start align-items-center gap-2">
+                        <i class="pi pi-phone"></i>
+                        <p>{{profile.contact.phone}}</p>
+                    </span>
+                    <span class="flex justify-content-start align-items-center gap-2">
+                        <i class="pi pi-github"></i>
+                        <p pTooltip="Ver perfil" (click)="openInNewWindow.emit(profile.contact.github)"
+                            class="cursor-pointer hover:text-primary">Github</p>
+                    </span>
+                    <span class="flex justify-content-start align-items-center gap-2">
+                        <i class="pi pi-linkedin"></i>
+                        <p pTooltip="Ver perfil" (click)="openInNewWindow.emit(profile.contact.linkedin)"
+                            class="cursor-pointer hover:text-primary">Linkedin</p>
+                    </span>
+                    <span class="flex justify-content-start align-items-center gap-2">
+                        <i class="pi pi-google"></i>
+                        <p (click)="copyToClipboard.emit(profile.contact.email)" pTooltip="Clique para copiar"
+                            class="cursor-pointer hover:text-primary">Email</p>
+                    </span>
+                </div>
+            </div>
+
+        </section>
+    }
+
+</dev-profile-panel>
+
+<app-modal 
+    [loading]="loading" 
+    [isOpen]="isModalOpen" 
+    [title]="'Editar Perfil'"
+    [icon]="'manage_accounts'"
+    (onClose)="isModalOpen = !isModalOpen">
+
+    <p-tabView>
+
+        <p-tabPanel header="Endereço">
+            <div class="my-4">
+
+                <app-address-form (cepExternApiError)="onCepExternApiError.emit($event)" />
+                <div class="mt-4">
+                    <p-button 
+                        size="small"
+                        label="Salvar" 
+                        icon="pi pi-check"
+                        [loading]="loading"
+                        [disabled]="addressForm.invalid || loading"
+                        (click)="onSave.emit({ form: addressForm, identifier: 'DEVELOPER_ADDRESS' })"
+                    />
+                </div>
+            </div>
+        </p-tabPanel>
+
+        <p-tabPanel header="Sobre">
+            <div class="my-4">
+
+                <app-developer-about-form />
+                <div class="mt-4">
+                    <p-button 
+                        size="small"
+                        label="Salvar"
+                        icon="pi pi-check" 
+                        [loading]="loading"
+                        [disabled]="aboutForm.invalid || loading"
+                        (click)="onSave.emit({ form: aboutForm, identifier: 'DEVELOPER_ABOUT' })"
+                    />
+                </div>
+            </div>
+        </p-tabPanel>
+
+        <p-tabPanel header="Contato">
+            <div class="my-4">
+
+                <app-developer-contact-form (emailAvailabilityError)="onEmailAvailabilityError($event)" />
+                <div class="mt-4">
+                    <p-button
+                        size="small"
+                        label="Salvar"
+                        icon="pi pi-check"
+                        [loading]="loading"
+                        [disabled]="contactForm.invalid || loading"
+                        (click)="onSave.emit({ form: contactForm, identifier: 'DEVELOPER_CONTACT' })"
+                    />
+                </div>
+            </div>
+        </p-tabPanel>
+
+    </p-tabView>
+</app-modal>

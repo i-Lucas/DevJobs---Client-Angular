@@ -13,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppStateService } from '@app-services/app/app.service';
 import { HttpService } from '@app-services/http/http.service';
 import { AuthenticationService } from '@app-services/auth/auth.service';
+import { FromMillisecondsToMonthYearPipe } from '@app-pipes/date-formatter.pipe';
 
 @NgModule({
   declarations: [
@@ -28,11 +29,12 @@ import { AuthenticationService } from '@app-services/auth/auth.service';
     ConfirmPopupModule,
   ],
   providers: [
-    AppStateService,
     HttpService,
     MessageService,
+    AppStateService,
     ConfirmationService,
     AuthenticationService,
+    FromMillisecondsToMonthYearPipe,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpService,

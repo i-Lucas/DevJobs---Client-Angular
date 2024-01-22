@@ -1,0 +1,78 @@
+<dev-profile-panel [isOwner]="isOwner" [loading]="loading" (onEdit)="isModalOpen = true">
+
+    <div class="flex flex-column gap-4 md:pr-4 md:py-2">
+
+        @if (!(educationList && educationList.length > 0)) {
+
+            <h4>empty</h4>
+
+        } @else {
+
+            @for (education of educationList; track education; let idx = $index) {
+
+                <div class="flex flex-column">
+                    <span class="font-bold text-2xl">{{education.institution}}</span>
+                    <span class="mt-2 text-xs font-bold">{{education.course}}</span>
+
+                    <div class="mt-2 flex gap-2 text-xs text-600">
+                        <span>{{education.from | msToMMyyyy}}</span>
+                        <span>{{education.to | msToMMyyyy}}</span>
+                    </div>
+
+                    <span class="text-xs font-bold mt-4">{{education.modality}}</span>
+
+                    <div class="flex gap-2 mt-2">
+                        <span class="text-xs font-bold">{{education.type}}</span>
+                        <span class="text-xs font-semibold">{{education.status}}</span>
+                    </div>
+                </div>
+
+                @if (idx < educationList.length - 1) { 
+                    <p-divider styleClass="m-0" />
+                }
+            }
+        }
+
+    </div>
+
+</dev-profile-panel>
+
+<app-modal 
+    [icon]="'school'"
+    [loading]="loading"
+    [isOpen]="isModalOpen"
+    [title]="'Formação Acadêmica'"
+    (onClose)="isModalOpen = !isModalOpen">
+
+    <p-tabView>
+
+        @if(educationList) {
+
+            @for (currentForm of academicEducationFormList; track currentForm; let idx = $index) {
+
+                <p-tabPanel header="{{educationList[idx].institution}}">
+
+                    <div class="my-4">
+
+                        <app-developer-academic-education-form
+                            [academicEducationForm]="currentForm"
+                        />
+
+                        <div class="mt-4">
+                            <p-button 
+                                size="small"
+                                label="Salvar" 
+                                icon="pi pi-check"
+                                [loading]="loading"
+                                [disabled]="currentForm.invalid || loading"
+                                (click)="onSave.emit({ form: currentForm, identifier: 'DEVELOPER_EDUCATION' })"
+                            />
+                        </div>
+                    </div>
+    
+                </p-tabPanel>     
+            }
+        }
+
+    </p-tabView>
+</app-modal>

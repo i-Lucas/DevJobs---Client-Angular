@@ -2,8 +2,10 @@ import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 
-import { HttpService } from '@app-services/http/http.service';
+import MockService from '../../services/mock.service';
+
 import { CommonSignupService } from '../../services/common-signup.service';
+// import { FromMillisecondsToMonthYearPipe } from '@app-pipes/date-formatter.pipe';
 import { CommonComponentService } from '@app-services/components/base-component.service';
 import { DeveloperFormService } from '@app-shared-forms/services/builder/developer-forms/developer-form.service';
 
@@ -32,23 +34,23 @@ export class DeveloperSignupComponent implements OnDestroy {
   protected aboutForm: FormGroup = this.developerFormService.getDeveloperAboutForm();
   protected contactForm: FormGroup = this.developerFormService.getDeveloperContactForm();
 
-  protected stackList: DeveloperProfileStackList[] = [];
+  protected stackList: DeveloperProfileStackList[] = []
   protected stackListForm: FormGroup = this.developerFormService.getDeveloperStacklistForm();
 
-  protected languagesList: DeveloperProfileLanguages[] = [];
+  protected languagesList: DeveloperProfileLanguages[] = []
   protected languagesForm: FormGroup = this.developerFormService.getDeveloperLanguagesForm();
 
-  protected projectsList: DeveloperProfileProjects[] = [];
+  protected projectsList: DeveloperProfileProjects[] = []
   protected projectsForm: FormGroup = this.developerFormService.getDeveloperProjectsForm();
 
-  protected certificatesList: DeveloperProfileCertificates[] = [];
+  protected certificatesList: DeveloperProfileCertificates[] = []
   protected certificatesForm: FormGroup = this.developerFormService.getDeveloperCertificatesForm();
 
-  protected jobExperiencesList: DeveloperProfileJobExperiences[] = [];
+  protected jobExperiencesList: DeveloperProfileJobExperiences[] = []
   protected jobExperiencesForm: FormGroup = this.developerFormService.getDeveloperJobExperiencesForm();
 
-  protected academicEducationList: DeveloperProfileAcademicEducation[] = [];
-  protected academicEducationForm: FormGroup = this.developerFormService.getDeveloperAcademicEducationForm();
+  protected academicEducationList: DeveloperProfileAcademicEducation[] = []
+  protected academicEducationForm: FormGroup = this.developerFormService.buildDeveloperAcademicEducationForm();
 
   protected stepMessages: string[] = [
     'Vamos começar! Me fale um pouco mais sobre você.',
@@ -63,14 +65,15 @@ export class DeveloperSignupComponent implements OnDestroy {
     'Quase lá! Defina sua senha e finalize o cadastro.'
   ];
 
-  protected currentStep: number = 0;
+  protected currentStep: number = 3;
 
   constructor(
+    // private mock: MockService,
     private cdRef: ChangeDetectorRef,
-    private httpService: HttpService,
-    private developerFormService: DeveloperFormService,
     private componentService: CommonComponentService,
-    private commomSignupService: CommonSignupService
+    private commomSignupService: CommonSignupService,
+    private developerFormService: DeveloperFormService,
+    // private fromMillisecondsToMonthYearPipe: FromMillisecondsToMonthYearPipe
   ) { }
 
   ngOnDestroy() {
@@ -85,9 +88,14 @@ export class DeveloperSignupComponent implements OnDestroy {
 
   private handleFormEdit(
     form: FormGroup,
-    item: DeveloperProfileListFields,
-    list: DeveloperProfileListFields[]
+    item: DeveloperProfileListFields & { from?: string; to?: string },
+    list: DeveloperProfileListFields[],
   ) {
+
+    // if (item.from && item.to) {
+    //   item.from = this.fromMillisecondsToMonthYearPipe.transform(item.from);
+    //   item.to = this.fromMillisecondsToMonthYearPipe.transform(item.to);
+    // }
 
     form.patchValue(item)
     this.removeItem(list, item.id!);

@@ -50,7 +50,9 @@
                     (onChange)="handlePreviewChanges($event)"
                 />
 
-                <app-developer-academic-education-form />
+                <app-developer-academic-education-form 
+                    [academicEducationForm]="academicEducationForm"
+                />
 
                 <signup-step-buttons
                     [optional]="true"

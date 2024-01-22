@@ -54,3 +54,9 @@ interface CompanyEditModeOnSave {
     form: FormGroup;
     identifier: CompanyProfileEditFieldsIdentifier;
 }
+
+interface DeveloperEditModeOnSave {
+
+    form: FormGroup;
+    identifier: DeveloperProfileEditFieldsIdentifier;
+}

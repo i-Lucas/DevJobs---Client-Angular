@@ -1,1 +1,56 @@
-<p>root-developer-profile works!</p>
+<main class="flex flex-column lg:p-4">
+
+    <dev-profile-about
+        [loading]="loading"
+        [profile]="currentProfile"
+        [isOwner]="enableEditingMode"
+        (openInNewWindow)="openNewWindow($event)"
+        (copyToClipboard)="copyToClipboard($event)"
+        (onCepExternApiError)="onCepExternApiError($event)"
+    />
+
+    <section class="flex flex-column lg:flex-row lg:py-4 min-h-screen">
+
+        <!-- coluna da esquerda -->
+        <section class="flex flex-column gap-3 w-full mt-3 lg:mt-0">
+
+            <dev-profile-education 
+                [loading]="loading"
+                [isOwner]="enableEditingMode"
+                [educationList]="currentProfile?.academic_education"
+                (onSave)="onSave($event)"
+            />
+
+            <dev-profile-experiences />
+            <dev-profile-projects />
+        </section>
+
+        <p-divider class="hidden lg:block" layout="vertical" />
+
+        <!-- coluna da direita -->
+        <section class="flex flex-column gap-3 w-full mt-3 lg:mt-0 lg:w-6">
+            <dev-profile-languages />
+            <dev-profile-certificates />
+            <dev-profile-stacklist />
+        </section>
+
+    </section>
+
+ 
+
+
+</main>
+
+<!-- 
+
+
+       <div class="flex gap-2">
+        <button pButton [routerLink]="['/dashboard/developer/profile', 'e8fd3733-6b87-40fd-ad0b-269dcec05e65']">
+            ver perfil do saulo
+        </button>
+        <button pButton [routerLink]="['/dashboard/company/profile', '511a63ed-a096-4ee4-9a23-876bcc18afab']">
+            Ver Empresa 2
+        </button>
+    </div>
+
+ -->

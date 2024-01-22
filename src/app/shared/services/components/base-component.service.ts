@@ -31,6 +31,24 @@ export class CommonComponentService {
     return /^\d+$/.test(date) ? date : new Date(date).getTime().toString()
   }
 
+  /**
+  * Converts a date string in the format "MM/YYYY" to milliseconds.
+  *
+  * @param {string} dateString - The date string in the format "MM/YYYY".
+  * @returns {number} The number of milliseconds representing the given date (with day set to 1).
+  *
+  * @example
+  * const dateString = "10/2022";
+  * const milliseconds = convertMMYYYYToMilliseconds(dateString);
+  * console.log(milliseconds); // Output: 1667232000000 (for October 1, 2022)
+  */
+  public convertMMYYYYToMilliseconds(dateString: string): number {
+    const [monthString, yearString] = dateString.split('/');
+    const month = parseInt(monthString, 10);
+    const year = parseInt(yearString, 10);
+    return new Date(year, month - 1, 1).getTime();
+  }
+
   public openInNewWindow(url: string) {
     window.open('https://' + url, "_blank");
   }
@@ -54,5 +72,16 @@ export class CommonComponentService {
       reject: () => rejectFunctionCallback?.call(this)
     })
   }
+
+  public copyToClipboard(text: string) {
+
+    navigator.clipboard.writeText(text).then(() => {
+      this.showMessage({ type: 'success', detail: text.concat(' copiado com sucesso!') });
+
+    }).catch((err) => {
+      this.showMessage({ type: 'error', detail: err });
+      console.log('Erro ao copiar texto para a área de transferência:', err);
+    })
+  };
 
 }

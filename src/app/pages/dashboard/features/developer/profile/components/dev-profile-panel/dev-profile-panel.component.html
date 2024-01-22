@@ -1,0 +1,22 @@
+<p-panel [toggleable]="true">
+
+    <ng-template pTemplate="icons">
+
+        @if (isOwner) {
+
+            <p-menu #menu id="config_menu" [model]="menuOptions" [popup]="true" />
+            <button class="p-panel-header-icon p-link mr-2" (click)="menu.toggle($event)">
+                <span class="pi pi-cog"></span>
+            </button>
+        }
+
+    </ng-template>
+
+    @if (loading) {
+
+        <p-skeleton styleClass="w-full h-20rem" />
+    }
+
+    <ng-content />
+    
+</p-panel>

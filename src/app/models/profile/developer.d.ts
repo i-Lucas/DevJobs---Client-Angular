@@ -164,3 +164,9 @@ type DeveloperProfileListFieldsIdentifier =
     'PROJECTS' |
     'LANGUAGES' |
     'STACKLIST';
+
+type DeveloperProfileEditFieldsIdentifier =
+    'DEVELOPER_ABOUT' |
+    'DEVELOPER_ADDRESS' |
+    'DEVELOPER_CONTACT' |
+    'DEVELOPER_EDUCATION'

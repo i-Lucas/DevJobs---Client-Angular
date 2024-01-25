@@ -60,3 +60,9 @@ interface DeveloperEditModeOnSave {
     form: FormGroup;
     identifier: DeveloperProfileEditFieldsIdentifier;
 }
+
+interface DeveloperEditModeOnDelete {
+
+    id: string,
+    identifier: DeveloperProfileEditFieldsIdentifier;
+}

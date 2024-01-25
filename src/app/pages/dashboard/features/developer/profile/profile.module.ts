@@ -28,6 +28,7 @@ import { RootDeveloperProfileComponent } from './components/root-developer-profi
 import { DevProfileExperiencesComponent } from './components/dev-profile-experiences/dev-profile-experiences.component';
 import { DevProfileCertificatesComponent } from './components/dev-profile-certificates/dev-profile-certificates.component';
 import { DevProfilePanelComponent } from './components/dev-profile-panel/dev-profile-panel.component';
+import { DeveloperProfileService } from './services/developer-profile.service';
 
 @NgModule({
   imports: [
@@ -70,7 +71,8 @@ export class PrimeModule { }
     DevProfileCertificatesComponent,
   ],
   providers: [
-    DeveloperFormService
+    DeveloperFormService,
+    DeveloperProfileService
   ],
   imports: [
     FormsModule,

@@ -10,7 +10,20 @@
 
         @if (!(educationList && educationList.length > 0)) {
 
-            <h4>empty</h4>
+            @if (isOwner) {
+
+                <p-button 
+                    size="small"
+                    label="Novo"
+                    icon="pi pi-plus"
+                    severity="success"
+                    [loading]="loading || editLoading"
+                />
+            
+            } @else {
+    
+                <p class="text-xs">Nenhum registro</p>
+            }
 
         } @else {
 
@@ -21,8 +34,8 @@
                     <span class="mt-2 text-xs font-bold">{{education.course}}</span>
 
                     <div class="mt-2 flex gap-2 text-xs text-600">
-                        <span>De: {{education.from | msToMMyyyy}}</span>
-                        <span>Até: {{education.to | msToMMyyyy}}</span>
+                        <span>De: {{education.from | MM_YYYY}}</span>
+                        <span>Até: {{education.to | MM_YYYY}}</span>
                     </div>
 
                     <span class="text-xs font-bold mt-4">{{education.modality}}</span>
@@ -46,6 +59,7 @@
 <app-modal 
     [icon]="'school'"
     [loading]="loading"
+    [editLoading]="editLoading"
     [isOpen]="isModalOpen"
     [title]="'Editar Formação Acadêmica'"
     (onClose)="isModalOpen = !isModalOpen">
@@ -60,18 +74,33 @@
 
                     <div class="my-4">
 
+                        <div class="flex justify-content-end">
+                            <i  pTooltip="Atualizado em: {{ educationList[idx].updatedAt | DD_MM_YYYY }}"                                
+                                class="material-icons cursor-pointer">help
+                            </i>                                                            
+                        </div>
+
                         <app-developer-academic-education-form
                             [academicEducationForm]="currentForm"
                         />
 
-                        <div class="mt-4">
+                        <div class="flex gap-2 mt-4">
                             <p-button 
                                 size="small"
                                 label="Salvar" 
                                 icon="pi pi-check"
-                                [loading]="loading"
-                                [disabled]="currentForm.invalid || loading"
-                                (click)="onSave.emit({ form: currentForm, identifier: 'DEVELOPER_EDUCATION' })"
+                                [loading]="loading || editLoading"
+                                [disabled]="currentForm.invalid || loading || editLoading"
+                                (click)="updateAcademicEducation(currentForm)"
+                            />
+                            <p-button 
+                                size="small"
+                                label="Excluir" 
+                                severity="danger"
+                                icon="pi pi-trash"
+                                [loading]="loading || editLoading"
+                                [disabled]="loading || editLoading"
+                                (click)="confirmDelete($event, currentForm.value.id)"
                             />
                         </div>
                     </div>

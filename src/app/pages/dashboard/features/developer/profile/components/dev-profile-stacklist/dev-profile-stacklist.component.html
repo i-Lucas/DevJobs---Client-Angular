@@ -10,7 +10,20 @@
 
         @if (!(stackList && stackList.length > 0)) {
 
-            <h4>empty</h4>
+            @if (isOwner) {
+
+                <p-button 
+                    size="small"
+                    label="Novo"
+                    icon="pi pi-plus"
+                    severity="success"
+                    [loading]="loading || editLoading"
+                />
+            
+            } @else {
+    
+                <p class="text-xs">Nenhum registro</p>
+            }
 
         } @else {
 
@@ -37,6 +50,7 @@
     [icon]="'handyman'"
     [loading]="loading"
     [isOpen]="isModalOpen"
+    [editLoading]="editLoading"
     [title]="'Editar Tecnologias'"
     (onClose)="isModalOpen = !isModalOpen">
 
@@ -50,18 +64,33 @@
 
                     <div class="my-4">
 
+                        <div class="flex justify-content-end">
+                            <i  pTooltip="Atualizado em: {{ stackList[idx].updatedAt | DD_MM_YYYY }}"                                
+                                class="material-icons cursor-pointer">help
+                            </i>                                                            
+                        </div>
+
                         <app-developer-stacklist-form
                             [stackListForm]="currentForm"
                         />
 
-                        <div class="mt-4">
+                        <div class="flex gap-2 mt-4">
                             <p-button 
                                 size="small"
                                 label="Salvar" 
                                 icon="pi pi-check"
-                                [loading]="loading"
-                                [disabled]="currentForm.invalid || loading"
-                                (click)="onSave.emit({ form: currentForm, identifier: 'DEVELOPER_STACKLIST' })"
+                                [loading]="loading || editLoading"
+                                (click)="updateStackList(currentForm)"
+                                [disabled]="currentForm.invalid || loading || editLoading"
+                            />
+                            <p-button
+                                size="small"
+                                label="Excluir" 
+                                severity="danger"
+                                icon="pi pi-trash"
+                                [loading]="loading || editLoading"
+                                [disabled]="loading || editLoading"
+                                (click)="confirmDelete($event, currentForm.value.id)"
                             />
                         </div>
                     </div>
@@ -72,3 +101,5 @@
 
     </p-tabView>
 </app-modal>
+
+<!-- (click)="onSave.emit({ form: currentForm, identifier: 'DEVELOPER_STACKLIST' })" -->

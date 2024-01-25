@@ -20,3 +20,19 @@ interface ApiResponseAddressData {
     street: string;
     service: string;
 }
+
+interface RequestDeveloperProfileUpdate<T> {
+    data: T
+    identifier: DeveloperProfileEditFieldsIdentifier,
+    onSuccess: (response: ApiResponse<T>) => void
+    onError: (error: ApiError) => void
+}
+
+interface RequestDeveloperProfileDelete<T> {
+    body: {
+        id: string,
+        identifier: DeveloperProfileEditFieldsIdentifier
+    },
+    onSuccess: (response: ApiResponse<T>) => void
+    onError: (error: ApiError) => void
+}

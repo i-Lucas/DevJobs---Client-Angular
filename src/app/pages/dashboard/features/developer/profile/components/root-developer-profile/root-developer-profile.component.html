@@ -4,9 +4,10 @@
         [loading]="loading"
         [profile]="currentProfile"
         [isOwner]="enableEditingMode"
+        (onEdit)="requestUpdate($event)"
         (openInNewWindow)="openNewWindow($event)"
         (copyToClipboard)="copyToClipboard($event)"
-        (onCepExternApiError)="onCepExternApiError($event)"
+        (onCepExternApiError)="showError($event)"
     />
 
     <section class="flex flex-column lg:flex-row lg:py-4 min-h-screen">
@@ -16,22 +17,25 @@
 
             <dev-profile-experiences
                 [loading]="loading"
-                (onSave)="onSave($event)"
                 [isOwner]="enableEditingMode"
-                [experiencesList]="currentProfile?.professional_experiences"
+                (onEdit)="requestUpdate($event)"
+                (onDelete)="requestDelete($event)"
+                [experiencesList]="currentProfile?.professional_experiences"                
             />
 
             <dev-profile-education 
-                [loading]="loading"
-                (onSave)="onSave($event)"
+                [loading]="loading"         
                 [isOwner]="enableEditingMode"
+                (onEdit)="requestUpdate($event)"
+                (onDelete)="requestDelete($event)"
                 [educationList]="currentProfile?.academic_education"
             />
 
             <dev-profile-projects
                 [loading]="loading"
-                (onSave)="onSave($event)"
                 [isOwner]="enableEditingMode"
+                (onEdit)="requestUpdate($event)"
+                (onDelete)="requestDelete($event)"
                 [projectsList]="currentProfile?.projects"
             />
             
@@ -44,22 +48,25 @@
 
             <dev-profile-languages
                 [loading]="loading"
-                (onSave)="onSave($event)"
                 [isOwner]="enableEditingMode"
+                (onEdit)="requestUpdate($event)"
+                (onDelete)="requestDelete($event)"
                 [languagesList]="currentProfile?.languages"
             />
 
             <dev-profile-certificates
                 [loading]="loading"
-                (onSave)="onSave($event)"
                 [isOwner]="enableEditingMode"
+                (onEdit)="requestUpdate($event)"
+                (onDelete)="requestDelete($event)"
                 [certificatesList]="currentProfile?.certificates"
             />
 
             <dev-profile-stacklist
                 [loading]="loading"
-                (onSave)="onSave($event)"
                 [isOwner]="enableEditingMode"
+                (onEdit)="requestUpdate($event)"
+                (onDelete)="requestDelete($event)"
                 [stackList]="currentProfile?.stack"
             />
 

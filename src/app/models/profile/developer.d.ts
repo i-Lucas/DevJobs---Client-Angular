@@ -119,6 +119,8 @@ interface DeveloperProfileAbout {
 
 interface DeveloperAddress {
 
+    id?: string;
+
     cep: string;
     city: string;
     state: string;

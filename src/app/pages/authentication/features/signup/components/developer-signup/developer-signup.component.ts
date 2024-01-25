@@ -34,22 +34,22 @@ export class DeveloperSignupComponent implements OnDestroy {
   protected aboutForm: FormGroup = this.developerFormService.getDeveloperAboutForm();
   protected contactForm: FormGroup = this.developerFormService.getDeveloperContactForm();
 
-  protected stackList: DeveloperProfileStackList[] = []
+  protected stackList: DeveloperProfileStackList[] = this.mock.getStackList(50);
   protected stackListForm: FormGroup = this.developerFormService.buildDeveloperStacklistForm();
 
   protected languagesList: DeveloperProfileLanguages[] = []
   protected languagesForm: FormGroup = this.developerFormService.buildDeveloperLanguagesForm();
 
-  protected projectsList: DeveloperProfileProjects[] = []
+  protected projectsList: DeveloperProfileProjects[] = this.mock.getProjects(50);
   protected projectsForm: FormGroup = this.developerFormService.buildDeveloperProjectsForm();
 
-  protected certificatesList: DeveloperProfileCertificates[] = []
+  protected certificatesList: DeveloperProfileCertificates[] = this.mock.getCertificates(50);
   protected certificatesForm: FormGroup = this.developerFormService.buildDeveloperCertificatesForm();
 
-  protected jobExperiencesList: DeveloperProfileJobExperiences[] = []
+  protected jobExperiencesList: DeveloperProfileJobExperiences[] = this.mock.getJobs(50);
   protected jobExperiencesForm: FormGroup = this.developerFormService.buildDeveloperJobExperiencesForm();
 
-  protected academicEducationList: DeveloperProfileAcademicEducation[] = []
+  protected academicEducationList: DeveloperProfileAcademicEducation[] = this.mock.getEducation(50);
   protected academicEducationForm: FormGroup = this.developerFormService.buildDeveloperAcademicEducationForm();
 
   protected stepMessages: string[] = [
@@ -65,7 +65,7 @@ export class DeveloperSignupComponent implements OnDestroy {
     'Quase lá! Defina sua senha e finalize o cadastro.'
   ];
 
-  protected currentStep: number = 9;
+  protected currentStep: number = 0;
 
   constructor(
     private mock: MockService,
@@ -73,7 +73,6 @@ export class DeveloperSignupComponent implements OnDestroy {
     private componentService: CommonComponentService,
     private commomSignupService: CommonSignupService,
     private developerFormService: DeveloperFormService,
-    // private fromMillisecondsToMonthYearPipe: FromMillisecondsToMonthYearPipe
   ) { }
 
   ngOnDestroy() {
@@ -197,9 +196,13 @@ export class DeveloperSignupComponent implements OnDestroy {
       about: this.aboutForm.value,
       contact: {
         ...contact,
-        email: contact.email.email  // form composition
+        email: contact.email.email, // form composition
+        id: undefined // important 
       },
-      address: this.addressForm.value,
+      address: {
+        ...this.addressForm.value,
+        id: undefined // important 
+      },
       password: this.passwordForm.value,
       academic_education: purgeIds(this.academicEducationList),
       professional_experiences: purgeIds(this.jobExperiencesList),

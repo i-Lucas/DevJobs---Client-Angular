@@ -28,6 +28,10 @@ export class DashboardService {
     return this.profile.asObservable();
   }
 
+  public getProfileSubject() {
+    return this.profile.getValue();
+  }
+
   public updateProfile(profile: AppProfile): void {
     this.profile.next(profile);
   }

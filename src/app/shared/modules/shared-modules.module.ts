@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 
-import { FromMillisecondsToMonthYearPipe } from '@app-pipes/date-formatter.pipe';
+import { FromMsToDayMonthYearPipe, FromMSToMonthYearPipe } from '@app-pipes/date-formatter.pipe';
 
 @NgModule({
   declarations: [
-    FromMillisecondsToMonthYearPipe,
+    FromMSToMonthYearPipe,
+    FromMsToDayMonthYearPipe,
   ],
   exports: [
-    FromMillisecondsToMonthYearPipe
-  ]
+    FromMSToMonthYearPipe,
+    FromMsToDayMonthYearPipe
+  ],
 })
 export class SharedModulesModule { }

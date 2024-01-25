@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { DateService } from '@app-services/date/date.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Injectable({
@@ -10,6 +11,7 @@ export class CommonComponentService {
 
   constructor(
     private router: Router,
+    private dateService: DateService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
   ) { }
@@ -31,29 +33,15 @@ export class CommonComponentService {
     return /^\d+$/.test(date) ? date : new Date(date).getTime().toString()
   }
 
-  /**
-  * Converts a date string in the format "MM/YYYY" to milliseconds.
-  *
-  * @param {string} dateString - The date string in the format "MM/YYYY".
-  * @returns {number} The number of milliseconds representing the given date (with day set to 1).
-  *
-  * @example
-  * const dateString = "10/2022";
-  * const milliseconds = convertMMYYYYToMilliseconds(dateString);
-  * console.log(milliseconds); // Output: 1667232000000 (for October 1, 2022)
-  */
-  public convertMMYYYYToMilliseconds(dateString: string): number {
-    const [monthString, yearString] = dateString.split('/');
-    const month = parseInt(monthString, 10);
-    const year = parseInt(yearString, 10);
-    return new Date(year, month - 1, 1).getTime();
+  public fromMMYYYYToMS(dateString: string) {
+    return this.dateService.fromMMYYYYToMS(dateString);
   }
 
   public openInNewWindow(url: string) {
     window.open('https://' + url, "_blank");
   }
 
-  protected confirmEvent(
+  public confirmEvent(
     event: Event,
     message: string = 'Você tem certeza ?',
     acceptFunctionCallback?: () => void,

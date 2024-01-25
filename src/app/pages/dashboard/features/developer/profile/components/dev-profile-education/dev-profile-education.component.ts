@@ -1,7 +1,9 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-import { FromMillisecondsToMonthYearPipe } from '@app-pipes/date-formatter.pipe';
+import { FromMSToMonthYearPipe } from '@app-pipes/date-formatter.pipe';
+import { DeveloperProfileService } from '../../services/developer-profile.service';
+import { CommonComponentService } from '@app-services/components/base-component.service';
 import { DeveloperFormService } from '@app-shared-forms/services/builder/developer-forms/developer-form.service';
 
 @Component({
@@ -12,16 +14,21 @@ export class DevProfileEducationComponent implements OnChanges {
 
   @Input() loading: boolean = false;
   @Input() isOwner: boolean = false;
-
-  @Output() onSave = new EventEmitter<DeveloperEditModeOnSave>();
   @Input() educationList: DeveloperProfile['academic_education'] | undefined;
 
+  @Output() onEdit = new EventEmitter<RequestDeveloperProfileUpdate<any>>();
+  @Output() onDelete = new EventEmitter<RequestDeveloperProfileDelete<any>>();
+
   protected isModalOpen: boolean = false;
+  protected editLoading: boolean = false;
   protected academicEducationFormList: FormGroup[] | undefined;
 
   constructor(
+    private cdr: ChangeDetectorRef,
     private formService: DeveloperFormService,
-    private fromMillisecondsToMonthYearPipe: FromMillisecondsToMonthYearPipe
+    private componentService: CommonComponentService,
+    private developerProfileService: DeveloperProfileService,
+    private fromMillisecondsToMonthYearPipe: FromMSToMonthYearPipe
   ) { }
 
   protected menuOptions: PMenuOptions[] = [
@@ -61,5 +68,65 @@ export class DevProfileEducationComponent implements OnChanges {
     return form;
 
   }
-  
+
+  protected updateAcademicEducation(form: FormGroup) {
+
+    this.editLoading = true
+
+    const body = {
+      ...form.value,
+      to: this.componentService.fromMMYYYYToMS(form.value.to).toString(),
+      from: this.componentService.fromMMYYYYToMS(form.value.from).toString()
+    };
+
+    this.onEdit.emit({
+      data: body,
+      identifier: 'DEVELOPER_EDUCATION',
+      onSuccess: (response) => {
+
+        this.editLoading = false
+        this.developerProfileService.updateDeveloperProfileEducation(body);
+        this.componentService.showMessage({ detail: response.message, type: 'success' });
+      },
+      onError: (error) => {
+
+        this.editLoading = false
+        this.componentService.showMessage({ detail: error.message, type: 'error' });
+      }
+    });
+
+  }
+
+  protected confirmDelete(event: Event, id: string) {
+    this.componentService.confirmEvent(event, undefined, () => {
+      this.deleteAcademicEducation(id);
+    });
+  };
+
+  protected deleteAcademicEducation(id: string) {
+
+    this.editLoading = true
+
+    this.onDelete.emit({
+      body: { id, identifier: 'DEVELOPER_EDUCATION' },
+      onError: (error) => {
+        this.editLoading = false
+        this.componentService.showMessage({ detail: error.message, type: 'error' });
+      },
+      onSuccess: (response) => {
+        this.editLoading = false
+        this.removeFormFromList(id);
+        this.developerProfileService.deleteDeveloperProfileEducation(id);
+        this.componentService.showMessage({ detail: response.message, type: 'success' });
+      }
+    })
+  }
+
+  private removeFormFromList(id: string) {
+    if (this.academicEducationFormList) {
+      this.academicEducationFormList = this.academicEducationFormList.filter(eduForm => eduForm.value.id !== id);
+      this.cdr.detectChanges();
+    }
+  }
+
 }

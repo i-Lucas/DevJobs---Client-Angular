@@ -10,10 +10,11 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { AppStateService } from '@app-services/app/app.service';
 import { HttpService } from '@app-services/http/http.service';
+import { DateService } from '@app-services/date/date.service';
+import { AppStateService } from '@app-services/app/app.service';
 import { AuthenticationService } from '@app-services/auth/auth.service';
-import { FromMillisecondsToMonthYearPipe } from '@app-pipes/date-formatter.pipe';
+import { FromMSToMonthYearPipe } from '@app-pipes/date-formatter.pipe';
 
 @NgModule({
   declarations: [
@@ -30,11 +31,12 @@ import { FromMillisecondsToMonthYearPipe } from '@app-pipes/date-formatter.pipe'
   ],
   providers: [
     HttpService,
+    DateService,
     MessageService,
     AppStateService,
     ConfirmationService,
     AuthenticationService,
-    FromMillisecondsToMonthYearPipe,
+    FromMSToMonthYearPipe,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpService,

@@ -10,7 +10,20 @@
 
         @if (!(experiencesList && experiencesList.length > 0)) {
 
-            <h4>empty</h4>
+            @if (isOwner) {
+
+                <p-button 
+                    size="small"
+                    label="Novo"
+                    icon="pi pi-plus"
+                    severity="success"
+                    [loading]="loading || editLoading"
+                />
+            
+            } @else {
+    
+                <p class="text-xs">Nenhum registro</p>
+            }
 
         } @else {
 
@@ -36,8 +49,8 @@
                         <span class="mt-2 text-xs font-bold">{{ experience.occupation }}</span>
         
                         <div class="mt-2 flex gap-2 text-xs text-600">
-                            <span>De: {{experience.from | msToMMyyyy}}</span>
-                            <span>Até: {{experience.to | msToMMyyyy}}</span>
+                            <span>De: {{experience.from | MM_YYYY}}</span>
+                            <span>Até: {{experience.to | MM_YYYY}}</span>
                         </div>
         
                         <span class="mt-3 text-sm text-justify line-height-3">
@@ -59,6 +72,7 @@
     [icon]="'work'"
     [loading]="loading"
     [isOpen]="isModalOpen"
+    [editLoading]="editLoading"
     [title]="'Editar Experiência Profissional'"
     (onClose)="isModalOpen = !isModalOpen">
 
@@ -72,20 +86,36 @@
 
                     <div class="my-4">
 
+                        <div class="flex justify-content-end">
+                            <i  pTooltip="Atualizado em: {{ experiencesList[idx].updatedAt | DD_MM_YYYY }}"                                
+                                class="material-icons cursor-pointer">help
+                            </i>                                                            
+                        </div>
+
                         <app-developer-job-experiences-form
                             [jobExperiencesForm]="currentForm"
                         />
 
-                        <div class="mt-4">
+                        <div class="flex gap-2 mt-4">
                             <p-button 
                                 size="small"
                                 label="Salvar" 
                                 icon="pi pi-check"
-                                [loading]="loading"
-                                [disabled]="currentForm.invalid || loading"
-                                (click)="onSave.emit({ form: currentForm, identifier: 'DEVELOPER_EXPERIENCES' })"
+                                [loading]="loading || editLoading"
+                                (click)="updateJobExperience(currentForm)"
+                                [disabled]="currentForm.invalid || loading || editLoading"
+                            />
+                            <p-button 
+                                size="small"
+                                label="Excluir" 
+                                severity="danger"
+                                icon="pi pi-trash"
+                                [loading]="loading || editLoading"
+                                [disabled]="loading || editLoading"
+                                (click)="confirmDelete($event, currentForm.value.id)"
                             />
                         </div>
+
                     </div>
                     
                 </p-tabPanel>
@@ -94,3 +124,6 @@
 
     </p-tabView>
 </app-modal>
+
+
+<!-- (click)="onSave.emit({ form: currentForm, identifier: 'DEVELOPER_EXPERIENCES' })" -->

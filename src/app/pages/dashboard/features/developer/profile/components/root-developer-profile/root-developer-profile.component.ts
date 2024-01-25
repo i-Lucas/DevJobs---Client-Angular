@@ -14,9 +14,25 @@ export class RootDeveloperProfileComponent implements OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  protected loading: boolean = true;
+  /**
+  * @param loading
+  * @default true
+  * local state that indicates when the current profile is being loaded
+  */
+  protected loading: boolean = true; // important to start as true !
+
+  /**
+  * @param openEditModal
+  * indicates whether the edit modal is open
+  */
   protected openEditModal: boolean = false;
+
+  /**
+  * @param enableEditingMode
+  * indicates whether the user can edit the current profile (owner)
+  */
   protected enableEditingMode: boolean = false;
+
   protected currentProfile: DeveloperProfile | undefined;
 
   constructor(
@@ -45,6 +61,7 @@ export class RootDeveloperProfileComponent implements OnDestroy {
       .subscribe(profile => {
 
         if (!profile) return // goto signin ?
+
         this.isUserOwnerCurrentProfile(profile, routeProfileId) ?
           this.handleUserDeveloperProfile(profile) :
           this.handleNonUserCompanyProfile(routeProfileId);
@@ -85,7 +102,7 @@ export class RootDeveloperProfileComponent implements OnDestroy {
   private handleGetAccountError(error: ApiError) {
     this.currentProfile = undefined;
     this.updateLocalStateLoading(false);
-    this.componentService.showMessage({ detail: error.message, type: 'error' });
+    this.showError(error);
   }
 
   private updateLocalStateLoading(state: boolean) {
@@ -100,26 +117,32 @@ export class RootDeveloperProfileComponent implements OnDestroy {
     this.componentService.copyToClipboard(text);
   }
 
-  protected onSave({ form, identifier }: DeveloperEditModeOnSave) {
-
-    const now = new Date().getTime().toString();
-
-    switch (identifier) {
-      case 'DEVELOPER_EDUCATION':
-
-        const formData = {
-          ...form.value,
-          updatedAt: now,
-          to: this.componentService.convertMMYYYYToMilliseconds(form.value.to),
-          from: this.componentService.convertMMYYYYToMilliseconds(form.value.from)
-        };
-
-        break;
-    }
+  protected showError(error: ApiError) {
+    this.componentService.showMessage({ detail: error.message, type: 'error' });
   }
 
-  protected onCepExternApiError(error: ApiError) {
-    this.componentService.showMessage({ detail: error.message, type: 'error' });
+  protected requestUpdate<T>({ data, identifier, onError, onSuccess }: RequestDeveloperProfileUpdate<T>) {
+
+    this.httpService
+      .post<ApiResponse<T>>('/profile/developer/update', {
+        data, identifier, profileId: this.currentProfile?.id,
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => onSuccess(response),
+        error: (error) => onError(error)
+      })
+  }
+
+  protected requestDelete<T>({ body, onSuccess, onError }: RequestDeveloperProfileDelete<T>) {
+
+    this.httpService
+      .post<ApiResponse<T>>('/profile/developer/delete', body)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => onSuccess(response),
+        error: (error: ApiError) => onError(error)
+      })
   }
 
 }

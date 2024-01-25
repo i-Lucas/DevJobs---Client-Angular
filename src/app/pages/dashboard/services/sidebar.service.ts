@@ -7,33 +7,17 @@ export class SidebarService {
   private sidebarProps = new BehaviorSubject<SidebarProps | null>(null);
   private sidebarList = new BehaviorSubject<SidebarListOptions[] | []>([]);
 
-  private getDefaultOptions(): SidebarListOptions[] {
+  private getDefaultOptions(mode: AccountType): SidebarListOptions[] {
+
+    const baseHome = '/dashboard/'.concat((mode === 'COMPANY' ? 'company' : 'developer'), '/');
+
     return [
-      {
-        link: { path: '/dashboard' },
-        icon: 'home', label: 'Início', tooltip: 'Início',
-      },
-      {
-        link: { path: '/dashboard' },
-        icon: 'forum', label: 'Mensagens',
-        tooltip: 'Acesse sua caixa de mensagens'
-      },
-      {
-        link: { path: '/dashboard' },
-        label: 'Suporte', icon: 'contact_support',
-        tooltip: 'Dúvidas ou problemas ? Contate o suporte'
-      },
-      {
-        link: { path: '/dashboard' },
-        label: 'Feedback', icon: 'feedback',
-        tooltip: 'Ajude-nos a melhorar com sua opinião'
-      },
-      {
-        link: { path: '/dashboard' },
-        icon: 'warning', label: 'Avisos',
-        tooltip: 'Veja se algo deu errado e como resolver'
-      }
-    ]
+      { link: { path: baseHome.concat('home') }, icon: 'home', label: 'Início', tooltip: 'Início' },
+      { link: { path: '/dashboard' }, icon: 'forum', label: 'Mensagens', tooltip: 'Acesse sua caixa de mensagens' },
+      { link: { path: '/dashboard' }, label: 'Suporte', icon: 'contact_support', tooltip: 'Dúvidas ou problemas? Contate o suporte' },
+      { link: { path: '/dashboard' }, label: 'Feedback', icon: 'feedback', tooltip: 'Ajude-nos a melhorar com sua opinião' },
+      { link: { path: '/dashboard' }, icon: 'warning', label: 'Avisos', tooltip: 'Veja se algo deu errado e como resolver' },
+    ];
   }
 
   private getProfileOption(mode: AccountType, profileId: string): SidebarListOptions {
@@ -102,9 +86,9 @@ export class SidebarService {
         this.getDeveloperOptions(props.profileId);
 
       this.updateSidebarList([
-        ...this.getDefaultOptions().slice(0, 1),
+        ...this.getDefaultOptions(props.mode).slice(0, 1),
         ...options,
-        ...this.getDefaultOptions().slice(1)
+        ...this.getDefaultOptions(props.mode).slice(1)
       ])
     }
   }

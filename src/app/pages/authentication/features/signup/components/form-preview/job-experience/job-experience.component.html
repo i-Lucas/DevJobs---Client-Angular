@@ -28,8 +28,8 @@
                         <p class="font-semibold">Descrição:</p>
                         <p class="max-w-30rem text-justify">{{ item.resume }}</p>
 
-                        <p><span class="font-semibold">Início</span>: {{item.from | msToMMyyyy}}</p>
-                        <p><span class="font-semibold">Término</span>: {{item.to | msToMMyyyy }}</p>
+                        <p><span class="font-semibold">Início</span>: {{item.from | MM_YYYY}}</p>
+                        <p><span class="font-semibold">Término</span>: {{item.to | MM_YYYY }}</p>
                         
                         <form-edit-buttons 
                             [item]="item" 

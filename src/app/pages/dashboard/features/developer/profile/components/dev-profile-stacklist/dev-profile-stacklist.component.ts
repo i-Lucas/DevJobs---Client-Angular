@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
+import { DeveloperProfileService } from '../../services/developer-profile.service';
+import { CommonComponentService } from '@app-services/components/base-component.service';
 import { DeveloperFormService } from '@app-shared-forms/services/builder/developer-forms/developer-form.service';
 
 @Component({
@@ -11,14 +13,21 @@ export class DevProfileStacklistComponent implements OnChanges {
 
   @Input() loading: boolean = false;
   @Input() isOwner: boolean = false;
-
-  @Output() onSave = new EventEmitter<DeveloperEditModeOnSave>();
   @Input() stackList: DeveloperProfile['stack'] | undefined;
 
+  @Output() onEdit = new EventEmitter<RequestDeveloperProfileUpdate<any>>();
+  @Output() onDelete = new EventEmitter<RequestDeveloperProfileDelete<any>>();
+
+  protected editLoading: boolean = false;
   protected isModalOpen: boolean = false;
   protected stackFormList: FormGroup[] | undefined;
 
-  constructor(private formService: DeveloperFormService) { }
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private formService: DeveloperFormService,
+    private componentService: CommonComponentService,
+    private developerProfileService: DeveloperProfileService,
+  ) { }
 
   protected menuOptions: PMenuOptions[] = [
     {
@@ -53,5 +62,62 @@ export class DevProfileStacklistComponent implements OnChanges {
 
   }
 
-}
+  protected updateStackList(form: FormGroup) {
 
+    const body = { ...form.value }
+    body.workload = body.workload.concat(' ', body.workload_tmp);
+    delete body.workload_tmp;
+
+    this.editLoading = true
+
+    this.onEdit.emit({
+      data: body,
+      identifier: 'DEVELOPER_STACKLIST',
+      onSuccess: (response) => {
+
+        this.editLoading = false
+        this.developerProfileService.updateDeveloperProfileStackList(body);
+        this.componentService.showMessage({ detail: response.message, type: 'success' });
+      },
+      onError: (error) => {
+
+        this.editLoading = false
+        this.componentService.showMessage({ detail: error.message, type: 'error' });
+      }
+    });
+
+  }
+
+  protected confirmDelete(event: Event, id: string) {
+    this.componentService.confirmEvent(event, undefined, () => {
+      this.deleteStack(id);
+    });
+  };
+
+  protected deleteStack(id: string) {
+
+    this.editLoading = true
+
+    this.onDelete.emit({
+      body: { id, identifier: 'DEVELOPER_STACKLIST' },
+      onError: (error) => {
+        this.editLoading = false
+        this.componentService.showMessage({ detail: error.message, type: 'error' });
+      },
+      onSuccess: (response) => {
+        this.editLoading = false
+        this.removeFormFromList(id);
+        this.developerProfileService.deleteDeveloperProfileStackList(id);
+        this.componentService.showMessage({ detail: response.message, type: 'success' });
+      }
+    })
+  }
+
+  private removeFormFromList(id: string) {
+    if (this.stackFormList) {
+      this.stackFormList = this.stackFormList.filter(form => form.value.id !== id);
+      this.cdr.detectChanges();
+    }
+  }
+
+}

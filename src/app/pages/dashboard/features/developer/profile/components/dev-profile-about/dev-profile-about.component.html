@@ -2,6 +2,7 @@
     [isOwner]="isOwner"
     [loading]="loading" 
     (onEdit)="isModalOpen = true"
+    [label]="'teste'"
     >
 
     @if (profile) {
@@ -63,12 +64,42 @@
     [isOpen]="isModalOpen" 
     [title]="'Editar Perfil'"
     [icon]="'manage_accounts'"
+    [editLoading]="editLoading"
     (onClose)="isModalOpen = !isModalOpen">
 
     <p-tabView>
 
+        <p-tabPanel header="Sobre">
+            <div class="my-4">
+
+                <div class="flex justify-content-end">
+                    <i  pTooltip="Atualizado em: {{ profile?.about!.updatedAt | DD_MM_YYYY }}"
+                        class="material-icons cursor-pointer">help
+                    </i>
+                </div>
+
+                <app-developer-about-form />
+                <div class="mt-4">
+                    <p-button
+                        size="small"
+                        label="Salvar"
+                        icon="pi pi-check"
+                        [loading]="loading || editLoading"
+                        [disabled]="aboutForm.invalid || loading || editLoading"
+                        (click)="updateAbout(aboutForm)"
+                    />
+                </div>
+            </div>
+        </p-tabPanel>
+
         <p-tabPanel header="Endereço">
             <div class="my-4">
+
+                <div class="flex justify-content-end">
+                    <i  pTooltip="Atualizado em: {{ profile?.address!.updatedAt | DD_MM_YYYY }}"                                
+                        class="material-icons cursor-pointer">help
+                    </i>                                                            
+                </div>
 
                 <app-address-form (cepExternApiError)="onCepExternApiError.emit($event)" />
                 <div class="mt-4">
@@ -76,26 +107,9 @@
                         size="small"
                         label="Salvar" 
                         icon="pi pi-check"
-                        [loading]="loading"
-                        [disabled]="addressForm.invalid || loading"
-                        (click)="onSave.emit({ form: addressForm, identifier: 'DEVELOPER_ADDRESS' })"
-                    />
-                </div>
-            </div>
-        </p-tabPanel>
-
-        <p-tabPanel header="Sobre">
-            <div class="my-4">
-
-                <app-developer-about-form />
-                <div class="mt-4">
-                    <p-button 
-                        size="small"
-                        label="Salvar"
-                        icon="pi pi-check" 
-                        [loading]="loading"
-                        [disabled]="aboutForm.invalid || loading"
-                        (click)="onSave.emit({ form: aboutForm, identifier: 'DEVELOPER_ABOUT' })"
+                        [loading]="loading || editLoading"
+                        [disabled]="addressForm.invalid || loading || editLoading"
+                        (click)="updateAddress(addressForm)"
                     />
                 </div>
             </div>
@@ -104,15 +118,21 @@
         <p-tabPanel header="Contato">
             <div class="my-4">
 
+                <div class="flex justify-content-end">
+                    <i  pTooltip="Atualizado em: {{ profile?.contact!.updatedAt | DD_MM_YYYY }}"                                
+                        class="material-icons cursor-pointer">help
+                    </i>                                                            
+                </div>
+
                 <app-developer-contact-form (emailAvailabilityError)="onEmailAvailabilityError($event)" />
                 <div class="mt-4">
                     <p-button
                         size="small"
                         label="Salvar"
                         icon="pi pi-check"
-                        [loading]="loading"
-                        [disabled]="contactForm.invalid || loading"
-                        (click)="onSave.emit({ form: contactForm, identifier: 'DEVELOPER_CONTACT' })"
+                        [loading]="loading || editLoading"
+                        [disabled]="contactForm.invalid || loading || editLoading"
+                        (click)="updateContact(contactForm)"
                     />
                 </div>
             </div>

@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
+import { DeveloperProfileService } from '../../services/developer-profile.service';
+import { CommonComponentService } from '@app-services/components/base-component.service';
 import { DeveloperFormService } from '@app-shared-forms/services/builder/developer-forms/developer-form.service';
 
 type LanguageLevel = 'Básico' | 'Avançado' | 'Intermediário' | 'Proficiente';
@@ -9,18 +11,25 @@ type LanguageLevel = 'Básico' | 'Avançado' | 'Intermediário' | 'Proficiente';
   selector: 'dev-profile-languages',
   templateUrl: './dev-profile-languages.component.html',
 })
-export class DevProfileLanguagesComponent {
+export class DevProfileLanguagesComponent implements OnChanges {
 
   @Input() loading: boolean = false;
   @Input() isOwner: boolean = false;
-
-  @Output() onSave = new EventEmitter<DeveloperEditModeOnSave>();
   @Input() languagesList: DeveloperProfile['languages'] | undefined;
 
+  @Output() onEdit = new EventEmitter<RequestDeveloperProfileUpdate<any>>();
+  @Output() onDelete = new EventEmitter<RequestDeveloperProfileDelete<any>>();
+
+  protected editLoading: boolean = false;
   protected isModalOpen: boolean = false;
   protected languagesFormList: FormGroup[] | undefined;
 
-  constructor(private formService: DeveloperFormService) { }
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private formService: DeveloperFormService,
+    private componentService: CommonComponentService,
+    private developerProfileService: DeveloperProfileService,
+  ) { }
 
   protected menuOptions: PMenuOptions[] = [
     {
@@ -30,10 +39,13 @@ export class DevProfileLanguagesComponent {
   ]
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.isOwner) {
-      if (changes['languagesList'] && changes['languagesList'].currentValue) {
-        if (this.languagesList) {
-          this.languagesList = this.getLanguageListWithRating(this.languagesList)
+
+    if (changes['languagesList'] && changes['languagesList'].currentValue) {
+      if (this.languagesList) {
+
+        this.languagesList = this.getLanguageListWithRating(this.languagesList); // here
+
+        if (this.isOwner) {
           this.updateLanguageFormsList(this.languagesList)
         }
       }
@@ -69,6 +81,62 @@ export class DevProfileLanguagesComponent {
     form.patchValue(language);
     return form;
 
+  }
+
+  protected updateLanguage(form: FormGroup) {
+
+    this.editLoading = true
+
+    this.onEdit.emit({
+      data: form.value,
+      identifier: 'DEVELOPER_LANGUAGES',
+      onSuccess: (response) => {
+
+        this.editLoading = false
+        this.developerProfileService.updateDeveloperProfileLanguages(form.value);
+        this.componentService.showMessage({ detail: response.message, type: 'success' });
+      },
+      onError: (error) => {
+
+        this.editLoading = false
+        this.componentService.showMessage({ detail: error.message, type: 'error' });
+      }
+    });
+
+  }
+
+  protected confirmDelete(event: Event, id: string) {
+    this.componentService.confirmEvent(event, undefined, () => {
+      this.deleteLanguage(id);
+    });
+  };
+
+  protected deleteLanguage(id: string) {
+
+    this.editLoading = true
+
+    this.onDelete.emit({
+      body: { id, identifier: 'DEVELOPER_LANGUAGES' },
+      onError: (error) => {
+        this.editLoading = false
+        this.componentService.showMessage({ detail: error.message, type: 'error' });
+      },
+      onSuccess: (response) => {
+        this.editLoading = false
+        this.removeFormFromList(id);
+        this.developerProfileService.deleteDeveloperProfileLanguage(id);
+        this.componentService.showMessage({ detail: response.message, type: 'success' });
+      }
+    })
+  }
+
+  private removeFormFromList(id: string) {
+
+    if (this.languagesFormList) {
+      this.languagesFormList = this.languagesFormList.filter(form => form.value.id !== id);
+      this.languagesList = this.languagesList!.filter(item => item.id !== id); // important, why the list being reassigned locally
+      this.cdr.detectChanges();
+    }
   }
 
 }

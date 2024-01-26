@@ -61,6 +61,10 @@ import { DevProfileCertificatesComponent } from './components/dev-profile-certif
 export class PrimeModule { }
 
 @NgModule({
+  providers: [
+    DeveloperFormService,
+    DeveloperProfileService
+  ],
   declarations: [
     DevNewFieldBtnComponent,
     DevProfileAboutComponent,
@@ -73,10 +77,6 @@ export class PrimeModule { }
     RootDeveloperProfileComponent,
     DevProfileExperiencesComponent,
     DevProfileCertificatesComponent,
-  ],
-  providers: [
-    DeveloperFormService,
-    DeveloperProfileService
   ],
   imports: [
     FormsModule,

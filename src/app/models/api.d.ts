@@ -28,6 +28,13 @@ interface RequestDeveloperProfileUpdate<T> {
     onError: (error: ApiError) => void
 }
 
+interface RequestCompanyProfileUpdate<T> {
+    data: T
+    identifier: CompanyProfileEditFieldsIdentifier,
+    onSuccess: (response: ApiResponse<T>) => void
+    onError: (error: ApiError) => void
+}
+
 interface RequestDeveloperProfileAdd<T> {
     data: T
     identifier: DeveloperProfileEditFieldsIdentifier,

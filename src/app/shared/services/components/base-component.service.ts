@@ -38,7 +38,24 @@ export class CommonComponentService {
   }
 
   public openInNewWindow(url: string) {
-    window.open('https://' + url, "_blank");
+
+    url = url.trim();
+    url = url.replace(/\/+$/, '');
+
+    const httpRegex = /^http:\/\//i;
+    const httpsRegex = /^https:\/\//i;
+
+    if (!httpRegex.test(url) && !httpsRegex.test(url)) {
+      url = 'https://' + url;
+    }
+
+    const urlRegex = /^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,6}(\/.*)?$/i;
+    if (!urlRegex.test(url)) {
+      this.showMessage({ type: 'error', detail: 'URL inválida: '.concat(url) });
+      return;
+    }
+
+    window.open(url, "_blank");
   }
 
   public confirmEvent(

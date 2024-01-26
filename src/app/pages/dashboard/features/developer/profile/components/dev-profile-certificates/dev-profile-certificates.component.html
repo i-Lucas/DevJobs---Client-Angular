@@ -57,11 +57,10 @@
 </dev-profile-panel>
 
 <app-modal 
-    [loading]="loading"
     [isOpen]="isModalOpen"
-    [editLoading]="editLoading"
-    [icon]="'workspace_premium'"
     (onClose)="onCloseModal()"
+    [icon]="'workspace_premium'"
+    [loading]="loading || editLoading"
     [title]="(addingNewField ? 'Novo Certificado' : 'Editar Certificado')">
 
     @if (addingNewField && newFieldForm) {

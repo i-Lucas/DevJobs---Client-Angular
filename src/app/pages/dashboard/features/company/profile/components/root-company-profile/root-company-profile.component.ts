@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 
 import { HttpService } from '@app-services/http/http.service';
+import { CompanyProfileService } from '../../services/company-profile.service';
 import { DashboardService } from 'app/pages/dashboard/services/dashboard.service';
 import { CommonComponentService } from '@app-services/components/base-component.service';
 
@@ -21,11 +22,14 @@ export class RootCompanyProfileComponent implements OnDestroy {
   protected enableEditingMode: boolean = false;
   protected currentProfile: CompanyProfile | undefined;
 
+  protected editLoading: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
     private httpService: HttpService,
     private dashboardService: DashboardService,
     private componentService: CommonComponentService,
+    private companyProfileService: CompanyProfileService,
   ) {
 
     this.route.params
@@ -94,16 +98,117 @@ export class RootCompanyProfileComponent implements OnDestroy {
     this.loading = state;
   }
 
-  protected openNewWindow(path: string) {
+  protected openInNewWindow(path: string) {
     this.componentService.openInNewWindow(path);
-  }
-
-  protected onSave({ form, identifier }: CompanyEditModeOnSave) {
-    console.log(form, identifier);
   }
 
   protected onCepExternApiError(error: ApiError) {
     this.componentService.showMessage({ detail: error.message, type: 'error' });
+  }
+
+  protected onSave({ form, identifier }: CompanyEditModeOnSave) {
+
+    switch (identifier) {
+
+      case 'COMPANY_ADDRESS':
+
+        this.requestUpdate({
+          data: form.value,
+          identifier: 'COMPANY_ADDRESS',
+          onSuccess: (response) => {
+
+            this.companyProfileService.updateCompanyAddress(form.value);
+            this.componentService.showMessage({ detail: response.message, type: 'success' });
+          },
+          onError: (error) => {
+
+            this.componentService.showMessage({ detail: error.message, type: 'error' });
+          }
+        })
+
+        break;
+
+      case 'COMPANY_CONTACT':
+
+        this.editLoading = true
+
+        this.requestUpdate({
+          data: form.value,
+          identifier: 'COMPANY_CONTACT',
+          onSuccess: (response) => {
+
+            this.companyProfileService.updateCompanyContact(form.value);
+            this.componentService.showMessage({ detail: response.message, type: 'success' });
+          },
+          onError: (error) => {
+
+            this.componentService.showMessage({ detail: error.message, type: 'error' });
+          }
+        })
+        break;
+
+      case 'COMPANY_DETAILS':
+
+        this.requestUpdate({
+          data: form.value,
+          identifier: 'COMPANY_DETAILS',
+          onSuccess: (response) => {
+
+            this.companyProfileService.updateCompanyDetails(form.value);
+            this.componentService.showMessage({ detail: response.message, type: 'success' });
+          },
+          onError: (error) => {
+
+            this.componentService.showMessage({ detail: error.message, type: 'error' });
+          }
+        })
+        break;
+
+      case 'COMPANY_SOCIAL':
+
+        this.requestUpdate({
+          data: form.value,
+          identifier: 'COMPANY_SOCIAL',
+          onSuccess: (response) => {
+
+            this.companyProfileService.updateCompanySocial(form.value);
+            this.componentService.showMessage({ detail: response.message, type: 'success' });
+          },
+          onError: (error) => {
+
+            this.componentService.showMessage({ detail: error.message, type: 'error' });
+          }
+        })
+        break;
+
+      case 'COMPANY_OWNER':
+        break;
+
+      case 'COMPANY_PERMISSIONS':
+        break;
+    }
+
+  }
+
+  protected requestUpdate<T>({ data, identifier, onError, onSuccess }: RequestCompanyProfileUpdate<T>) {
+
+    this.editLoading = true
+
+    this.httpService
+      .post<ApiResponse<T>>('/profile/company/update', {
+        data, identifier, profileId: this.currentProfile?.id,
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.editLoading = false
+          onSuccess(response)
+        },
+        error: (error) => {
+          this.editLoading = false
+          onError(error)
+        }
+      })
   }
 
 }

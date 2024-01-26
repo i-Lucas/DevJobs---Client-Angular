@@ -7,26 +7,34 @@ import { BaseFormService } from '@app-shared-forms/services/base/base-form.servi
 @Injectable()
 export class CompanyFormService extends BaseFormService {
 
-  private detailsForm: FormGroup;
-  private contactForm: FormGroup;
-  private socialNetworkForm: FormGroup;
-  private companyAccountForm: FormGroup;
-
   constructor(
     private formBuilder: FormBuilder,
     private commomFormService: CommonFormService
   ) {
-
+    
     super()
+  }
 
-    this.companyAccountForm = this.formBuilder.group({
+  public getCompanyAccountForm(isEditMode: boolean = false): FormGroup {
+
+    const formGroupConfig = {
       name: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
       email: this.commomFormService.getEmailForm(),
       phone: ['', [Validators.required, Validators.minLength(11)]],
       password: this.commomFormService.getPasswordForm()
-    })
+    }
 
-    this.detailsForm = this.formBuilder.group({
+    if (isEditMode) {
+      this.addEditFieldsToFormGroup(formGroupConfig);
+    }
+
+    return this.formBuilder.group(formGroupConfig);
+
+  }
+
+  public getCompanyDetailsForm(isEditMode: boolean = false): FormGroup {
+
+    const formGroupConfig = {
       fantasy_name: ['', [Validators.required, Validators.maxLength(50)]],
       description: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(250)]],
       foundedIn: ['', [Validators.required, this.validatePattern(/^(19|20)\d{2}$/)]],
@@ -36,44 +44,54 @@ export class CompanyFormService extends BaseFormService {
       cnpj: ['', [Validators.required]],
       socialReason: ['', [Validators.required]],
       about: ['', [Validators.required]]
-    })
+    }
 
-    this.socialNetworkForm = this.formBuilder.group({
+    if (isEditMode) {
+      this.addEditFieldsToFormGroup(formGroupConfig);
+    }
+
+    return this.formBuilder.group(formGroupConfig);
+
+  }
+
+  public getCompanySocialNetworkForm(isEditMode: boolean = false): FormGroup {
+
+    const formGroupConfig = {
       website: [''],
       linkedin: [''],
       facebook: [''],
       twitter: [''],
       instagram: [''],
       github: [''],
-    })
+    }
 
-    this.contactForm = this.formBuilder.group({
+    if (isEditMode) {
+      this.addEditFieldsToFormGroup(formGroupConfig);
+    }
+
+    return this.formBuilder.group(formGroupConfig);
+
+  }
+
+  public getCompanyContactForm(isEditMode: boolean = false): FormGroup {
+
+    const formGroupConfig = {
       whatsapp: [''],
       phone: ['', [Validators.required, Validators.minLength(11)]],
       rhEmail: ['', [Validators.required, this.validatePattern(this.emailPattern)]],
       supportEmail: ['', [Validators.required, this.validatePattern(this.emailPattern)]],
-    })
+    }
+
+    if (isEditMode) {
+      this.addEditFieldsToFormGroup(formGroupConfig);
+    }
+
+    return this.formBuilder.group(formGroupConfig);
 
   }
 
-  public getCompanyAccountForm(): FormGroup {
-    return this.companyAccountForm
-  }
-
-  public getCompanyDetailsForm(): FormGroup {
-    return this.detailsForm
-  }
-
-  public getCompanySocialNetworkForm(): FormGroup {
-    return this.socialNetworkForm
-  }
-
-  public getCompanyContactForm(): FormGroup {
-    return this.contactForm
-  }
-
-  public getAddressForm(): FormGroup {
-    return this.commomFormService.getAddressForm();
+  public getAddressForm(isEditMode: boolean = false): FormGroup {
+    return this.commomFormService.getAddressForm(isEditMode);
   }
 
 }

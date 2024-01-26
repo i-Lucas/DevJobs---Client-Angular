@@ -1,7 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-
-import { CompanyFormService } from '@app-shared-forms/services/builder/company-forms/company-form.service';
 
 @Component({
   selector: 'app-company-details-form',
@@ -9,7 +7,7 @@ import { CompanyFormService } from '@app-shared-forms/services/builder/company-f
 })
 export class CompanyDetailsFormComponent {
 
-  protected detailsForm: FormGroup = this.companyFormService.getCompanyDetailsForm();
+  @Input() detailsForm: FormGroup | undefined
 
   protected employeesSize: DropdownOptionsList[] = [
     { name: '(1 - 10 colaboradores)' },
@@ -26,7 +24,5 @@ export class CompanyDetailsFormComponent {
     { name: 'SA' },
     { name: 'EIRELI' },
   ];
-
-  constructor(private companyFormService: CompanyFormService) { }
 
 }

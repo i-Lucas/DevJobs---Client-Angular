@@ -14,7 +14,8 @@
         @else {
 
             <company-profile-right-column 
-                [currentProfile]="currentProfile" 
+                [profile]="currentProfile"
+                (openWindow)="openInNewWindow($event)"
                 [enableEditingMode]="enableEditingMode"
                 (clickEdit)="openEditModal = !openEditModal"
             />
@@ -43,10 +44,11 @@
 
 @if(enableEditingMode) {
 
-    <company-profile-edit-mode 
+    <company-profile-edit-mode
         [isOpen]="openEditModal"
         (onSave)="onSave($event)"
         [profile]="currentProfile"
+        [loading]="loading || editLoading"
         (onClose)="openEditModal = !openEditModal"
         (onCepExternApiError)="onCepExternApiError($event)"
     />

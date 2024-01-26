@@ -129,6 +129,8 @@ export class DevProfileAboutComponent implements OnChanges {
 
   protected updateAbout(form: FormGroup) {
 
+    this.editLoading = true
+
     this.onEdit.emit({
       data: form.value,
       identifier: 'DEVELOPER_ABOUT',

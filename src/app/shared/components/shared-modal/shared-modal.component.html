@@ -30,8 +30,8 @@
             size="small"
             label="Cancelar"
             icon="pi pi-times"
-            [loading]="loading || editLoading"
-            [disabled]="loading || editLoading"
+            [loading]="loading"
+            [disabled]="loading"
             (click)="onClose.emit()"
             styleClass="p-button-warning"
         />

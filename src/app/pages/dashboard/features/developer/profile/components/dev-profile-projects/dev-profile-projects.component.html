@@ -59,10 +59,9 @@
 
 <app-modal 
     [icon]="'web'"
-    [loading]="loading"
     [isOpen]="isModalOpen"
-    [editLoading]="editLoading"
     (onClose)="onCloseModal()"
+    [loading]="loading || editLoading"
     [title]="(addingNewField ? 'Novo Projeto' : 'Editar Projetos')">
 
     @if (addingNewField && newFieldForm) {

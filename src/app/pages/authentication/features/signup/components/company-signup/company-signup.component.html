@@ -9,7 +9,10 @@
 
             @case (0) {
                 
-                <app-company-account-form (emailAvailabilityError)="onEmailAvailabilityError($event)" />
+                <app-company-account-form 
+                    (emailAvailabilityError)="onEmailAvailabilityError($event)"
+                    [accountForm]="accountForm"
+                />
 
                 <signup-step-buttons
                     [loading]="loading"
@@ -21,7 +24,9 @@
 
             @case (1) {
 
-                <app-company-details-form />
+                <app-company-details-form
+                    [detailsForm]="detailsForm"
+                />
 
                 <signup-step-buttons
                     [loading]="loading" 
@@ -48,7 +53,9 @@
 
             @case (3) {
                 
-                <app-company-social-network-form />
+                <app-company-social-network-form
+                    [socialNetworkForm]="socialNetworkForm"
+                />
                 
                 <signup-step-buttons
                     [loading]="loading" 
@@ -60,7 +67,9 @@
 
             @case (4) {
                 
-                <app-company-contact-form />
+                <app-company-contact-form
+                    [contactForm]="contactForm"
+                />
 
                 <button 
                     pButton 

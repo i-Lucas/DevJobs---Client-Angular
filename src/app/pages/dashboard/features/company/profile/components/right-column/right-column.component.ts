@@ -6,13 +6,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class RightColumnComponent {
 
-  @Input() currentProfile: CompanyProfile | undefined;
+  @Input() profile: CompanyProfile | undefined;
   @Input() enableEditingMode: boolean = false;
 
   @Output() clickEdit = new EventEmitter<void>()
-
-  protected openNewWindow(path: string) {
-
-  }
+  @Output() openWindow = new EventEmitter<string>()
 
 }

@@ -1,7 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-
-import { CompanyFormService } from '@app-shared-forms/services/builder/company-forms/company-form.service';
 
 @Component({
   selector: 'app-company-social-network-form',
@@ -9,7 +7,6 @@ import { CompanyFormService } from '@app-shared-forms/services/builder/company-f
 })
 export class CompanySocialNetworkFormComponent {
 
-  protected socialNetworkForm: FormGroup = this.companyFormService.getCompanySocialNetworkForm();
+  @Input() socialNetworkForm: FormGroup  | undefined;
 
-  constructor(private companyFormService: CompanyFormService) { }
 }

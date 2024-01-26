@@ -1,39 +1,42 @@
-<form class="flex flex-column gap-2 m-auto text-sm" [formGroup]="detailsForm">
+@if (detailsForm) {
 
-    <label class="block font-medium mb-1">Empresa</label>
-    <input formControlName="fantasy_name" type="text" pInputText class="w-full">
-    <small class="mb-3 text-xs">Nome fantasia ou nome que exibiremos como ofertante de oportunidades. (ex:
-        DevJobs)</small>
+    <form class="flex flex-column gap-2 m-auto text-sm" [formGroup]="detailsForm">
 
-    <label class="block font-medium mb-1">Descrição</label>
-    <input formControlName="description" type="text" pInputText class="w-full">
-    <small class="mb-3 text-xs">Defina de maneira breve a sua empresa. (ex: Plataforma de gerenciamento de processos
-        seletivos)</small>
-
-    <label class="block font-medium mb-1">Ano de Fundação</label>
-    <input formControlName="foundedIn" pKeyFilter="int" type="text" pInputText class="w-full mb-3">
-
-    <label class="block font-medium mb-1">Tamanho da Equipe</label>
-    <p-dropdown formControlName="teamSize" styleClass="mb-3 w-full" [options]="employeesSize"
-        optionValue="name" optionLabel="name" placeholder="Selecione" />
-
-    <label class="block font-medium mb-1">Mercado</label>
-    <input formControlName="marketArea" type="text" pInputText class="w-full">
-    <small class="mb-3 text-xs">Selecione o setor de atuação da empresa (ex: Mercado Imobiliário)</small>
-
-    <label class="block font-medium mb-1">Natureza Jurídica</label>
-    <p-dropdown formControlName="legalNature" styleClass="mb-3 w-full" [options]="legalNature"
-        optionValue="name" optionLabel="name" placeholder="Selecione" />
-
-    <label class="block font-medium mt-3 mb-1">CNPJ</label>
-    <p-inputMask formControlName="cnpj" mask="99.999.999/9999-99" styleClass="w-full mb-3"
-        placeholder="99.999.999/9999-99" />
-
-    <label class="block font-medium mb-1">Razão Social</label>
-    <input formControlName="socialReason" type="text" pInputText class="w-full mb-3">
-
-    <label class="block font-medium mb-1">Sobre</label>
-    <textarea formControlName="about" rows="6" cols="30" class="w-full" pInputTextarea [autoResize]="true"></textarea>
-    <small class="mb-3 text-xs">Forneça os detalhes a serem exibidos no perfil da sua empresa.</small>
-
-</form>
+        <label class="block font-medium mb-1">Empresa</label>
+        <input formControlName="fantasy_name" type="text" pInputText class="w-full">
+        <small class="mb-3 text-xs">Nome fantasia ou nome que exibiremos como ofertante de oportunidades. (ex:
+            DevJobs)</small>
+    
+        <label class="block font-medium mb-1">Descrição</label>
+        <input formControlName="description" type="text" pInputText class="w-full">
+        <small class="mb-3 text-xs">Defina de maneira breve a sua empresa. (ex: Plataforma de gerenciamento de processos
+            seletivos)</small>
+    
+        <label class="block font-medium mb-1">Ano de Fundação</label>
+        <input formControlName="foundedIn" pKeyFilter="int" type="text" pInputText class="w-full mb-3">
+    
+        <label class="block font-medium mb-1">Tamanho da Equipe</label>
+        <p-dropdown formControlName="teamSize" styleClass="mb-3 w-full" [options]="employeesSize"
+            optionValue="name" optionLabel="name" placeholder="Selecione" />
+    
+        <label class="block font-medium mb-1">Mercado</label>
+        <input formControlName="marketArea" type="text" pInputText class="w-full">
+        <small class="mb-3 text-xs">Selecione o setor de atuação da empresa (ex: Mercado Imobiliário)</small>
+    
+        <label class="block font-medium mb-1">Natureza Jurídica</label>
+        <p-dropdown formControlName="legalNature" styleClass="mb-3 w-full" [options]="legalNature"
+            optionValue="name" optionLabel="name" placeholder="Selecione" />
+    
+        <label class="block font-medium mt-3 mb-1">CNPJ</label>
+        <p-inputMask formControlName="cnpj" mask="99.999.999/9999-99" styleClass="w-full mb-3"
+            placeholder="99.999.999/9999-99" />
+    
+        <label class="block font-medium mb-1">Razão Social</label>
+        <input formControlName="socialReason" type="text" pInputText class="w-full mb-3">
+    
+        <label class="block font-medium mb-1">Sobre</label>
+        <textarea formControlName="about" rows="6" cols="30" class="w-full" pInputTextarea [autoResize]="true"></textarea>
+        <small class="mb-3 text-xs">Forneça os detalhes a serem exibidos no perfil da sua empresa.</small>
+    
+    </form>
+}

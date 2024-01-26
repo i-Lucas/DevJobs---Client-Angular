@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DashboardService } from 'app/pages/dashboard/services/dashboard.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class DeveloperProfileService {
 
   constructor(private dashboardService: DashboardService) { }

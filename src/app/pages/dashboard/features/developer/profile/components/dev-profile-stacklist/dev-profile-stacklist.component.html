@@ -45,10 +45,9 @@
 
 <app-modal 
     [icon]="'handyman'"
-    [loading]="loading"
     [isOpen]="isModalOpen"
-    [editLoading]="editLoading"
     (onClose)="onCloseModal()"
+    [loading]="loading || editLoading"
     [title]="(addingNewField ? 'Nova Tecnologia' : 'Editar Tecnologias')">
 
     @if (addingNewField && newFieldForm) {

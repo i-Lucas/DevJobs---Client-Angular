@@ -67,10 +67,9 @@
 
 <app-modal 
     [icon]="'work'"
-    [loading]="loading"
     [isOpen]="isModalOpen"
     (onClose)="onCloseModal()"
-    [editLoading]="editLoading"
+    [loading]="loading || editLoading"
     [title]="(addingNewField ? 'Nova' : 'Editar') + ' Experiência Profissional'">
     
     @if (addingNewField && newFieldForm) {

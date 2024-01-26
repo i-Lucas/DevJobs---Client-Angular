@@ -58,11 +58,10 @@
 
 <app-modal
     [icon]="'public'"
-    [loading]="loading"
     [isOpen]="isModalOpen"
-    [editLoading]="editLoading"
     [title]="'Editar Idiomas'"
     (onClose)="onCloseModal()"
+    [loading]="loading || editLoading"
     [title]="(addingNewField ? 'Novo Idioma' : 'Editar Idiomas')">
     
     @if (addingNewField && newFieldForm) {

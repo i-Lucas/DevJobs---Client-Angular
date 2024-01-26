@@ -7,11 +7,14 @@ import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { TabViewModule } from 'primeng/tabview';
 import { DividerModule } from 'primeng/divider';
+import { TooltipModule } from 'primeng/tooltip';
 import { SkeletonModule } from 'primeng/skeleton';
 
 import { SharedFormsModule } from '@app-shared-forms/shared-forms.module';
+import { CompanyProfileService } from './services/company-profile.service';
 import { SharedComponentsModule } from 'app/shared/components/shared-components.module';
 
+import { SharedModulesModule } from 'app/shared/modules/shared-modules.module';
 import { EditModeComponent } from './components/edit-mode/edit-mode.component';
 import { LeftColumnComponent } from './components/left-column/left-column.component';
 import { RightColumnComponent } from './components/right-column/right-column.component';
@@ -29,6 +32,7 @@ const routes: Routes = [
     BadgeModule,
     ImageModule,
     ButtonModule,
+    TooltipModule,
     TabViewModule,
     DividerModule,
     SkeletonModule,
@@ -37,6 +41,7 @@ const routes: Routes = [
     BadgeModule,
     ImageModule,
     ButtonModule,
+    TooltipModule,
     TabViewModule,
     DividerModule,
     SkeletonModule,
@@ -45,6 +50,9 @@ const routes: Routes = [
 export class PrimeModule { }
 
 @NgModule({
+  providers: [
+    CompanyProfileService
+  ],
   declarations: [
     EditModeComponent,
     LeftColumnComponent,
@@ -55,8 +63,9 @@ export class PrimeModule { }
     CommonModule,
     PrimeModule,
     SharedFormsModule,
+    SharedModulesModule,
     SharedComponentsModule,
     RouterModule.forChild(routes)
-  ]
+  ],
 })
 export default class ProfileModule { }

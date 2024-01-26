@@ -88,7 +88,7 @@ export class DevProfileLanguagesComponent implements OnChanges {
   private getLanguageListWithRating(languageList: DeveloperProfileLanguages[]) {
 
     function getLevel(level: LanguageLevel) {
-      const levelMapping = { 'Básico': 2, 'Avançado': 3, 'Intermediário': 4, 'Proficiente': 5 }
+      const levelMapping = { 'Básico': 2, 'Intermediário': 3, 'Avançado': 4, 'Proficiente': 5 }
       return levelMapping[level];
     }
 

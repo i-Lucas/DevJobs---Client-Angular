@@ -1,7 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-
-import { CompanyFormService } from '@app-shared-forms/services/builder/company-forms/company-form.service';
 
 @Component({
   selector: 'app-company-account-form',
@@ -10,9 +8,7 @@ import { CompanyFormService } from '@app-shared-forms/services/builder/company-f
 export class CompanyAccountFormComponent {
 
   @Output() emailAvailabilityError = new EventEmitter<ApiError>();
-  protected accountForm: FormGroup = this.companyFormService.getCompanyAccountForm();
-
-  constructor(private companyFormService: CompanyFormService) { }
+  @Input() accountForm: FormGroup | undefined
 
   protected onEmailAvailabilityError($event: ApiError) {
     this.emailAvailabilityError.emit($event);

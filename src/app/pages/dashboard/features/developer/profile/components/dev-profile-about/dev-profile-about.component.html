@@ -60,11 +60,10 @@
 </dev-profile-panel>
 
 <app-modal 
-    [loading]="loading" 
     [isOpen]="isModalOpen" 
     [title]="'Editar Perfil'"
     [icon]="'manage_accounts'"
-    [editLoading]="editLoading"
+    [loading]="loading || editLoading" 
     (onClose)="isModalOpen = !isModalOpen">
 
     <p-tabView>

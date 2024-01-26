@@ -1,42 +1,30 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-import { AppStateService } from '@app-services/app/app.service';
 import { CompanyFormService } from '@app-shared-forms/services/builder/company-forms/company-form.service';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'company-profile-edit-mode',
   templateUrl: './edit-mode.component.html',
 })
-export class EditModeComponent implements OnChanges, OnDestroy {
+export class EditModeComponent implements OnChanges {
 
   @Input() isOpen: boolean = false;
+  @Input() loading: boolean = false;
   @Input() profile: CompanyProfile | undefined;
 
   @Output() onClose = new EventEmitter<void>();
   @Output() onSave = new EventEmitter<CompanyEditModeOnSave>();
   @Output() onCepExternApiError = new EventEmitter<ApiError>();
 
-  protected loading: boolean = true;
-  private destroy$ = new Subject<void>();
+  private EDIT_MODE: boolean = true;
 
-  protected addressForm: FormGroup = this.companyFormService.getAddressForm();
-  // protected accountForm: FormGroup = this.companyFormService.getCompanyAccountForm();
-  protected detailsForm: FormGroup = this.companyFormService.getCompanyDetailsForm();
-  protected contactForm: FormGroup = this.companyFormService.getCompanyContactForm();
-  protected socialNetworkForm: FormGroup = this.companyFormService.getCompanySocialNetworkForm();
+  protected addressForm: FormGroup = this.companyFormService.getAddressForm(this.EDIT_MODE);
+  protected detailsForm: FormGroup = this.companyFormService.getCompanyDetailsForm(this.EDIT_MODE);
+  protected contactForm: FormGroup = this.companyFormService.getCompanyContactForm(this.EDIT_MODE);
+  protected socialNetworkForm: FormGroup = this.companyFormService.getCompanySocialNetworkForm(this.EDIT_MODE);
 
-  constructor(
-    private companyFormService: CompanyFormService,
-    private appService: AppStateService
-  ) {
-
-    this.appService
-      .getIsRequestInProgress()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((state) => this.loading = state)
-  }
+  constructor(private companyFormService: CompanyFormService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['profile'] && changes['profile'].currentValue) {
@@ -46,17 +34,27 @@ export class EditModeComponent implements OnChanges, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   private patchFormValues(profile: CompanyProfile) {
-    this.addressForm.patchValue(profile.address);
-    // this.accountForm.patchValue(profile.ownerInfo);
+    this.setAddressValue(profile.address);
     this.detailsForm.patchValue(profile.details);
     this.contactForm.patchValue(profile.suportInfo);
     this.socialNetworkForm.patchValue(profile.socialNetwork);
+  }
+
+  private setAddressValue(address: DeveloperAddress) {
+
+    this.addressForm.setValue({
+      id: address.id,
+      cep: address.cep,
+      city: address.city,
+      state: address.state,
+      number: address.number,
+      address: address.address,
+      complement: address.complement,
+      neighborhood: address.neighborhood,
+      createdAt: address.createdAt,
+      updatedAt: address.updatedAt
+    }, { emitEvent: false }); // not perform cep http request
   }
 
 }

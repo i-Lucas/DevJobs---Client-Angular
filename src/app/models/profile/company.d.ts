@@ -80,8 +80,9 @@ interface CompanyProfile {
 }
 
 type CompanyProfileEditFieldsIdentifier =
-    'COMPAY_ADDRESS' |
+    'COMPANY_ADDRESS' |
     'COMPANY_DETAILS' |
     'COMPANY_CONTACT' |
     'COMPANY_SOCIAL' |
-    'COMPANY_PERMISSIONS'; // TODO
+    'COMPANY_OWNER' |
+    'COMPANY_PERMISSIONS'  // TODO

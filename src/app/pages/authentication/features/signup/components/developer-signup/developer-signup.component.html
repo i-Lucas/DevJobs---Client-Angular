@@ -9,7 +9,9 @@
 
             @case (0) {
                 
-                <app-developer-about-form />
+                <app-developer-about-form
+                    [aboutForm]="aboutForm"
+                />
                 
                 <signup-step-buttons
                     [loading]="loading"
@@ -21,7 +23,10 @@
 
             @case (1) {
                 
-                <app-developer-contact-form (emailAvailabilityError)="onEmailAvailabilityError($event)" />
+                <app-developer-contact-form
+                    (emailAvailabilityError)="onEmailAvailabilityError($event)"
+                    [contactForm]="contactForm"
+                />
 
                 <signup-step-buttons
                     [loading]="loading" 
@@ -33,7 +38,10 @@
             
             @case (2) {
                 
-                <app-address-form (cepExternApiError)="onCepExternApiError($event)" />
+                <app-address-form 
+                    (cepExternApiError)="onCepExternApiError($event)"
+                    [addressForm]="addressForm"
+                />
 
                 <signup-step-buttons
                     [loading]="loading"

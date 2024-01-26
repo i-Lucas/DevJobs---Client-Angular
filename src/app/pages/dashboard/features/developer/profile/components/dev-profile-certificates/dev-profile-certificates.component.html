@@ -1,23 +1,20 @@
 <dev-profile-panel 
     [isOwner]="isOwner"
     [loading]="loading"
+    (onAdd)="onAdding()"
     [label]="'Certificados'"
     [icon]="'workspace_premium'"
-    (onEdit)="isModalOpen = true"
-    >
-
+    (onEdit)="isModalOpen = true">
+    
     <div class="flex flex-column gap-4 md:pr-4 md:py-2">
 
         @if (!(certificatesList && certificatesList.length > 0)) {
 
             @if (isOwner) {
 
-                <p-button 
-                    size="small"
-                    label="Novo"
-                    icon="pi pi-plus"
-                    severity="success"
+                <dev-new-field-btn
                     [loading]="loading || editLoading"
+                    (newClick)="onAdding()"
                 />
             
             } @else {
@@ -64,56 +61,78 @@
     [isOpen]="isModalOpen"
     [editLoading]="editLoading"
     [icon]="'workspace_premium'"
-    [title]="'Editar Certificados'"
-    (onClose)="isModalOpen = !isModalOpen">
+    (onClose)="onCloseModal()"
+    [title]="(addingNewField ? 'Novo Certificado' : 'Editar Certificado')">
 
-    <p-tabView>
+    @if (addingNewField && newFieldForm) {
 
-        @if(certificatesList) {
+        <p-tabView>
+            <p-tabPanel header={{newFieldForm.value.institution}}>
 
-            @for (currentForm of certificatesFormList; track currentForm; let idx = $index) {
+                <div class="my-4">
 
-                <p-tabPanel header="{{certificatesList[idx].institution}}">
+                    <app-developer-certificates-form
+                        [certificatesForm]="newFieldForm"
+                    />
 
-                    <div class="my-4">
+                    <p-button 
+                        size="small"
+                        label="Salvar" 
+                        icon="pi pi-check"
+                        [loading]="loading || editLoading"
+                        (click)="addNewField(newFieldForm)"
+                        [disabled]="newFieldForm.invalid || loading || editLoading"
+                    />
+                </div>
 
-                        <div class="flex justify-content-end">
-                            <i  pTooltip="Atualizado em: {{ certificatesList[idx].updatedAt | DD_MM_YYYY }}"                                
-                                class="material-icons cursor-pointer">help
-                            </i>                                                            
-                        </div>
+            </p-tabPanel>
+        </p-tabView>
+    }
 
-                        <app-developer-certificates-form
-                            [certificatesForm]="currentForm"
-                        />
+    @else {
 
-                        <div class="flex gap-2 mt-4">
-                            <p-button
-                                size="small"
-                                label="Salvar"
-                                icon="pi pi-check"
-                                [loading]="loading || editLoading"
-                                (click)="updateCertificate(currentForm)"
-                                [disabled]="currentForm.invalid || loading || editLoading"
-                                />
-                            <p-button
-                                size="small"
-                                label="Excluir" 
-                                severity="danger"
-                                icon="pi pi-trash"
-                                [loading]="loading || editLoading"
-                                [disabled]="loading || editLoading"
-                                (click)="confirmDelete($event, currentForm.value.id)"
-                            />
-                        </div>
-                    </div>
+        @if(certificatesList && certificatesList.length > 0) {
+
+            <p-tabView>
+
+                @for (currentForm of certificatesFormList; track currentForm; let idx = $index) {
+        
+                    <p-tabPanel header="{{certificatesList[idx].institution}}">    
+                        <div class="my-4">
     
-                </p-tabPanel>     
-            }
+                            <div class="flex justify-content-end">
+                                <i  pTooltip="Atualizado em: {{ certificatesList[idx].updatedAt | DD_MM_YYYY }}"                                
+                                    class="material-icons cursor-pointer">help
+                                </i>                                                            
+                            </div>
+    
+                            <app-developer-certificates-form
+                                [certificatesForm]="currentForm"
+                            />
+    
+                            <dev-save-delete-btn
+                                [loading]="loading"
+                                [disabled]="loading || editLoading"
+                                (clickUpdate)="updateCertificate(currentForm)"
+                                (clickDelete)="confirmDelete($event, currentForm.value.id)"
+                                [saveDisabled]="currentForm.invalid || loading || editLoading"
+                            />
+                        </div>        
+                    </p-tabPanel>
+                }
+
+            </p-tabView>
         }
 
-    </p-tabView>
+        @else {
+
+            <p class="text-xs">Nenhum registro</p>
+
+            <dev-new-field-btn
+                [loading]="loading || editLoading"
+                (newClick)="onAdding()"
+            />
+        }
+    }
+
 </app-modal>
-
-
-<!-- (click)="onSave.emit({ form: currentForm, identifier: 'DEVELOPER_CERTIFICATES' })" -->

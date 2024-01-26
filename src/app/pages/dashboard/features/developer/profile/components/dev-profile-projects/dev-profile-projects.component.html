@@ -2,9 +2,9 @@
     [icon]="'web'"
     [isOwner]="isOwner"
     [loading]="loading"
+    (onAdd)="onAdding()"
     [label]="'Projetos'"
-    (onEdit)="isModalOpen = true"
-    >
+    (onEdit)="isModalOpen = true">
 
     <div class="flex flex-column gap-4 md:pr-4 md:py-2">
 
@@ -12,12 +12,9 @@
 
             @if (isOwner) {
 
-                <p-button 
-                    size="small"
-                    label="Novo"
-                    icon="pi pi-plus"
-                    severity="success"
+                <dev-new-field-btn
                     [loading]="loading || editLoading"
+                    (newClick)="onAdding()"
                 />
             
             } @else {
@@ -65,53 +62,77 @@
     [loading]="loading"
     [isOpen]="isModalOpen"
     [editLoading]="editLoading"
-    [title]="'Editar Projetos'"
-    (onClose)="isModalOpen = !isModalOpen">
+    (onClose)="onCloseModal()"
+    [title]="(addingNewField ? 'Novo Projeto' : 'Editar Projetos')">
 
-    <p-tabView>
+    @if (addingNewField && newFieldForm) {
 
-        @if(projectsList) {
+        <p-tabView>
+            <p-tabPanel header={{newFieldForm.value.title}}>
 
-            @for (currentForm of projectsFormList; track currentForm; let idx = $index) {
+                <div class="my-4">
 
-                <p-tabPanel header="{{projectsList[idx].title}}">
+                    <app-developer-projects-form
+                        [projectsForm]="newFieldForm"
+                    />
 
-                    <div class="my-4">
+                    <p-button 
+                        size="small"
+                        label="Salvar" 
+                        icon="pi pi-check"
+                        [loading]="loading || editLoading"
+                        [disabled]="newFieldForm.invalid || loading || editLoading"
+                        (click)="addNewField(newFieldForm)"
+                    />
+                </div>
 
-                        <div class="flex justify-content-end">
-                            <i  pTooltip="Atualizado em: {{ projectsList[idx].updatedAt | DD_MM_YYYY }}"                                
-                                class="material-icons cursor-pointer">help
-                            </i>                                                            
-                        </div>
+            </p-tabPanel>
+        </p-tabView>
+    }
 
-                        <app-developer-projects-form
-                            [projectsForm]="currentForm"
-                        />
+    @else {
 
-                        <div class="flex gap-2 mt-4">
-                            <p-button 
-                                size="small"
-                                label="Salvar" 
-                                icon="pi pi-check"
-                                [loading]="loading || editLoading"
-                                [disabled]="currentForm.invalid || loading || editLoading"
-                                (click)="updateProject(currentForm)"
+        @if(projectsList && projectsList.length > 0) {
+            
+            <p-tabView>
+
+                @for (currentForm of projectsFormList; track currentForm; let idx = $index) {
+        
+                    <p-tabPanel header="{{projectsList[idx].title}}">        
+                        <div class="my-4">
+        
+                            <div class="flex justify-content-end">
+                                <i  pTooltip="Atualizado em: {{ projectsList[idx].updatedAt | DD_MM_YYYY }}"
+                                    class="material-icons cursor-pointer">help
+                                </i>
+                            </div>
+        
+                            <app-developer-projects-form
+                                [projectsForm]="currentForm"
                             />
-                            <p-button
-                                size="small"
-                                label="Excluir" 
-                                severity="danger"
-                                icon="pi pi-trash"
-                                [loading]="loading || editLoading"
+        
+                            <dev-save-delete-btn
+                                [loading]="loading"
                                 [disabled]="loading || editLoading"
-                                (click)="confirmDelete($event, currentForm.value.id)"
+                                (clickUpdate)="updateProject(currentForm)"                   
+                                (clickDelete)="confirmDelete($event, currentForm.value.id)"
+                                [saveDisabled]="currentForm.invalid || loading || editLoading"
                             />
-                        </div>
-                    </div>
-    
-                </p-tabPanel>     
-            }
+                        </div>        
+                    </p-tabPanel>     
+                }
+                        
+            </p-tabView>
         }
+        @else {
 
-    </p-tabView>
+            <p class="text-xs">Nenhum registro</p>
+
+            <dev-new-field-btn
+                [loading]="loading || editLoading"
+                (newClick)="onAdding()"
+            />
+        }
+    }
+    
 </app-modal>

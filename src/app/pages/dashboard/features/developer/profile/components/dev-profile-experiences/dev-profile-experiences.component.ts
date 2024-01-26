@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 import { FromMSToMonthYearPipe } from '@app-pipes/date-formatter.pipe';
 import { DeveloperProfileService } from '../../services/developer-profile.service';
@@ -16,12 +16,18 @@ export class DevProfileExperiencesComponent implements OnChanges {
   @Input() isOwner: boolean = false;
   @Input() experiencesList: DeveloperProfile['professional_experiences'] | undefined;
 
+  @Output() onAdd = new EventEmitter<RequestDeveloperProfileAdd<any>>();
   @Output() onEdit = new EventEmitter<RequestDeveloperProfileUpdate<any>>();
   @Output() onDelete = new EventEmitter<RequestDeveloperProfileDelete<any>>();
+
+  private identifier: DeveloperProfileEditFieldsIdentifier = 'DEVELOPER_EXPERIENCES'
 
   protected editLoading: boolean = false;
   protected isModalOpen: boolean = false;
   protected experiencesFormList: FormGroup[] | undefined;
+
+  protected addingNewField: boolean = false;
+  protected newFieldForm: FormGroup | undefined;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -31,42 +37,72 @@ export class DevProfileExperiencesComponent implements OnChanges {
     private fromMillisecondsToMonthYearPipe: FromMSToMonthYearPipe
   ) { }
 
-  protected menuOptions: PMenuOptions[] = [
-    {
-      label: 'Editar', icon: 'pi pi-file-edit',
-      command: () => this.isModalOpen = true
-    }
-  ]
-
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isOwner) {
       if (changes['experiencesList'] && changes['experiencesList'].currentValue) {
         if (this.experiencesList) {
-          this.updateExperiencesFormsList(this.experiencesList)
+          this.createExperienceForms(this.experiencesList)
         }
       }
     }
   }
 
-  private updateExperiencesFormsList(experiencesList: DeveloperProfileJobExperiences[]) {
-    this.experiencesFormList = experiencesList.map(experience =>
-      this.createExperienceForm(experience)
-    );
+  private createExperienceForms(experiencesList: DeveloperProfileJobExperiences[]) {
+
+    this.experiencesFormList = experiencesList.map(experience => {
+
+      const EDIT_MODE: boolean = true;
+      const form = this.formService.buildDeveloperJobExperiencesForm(EDIT_MODE);
+
+      form.patchValue({
+        ...experience,
+        from: this.fromMillisecondsToMonthYearPipe.transform(experience.from),
+        to: this.fromMillisecondsToMonthYearPipe.transform(experience.to),
+      });
+
+      return form;
+
+    })
   }
 
-  private createExperienceForm(experience: DeveloperProfileJobExperiences): FormGroup {
+  protected onCloseModal() {
+    this.isModalOpen = false
+    this.addingNewField = false
+    this.newFieldForm = undefined
+  }
 
-    const EDIT_MODE: boolean = true;
-    const form = this.formService.buildDeveloperJobExperiencesForm(EDIT_MODE);
+  protected onAdding() {
+    this.isModalOpen = true
+    this.addingNewField = true
+    this.newFieldForm = this.formService.buildDeveloperJobExperiencesForm();
+  }
 
-    form.patchValue({
-      ...experience,
-      from: this.fromMillisecondsToMonthYearPipe.transform(experience.from),
-      to: this.fromMillisecondsToMonthYearPipe.transform(experience.to),
-    });
+  protected addNewField(form: FormGroup) {
 
-    return form;
+    const data = {
+      ...form.value,
+      to: this.componentService.fromMMYYYYToMS(form.value.to).toString(),
+      from: this.componentService.fromMMYYYYToMS(form.value.from).toString()
+    };
 
+    this.editLoading = true
+
+    this.onAdd.emit({
+      data, identifier: this.identifier,
+      onSuccess: (response) => {
+
+        this.editLoading = false
+        this.newFieldForm?.reset();
+
+        this.developerProfileService.addDeveloperProfileJobExperienceToList(response.data);
+        this.componentService.showMessage({ detail: response.message, type: 'success' });
+      },
+      onError: (error) => {
+
+        this.editLoading = false
+        this.componentService.showMessage({ detail: error.message, type: 'error' });
+      }
+    })
   }
 
   protected updateJobExperience(form: FormGroup) {
@@ -81,7 +117,7 @@ export class DevProfileExperiencesComponent implements OnChanges {
 
     this.onEdit.emit({
       data: body,
-      identifier: 'DEVELOPER_EXPERIENCES',
+      identifier: this.identifier,
       onSuccess: (response) => {
 
         this.editLoading = false
@@ -108,7 +144,7 @@ export class DevProfileExperiencesComponent implements OnChanges {
     this.editLoading = true
 
     this.onDelete.emit({
-      body: { id, identifier: 'DEVELOPER_EXPERIENCES' },
+      body: { id, identifier: this.identifier },
       onError: (error) => {
         this.editLoading = false
         this.componentService.showMessage({ detail: error.message, type: 'error' });
@@ -128,5 +164,5 @@ export class DevProfileExperiencesComponent implements OnChanges {
       this.cdr.detectChanges();
     }
   }
-  
+
 }

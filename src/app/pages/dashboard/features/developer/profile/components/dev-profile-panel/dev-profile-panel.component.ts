@@ -13,11 +13,16 @@ export class DevProfilePanelComponent {
   @Input() label: string | undefined;
 
   @Output() onEdit = new EventEmitter<void>();
+  @Output() onAdd = new EventEmitter<void>();
 
   protected menuOptions: PMenuOptions[] = [
     {
       label: 'Editar', icon: 'pi pi-file-edit',
       command: () => this.onEdit.emit()
+    },
+    {
+      label: 'Novo', icon: 'pi pi-plus',
+      command: () => this.onAdd.emit()
     }
   ]
 

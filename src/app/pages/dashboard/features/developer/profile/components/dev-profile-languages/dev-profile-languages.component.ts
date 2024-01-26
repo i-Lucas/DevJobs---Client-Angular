@@ -17,12 +17,18 @@ export class DevProfileLanguagesComponent implements OnChanges {
   @Input() isOwner: boolean = false;
   @Input() languagesList: DeveloperProfile['languages'] | undefined;
 
+  @Output() onAdd = new EventEmitter<RequestDeveloperProfileAdd<any>>();
   @Output() onEdit = new EventEmitter<RequestDeveloperProfileUpdate<any>>();
   @Output() onDelete = new EventEmitter<RequestDeveloperProfileDelete<any>>();
+
+  private identifier: DeveloperProfileEditFieldsIdentifier = 'DEVELOPER_LANGUAGES'
 
   protected editLoading: boolean = false;
   protected isModalOpen: boolean = false;
   protected languagesFormList: FormGroup[] | undefined;
+
+  protected addingNewField: boolean = false;
+  protected newFieldForm: FormGroup | undefined;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -30,13 +36,6 @@ export class DevProfileLanguagesComponent implements OnChanges {
     private componentService: CommonComponentService,
     private developerProfileService: DeveloperProfileService,
   ) { }
-
-  protected menuOptions: PMenuOptions[] = [
-    {
-      label: 'Editar', icon: 'pi pi-file-edit',
-      command: () => this.isModalOpen = true
-    }
-  ]
 
   ngOnChanges(changes: SimpleChanges): void {
 
@@ -46,10 +45,44 @@ export class DevProfileLanguagesComponent implements OnChanges {
         this.languagesList = this.getLanguageListWithRating(this.languagesList); // here
 
         if (this.isOwner) {
-          this.updateLanguageFormsList(this.languagesList)
+          this.createLanguageForm(this.languagesList)
         }
       }
     }
+  }
+
+  protected onCloseModal() {
+    this.isModalOpen = false
+    this.addingNewField = false
+    this.newFieldForm = undefined
+  }
+
+  protected onAdding() {
+    this.isModalOpen = true
+    this.addingNewField = true
+    this.newFieldForm = this.formService.buildDeveloperLanguagesForm();
+  }
+
+  protected addNewField(form: FormGroup) {
+
+    this.editLoading = true
+
+    this.onAdd.emit({
+      data: form.value, identifier: this.identifier,
+      onSuccess: (response) => {
+
+        this.editLoading = false
+        this.newFieldForm?.reset();
+
+        this.developerProfileService.addDeveloperProfileLanguageToList(response.data);
+        this.componentService.showMessage({ detail: response.message, type: 'success' });
+      },
+      onError: (error) => {
+
+        this.editLoading = false
+        this.componentService.showMessage({ detail: error.message, type: 'error' });
+      }
+    })
   }
 
   private getLanguageListWithRating(languageList: DeveloperProfileLanguages[]) {
@@ -66,21 +99,17 @@ export class DevProfileLanguagesComponent implements OnChanges {
 
   }
 
-  private updateLanguageFormsList(languageList: DeveloperProfileLanguages[]) {
+  private createLanguageForm(languageList: DeveloperProfileLanguages[]) {
 
-    this.languagesFormList = languageList.map(language =>
-      this.createLanguageForm(language)
-    );
-  }
+    this.languagesFormList = languageList.map(language => {
 
-  private createLanguageForm(language: DeveloperProfileLanguages): FormGroup {
+      const EDIT_MODE: boolean = true;
+      const form = this.formService.buildDeveloperLanguagesForm(EDIT_MODE);
 
-    const EDIT_MODE: boolean = true;
-    const form = this.formService.buildDeveloperLanguagesForm(EDIT_MODE);
+      form.patchValue(language);
+      return form;
 
-    form.patchValue(language);
-    return form;
-
+    });
   }
 
   protected updateLanguage(form: FormGroup) {
@@ -89,7 +118,7 @@ export class DevProfileLanguagesComponent implements OnChanges {
 
     this.onEdit.emit({
       data: form.value,
-      identifier: 'DEVELOPER_LANGUAGES',
+      identifier: this.identifier,
       onSuccess: (response) => {
 
         this.editLoading = false
@@ -116,7 +145,7 @@ export class DevProfileLanguagesComponent implements OnChanges {
     this.editLoading = true
 
     this.onDelete.emit({
-      body: { id, identifier: 'DEVELOPER_LANGUAGES' },
+      body: { id, identifier: this.identifier },
       onError: (error) => {
         this.editLoading = false
         this.componentService.showMessage({ detail: error.message, type: 'error' });

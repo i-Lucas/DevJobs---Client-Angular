@@ -145,4 +145,17 @@ export class RootDeveloperProfileComponent implements OnDestroy {
       })
   }
 
+  protected requestAdd<T>({ data, identifier, onSuccess, onError }: RequestDeveloperProfileAdd<T>) {
+
+    this.httpService
+      .post<ApiResponse<T>>('/profile/developer/add', {
+        data, identifier, profileId: this.currentProfile?.id,
+      })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => onSuccess(response),
+        error: (error: ApiError) => onError(error)
+      })
+  }
+
 }

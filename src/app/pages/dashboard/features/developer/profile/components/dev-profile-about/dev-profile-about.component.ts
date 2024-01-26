@@ -23,22 +23,17 @@ export class DevProfileAboutComponent implements OnChanges {
   protected isModalOpen: boolean = false;
   protected editLoading: boolean = false;
 
-  protected addressForm: FormGroup = this.developerFormService.getAddressForm();
-  protected aboutForm: FormGroup = this.developerFormService.getDeveloperAboutForm();
-  protected contactForm: FormGroup = this.developerFormService.getDeveloperContactForm();
+  private EDIT_MODE: boolean = true
+
+  protected addressForm: FormGroup = this.developerFormService.getAddressForm(this.EDIT_MODE);
+  protected aboutForm: FormGroup = this.developerFormService.getDeveloperAboutForm(this.EDIT_MODE);
+  protected contactForm: FormGroup = this.developerFormService.getDeveloperContactForm(this.EDIT_MODE);
 
   constructor(
     private componentService: CommonComponentService,
     private developerFormService: DeveloperFormService,
     private developerProfileService: DeveloperProfileService,
   ) { }
-
-  protected menuOptions: PMenuOptions[] = [
-    {
-      label: 'Editar', icon: 'pi pi-file-edit',
-      command: () => this.isModalOpen = true
-    }
-  ];
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isOwner) {
@@ -74,6 +69,8 @@ export class DevProfileAboutComponent implements OnChanges {
       address: address.address,
       complement: address.complement,
       neighborhood: address.neighborhood,
+      createdAt: address.createdAt,
+      updatedAt: address.updatedAt
     }, { emitEvent: false }); // not perform cep http request
   }
 

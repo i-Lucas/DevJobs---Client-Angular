@@ -18,6 +18,7 @@
             <dev-profile-experiences
                 [loading]="loading"
                 [isOwner]="enableEditingMode"
+                (onAdd)="requestAdd($event)"
                 (onEdit)="requestUpdate($event)"
                 (onDelete)="requestDelete($event)"
                 [experiencesList]="currentProfile?.professional_experiences"                
@@ -25,6 +26,7 @@
 
             <dev-profile-education 
                 [loading]="loading"         
+                (onAdd)="requestAdd($event)"
                 [isOwner]="enableEditingMode"
                 (onEdit)="requestUpdate($event)"
                 (onDelete)="requestDelete($event)"
@@ -33,6 +35,7 @@
 
             <dev-profile-projects
                 [loading]="loading"
+                (onAdd)="requestAdd($event)"
                 [isOwner]="enableEditingMode"
                 (onEdit)="requestUpdate($event)"
                 (onDelete)="requestDelete($event)"
@@ -48,6 +51,7 @@
 
             <dev-profile-languages
                 [loading]="loading"
+                (onAdd)="requestAdd($event)"
                 [isOwner]="enableEditingMode"
                 (onEdit)="requestUpdate($event)"
                 (onDelete)="requestDelete($event)"
@@ -56,6 +60,7 @@
 
             <dev-profile-certificates
                 [loading]="loading"
+                (onAdd)="requestAdd($event)"
                 [isOwner]="enableEditingMode"
                 (onEdit)="requestUpdate($event)"
                 (onDelete)="requestDelete($event)"
@@ -64,6 +69,7 @@
 
             <dev-profile-stacklist
                 [loading]="loading"
+                (onAdd)="requestAdd($event)"
                 [isOwner]="enableEditingMode"
                 (onEdit)="requestUpdate($event)"
                 (onDelete)="requestDelete($event)"

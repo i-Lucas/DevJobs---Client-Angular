@@ -1,0 +1,19 @@
+<div class="flex gap-2 mt-4">
+    <p-button 
+        size="small"
+        label="Salvar" 
+        icon="pi pi-check"
+        [loading]="loading"
+        [disabled]="saveDisabled"
+        (click)="clickUpdate.emit()"
+    />
+    <p-button
+        size="small"
+        label="Excluir" 
+        severity="danger"
+        icon="pi pi-trash"
+        [loading]="loading"
+        [disabled]="disabled"
+        (click)="clickDelete.emit($event)"
+    />
+</div>

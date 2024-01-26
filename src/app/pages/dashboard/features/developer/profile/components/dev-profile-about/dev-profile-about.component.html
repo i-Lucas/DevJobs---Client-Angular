@@ -78,7 +78,10 @@
                     </i>
                 </div>
 
-                <app-developer-about-form />
+                <app-developer-about-form
+                    [aboutForm]="aboutForm"
+                />
+                
                 <div class="mt-4">
                     <p-button
                         size="small"
@@ -101,7 +104,11 @@
                     </i>                                                            
                 </div>
 
-                <app-address-form (cepExternApiError)="onCepExternApiError.emit($event)" />
+                <app-address-form 
+                    (cepExternApiError)="onCepExternApiError.emit($event)"
+                    [addressForm]="addressForm"
+                />
+                
                 <div class="mt-4">
                     <p-button 
                         size="small"
@@ -124,7 +131,11 @@
                     </i>                                                            
                 </div>
 
-                <app-developer-contact-form (emailAvailabilityError)="onEmailAvailabilityError($event)" />
+                <app-developer-contact-form
+                    (emailAvailabilityError)="onEmailAvailabilityError($event)"
+                    [contactForm]="contactForm"
+                />
+                
                 <div class="mt-4">
                     <p-button
                         size="small"

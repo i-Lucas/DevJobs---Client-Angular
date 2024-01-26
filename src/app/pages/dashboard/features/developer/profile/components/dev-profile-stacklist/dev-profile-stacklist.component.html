@@ -2,9 +2,9 @@
     [icon]="'handyman'"
     [isOwner]="isOwner"
     [loading]="loading"
+    (onAdd)="onAdding()"
     [label]="'Tecnologias'"
-    (onEdit)="isModalOpen = true"
-    >
+    (onEdit)="isModalOpen = true">    
 
     <div class="flex flex-column gap-4 md:pr-4 md:py-2">
 
@@ -12,13 +12,10 @@
 
             @if (isOwner) {
 
-                <p-button 
-                    size="small"
-                    label="Novo"
-                    icon="pi pi-plus"
-                    severity="success"
-                    [loading]="loading || editLoading"
-                />
+            <dev-new-field-btn
+                [loading]="loading || editLoading"
+                (newClick)="onAdding()"
+            />
             
             } @else {
     
@@ -51,55 +48,78 @@
     [loading]="loading"
     [isOpen]="isModalOpen"
     [editLoading]="editLoading"
-    [title]="'Editar Tecnologias'"
-    (onClose)="isModalOpen = !isModalOpen">
+    (onClose)="onCloseModal()"
+    [title]="(addingNewField ? 'Nova Tecnologia' : 'Editar Tecnologias')">
 
-    <p-tabView>
+    @if (addingNewField && newFieldForm) {
 
-        @if(stackList) {
+        <p-tabView>
+            <p-tabPanel header={{newFieldForm.value.title}}>
 
-            @for (currentForm of stackFormList; track currentForm; let idx = $index) {
+                <div class="my-4">
 
-                <p-tabPanel header="{{stackList[idx].name}}">
+                    <app-developer-stacklist-form
+                        [stackListForm]="newFieldForm"
+                    />
 
-                    <div class="my-4">
+                    <p-button 
+                        size="small"
+                        label="Salvar" 
+                        icon="pi pi-check"
+                        [loading]="loading || editLoading"
+                        [disabled]="newFieldForm.invalid || loading || editLoading"
+                        (click)="addNewField(newFieldForm)"
+                    />
+                </div>
 
-                        <div class="flex justify-content-end">
-                            <i  pTooltip="Atualizado em: {{ stackList[idx].updatedAt | DD_MM_YYYY }}"                                
-                                class="material-icons cursor-pointer">help
-                            </i>                                                            
-                        </div>
+            </p-tabPanel>
+        </p-tabView>
+    }
 
-                        <app-developer-stacklist-form
-                            [stackListForm]="currentForm"
-                        />
+    @else {
 
-                        <div class="flex gap-2 mt-4">
-                            <p-button 
-                                size="small"
-                                label="Salvar" 
-                                icon="pi pi-check"
-                                [loading]="loading || editLoading"
-                                (click)="updateStackList(currentForm)"
-                                [disabled]="currentForm.invalid || loading || editLoading"
+        @if(stackList && stackList.length > 0) {
+
+            <p-tabView>
+                  
+                @for (currentForm of stackFormList; track currentForm; let idx = $index) {
+        
+                    <p-tabPanel header="{{stackList[idx].name}}">        
+                        <div class="my-4">
+        
+                            <div class="flex justify-content-end">
+                                <i  pTooltip="Atualizado em: {{ stackList[idx].updatedAt | DD_MM_YYYY }}"                                
+                                    class="material-icons cursor-pointer">help
+                                </i>                                                            
+                            </div>
+        
+                            <app-developer-stacklist-form
+                                [stackListForm]="currentForm"
                             />
-                            <p-button
-                                size="small"
-                                label="Excluir" 
-                                severity="danger"
-                                icon="pi pi-trash"
-                                [loading]="loading || editLoading"
+        
+                            <dev-save-delete-btn
+                                [loading]="loading"
                                 [disabled]="loading || editLoading"
-                                (click)="confirmDelete($event, currentForm.value.id)"
+                                (clickUpdate)="updateStackList(currentForm)"                   
+                                (clickDelete)="confirmDelete($event, currentForm.value.id)"
+                                [saveDisabled]="currentForm.invalid || loading || editLoading"
                             />
                         </div>
-                    </div>
-    
-                </p-tabPanel>     
-            }
+                    </p-tabPanel>                     
+                }
+
+            </p-tabView>
         }
 
-    </p-tabView>
-</app-modal>
+        @else {
 
-<!-- (click)="onSave.emit({ form: currentForm, identifier: 'DEVELOPER_STACKLIST' })" -->
+            <p class="text-xs">Nenhum registro</p>
+
+            <dev-new-field-btn
+                [loading]="loading || editLoading"
+                (newClick)="onAdding()"
+            />
+        }
+    }
+
+</app-modal>

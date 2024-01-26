@@ -2,9 +2,9 @@
     [icon]="'work'"
     [isOwner]="isOwner"
     [loading]="loading"
+    (onAdd)="onAdding()"
     (onEdit)="isModalOpen = true"
-    [label]="'Experiência Profissional'"
-    >
+    [label]="'Experiência Profissional'">
 
     <div class="flex flex-column gap-4 md:pr-4 md:py-2">
 
@@ -12,12 +12,9 @@
 
             @if (isOwner) {
 
-                <p-button 
-                    size="small"
-                    label="Novo"
-                    icon="pi pi-plus"
-                    severity="success"
+                <dev-new-field-btn
                     [loading]="loading || editLoading"
+                    (newClick)="onAdding()"
                 />
             
             } @else {
@@ -72,58 +69,77 @@
     [icon]="'work'"
     [loading]="loading"
     [isOpen]="isModalOpen"
+    (onClose)="onCloseModal()"
     [editLoading]="editLoading"
-    [title]="'Editar Experiência Profissional'"
-    (onClose)="isModalOpen = !isModalOpen">
+    [title]="(addingNewField ? 'Nova' : 'Editar') + ' Experiência Profissional'">
+    
+    @if (addingNewField && newFieldForm) {
 
-    <p-tabView>
+        <p-tabView>
+            <p-tabPanel header={{newFieldForm.value.company}}>
 
-        @if(experiencesList) {
+                <div class="my-4">
+                    <app-developer-job-experiences-form
+                        [jobExperiencesForm]="newFieldForm"
+                    />
 
-            @for (currentForm of experiencesFormList; track currentForm; let idx = $index) {
+                    <p-button 
+                        size="small"
+                        label="Salvar" 
+                        icon="pi pi-check"
+                        [loading]="loading || editLoading"
+                        [disabled]="newFieldForm.invalid || loading || editLoading"
+                        (click)="addNewField(newFieldForm)"
+                    />
+                </div>
 
-                <p-tabPanel header="{{experiencesList[idx].company}}">
+            </p-tabPanel>
+        </p-tabView>
+    }
 
-                    <div class="my-4">
+    @else {
 
-                        <div class="flex justify-content-end">
-                            <i  pTooltip="Atualizado em: {{ experiencesList[idx].updatedAt | DD_MM_YYYY }}"                                
-                                class="material-icons cursor-pointer">help
-                            </i>                                                            
-                        </div>
+        @if(experiencesList && experiencesList.length > 0) {
 
-                        <app-developer-job-experiences-form
-                            [jobExperiencesForm]="currentForm"
-                        />
+            <p-tabView>
 
-                        <div class="flex gap-2 mt-4">
-                            <p-button 
-                                size="small"
-                                label="Salvar" 
-                                icon="pi pi-check"
-                                [loading]="loading || editLoading"
-                                (click)="updateJobExperience(currentForm)"
-                                [disabled]="currentForm.invalid || loading || editLoading"
-                            />
-                            <p-button 
-                                size="small"
-                                label="Excluir" 
-                                severity="danger"
-                                icon="pi pi-trash"
-                                [loading]="loading || editLoading"
-                                [disabled]="loading || editLoading"
-                                (click)="confirmDelete($event, currentForm.value.id)"
-                            />
-                        </div>
+                @for (currentForm of experiencesFormList; track currentForm; let idx = $index) {
 
-                    </div>
-                    
-                </p-tabPanel>
-            }
+                        <p-tabPanel header="{{experiencesList[idx].company}}">
+                            <div class="my-4">
+
+                                <div class="flex justify-content-end">
+                                    <i  pTooltip="Atualizado em: {{ experiencesList[idx].updatedAt | DD_MM_YYYY }}"                                
+                                        class="material-icons cursor-pointer">help
+                                    </i>                                                            
+                                </div>
+
+                                <app-developer-job-experiences-form
+                                    [jobExperiencesForm]="currentForm"
+                                />
+
+                                <dev-save-delete-btn
+                                    [loading]="loading"
+                                    [disabled]="loading || editLoading"
+                                    (clickUpdate)="updateJobExperience(currentForm)"                   
+                                    (clickDelete)="confirmDelete($event, currentForm.value.id)"
+                                    [saveDisabled]="currentForm.invalid || loading || editLoading"
+                                />
+
+                            </div>                            
+                        </p-tabPanel>
+                    }
+
+            </p-tabView>
         }
+        @else {
 
-    </p-tabView>
+            <p class="text-xs">Nenhum registro</p>
+
+            <dev-new-field-btn
+                [loading]="loading || editLoading"
+                (newClick)="onAdding()"
+            />
+        }
+    }
 </app-modal>
-
-
-<!-- (click)="onSave.emit({ form: currentForm, identifier: 'DEVELOPER_EXPERIENCES' })" -->

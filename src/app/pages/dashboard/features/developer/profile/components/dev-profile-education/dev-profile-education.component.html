@@ -1,7 +1,8 @@
-<dev-profile-panel 
+<dev-profile-panel
     [icon]="'school'"
     [isOwner]="isOwner"
     [loading]="loading"
+    (onAdd)="onAdding()"
     [label]="'Formação Acadêmica'"
     (onEdit)="isModalOpen = true"
     >
@@ -12,12 +13,9 @@
 
             @if (isOwner) {
 
-                <p-button 
-                    size="small"
-                    label="Novo"
-                    icon="pi pi-plus"
-                    severity="success"
+                <dev-new-field-btn
                     [loading]="loading || editLoading"
+                    (newClick)="onAdding()"
                 />
             
             } @else {
@@ -56,58 +54,82 @@
 
 </dev-profile-panel>
 
-<app-modal 
+<app-modal
     [icon]="'school'"
     [loading]="loading"
-    [editLoading]="editLoading"
     [isOpen]="isModalOpen"
-    [title]="'Editar Formação Acadêmica'"
-    (onClose)="isModalOpen = !isModalOpen">
-
-    <p-tabView>
-
-        @if(educationList) {
-
-            @for (currentForm of academicEducationFormList; track currentForm; let idx = $index) {
-
-                <p-tabPanel header="{{educationList[idx].institution}}">
-
-                    <div class="my-4">
-
-                        <div class="flex justify-content-end">
-                            <i  pTooltip="Atualizado em: {{ educationList[idx].updatedAt | DD_MM_YYYY }}"                                
-                                class="material-icons cursor-pointer">help
-                            </i>                                                            
-                        </div>
-
-                        <app-developer-academic-education-form
-                            [academicEducationForm]="currentForm"
-                        />
-
-                        <div class="flex gap-2 mt-4">
-                            <p-button 
-                                size="small"
-                                label="Salvar" 
-                                icon="pi pi-check"
-                                [loading]="loading || editLoading"
-                                [disabled]="currentForm.invalid || loading || editLoading"
-                                (click)="updateAcademicEducation(currentForm)"
-                            />
-                            <p-button 
-                                size="small"
-                                label="Excluir" 
-                                severity="danger"
-                                icon="pi pi-trash"
-                                [loading]="loading || editLoading"
-                                [disabled]="loading || editLoading"
-                                (click)="confirmDelete($event, currentForm.value.id)"
-                            />
-                        </div>
-                    </div>
+    (onClose)="onCloseModal()"
+    [editLoading]="editLoading"
+    [title]="(addingNewField ? 'Nova' : 'Editar') + ' Formação Acadêmica'">
     
-                </p-tabPanel>     
-            }
-        }
+    @if (addingNewField && newFieldForm) {
 
-    </p-tabView>
+        <p-tabView>
+            <p-tabPanel header={{newFieldForm.value.company}}>
+
+                <div class="my-4">
+
+                    <app-developer-academic-education-form
+                        [academicEducationForm]="newFieldForm"
+                    />
+
+                    <p-button 
+                        size="small"
+                        label="Salvar" 
+                        icon="pi pi-check"
+                        [loading]="loading || editLoading"
+                        [disabled]="newFieldForm.invalid || loading || editLoading"
+                        (click)="addNewField(newFieldForm)"
+                    />
+                </div>
+
+            </p-tabPanel>
+        </p-tabView>
+    }
+
+    @else {
+
+        @if(educationList && educationList.length > 0) {
+
+            <p-tabView>
+
+                @for (currentForm of academicEducationFormList; track currentForm; let idx = $index) {
+
+                    <p-tabPanel header="{{educationList[idx].institution}}">
+                        <div class="my-4">
+    
+                            <div class="flex justify-content-end">
+                                <i  pTooltip="Atualizado em: {{ educationList[idx].updatedAt | DD_MM_YYYY }}"                                
+                                    class="material-icons cursor-pointer">help
+                                </i>                                                            
+                            </div>
+    
+                            <app-developer-academic-education-form
+                                [academicEducationForm]="currentForm"
+                            />
+    
+                            <dev-save-delete-btn
+                                [loading]="loading"
+                                [disabled]="loading || editLoading"
+                                (clickUpdate)="updateAcademicEducation(currentForm)"                   
+                                (clickDelete)="confirmDelete($event, currentForm.value.id)"
+                                [saveDisabled]="currentForm.invalid || loading || editLoading"
+                            />
+                        </div>
+                    </p-tabPanel>
+
+                }
+
+            </p-tabView>
+        }
+        @else {
+
+            <p class="text-xs">Nenhum registro</p>
+
+            <dev-new-field-btn
+                [loading]="loading || editLoading"
+                (newClick)="onAdding()"
+            />
+        }
+    }
 </app-modal>

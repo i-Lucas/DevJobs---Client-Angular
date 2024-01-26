@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 import { FromMSToMonthYearPipe } from '@app-pipes/date-formatter.pipe';
 import { DeveloperProfileService } from '../../services/developer-profile.service';
@@ -16,12 +16,18 @@ export class DevProfileEducationComponent implements OnChanges {
   @Input() isOwner: boolean = false;
   @Input() educationList: DeveloperProfile['academic_education'] | undefined;
 
+  @Output() onAdd = new EventEmitter<RequestDeveloperProfileAdd<any>>();
   @Output() onEdit = new EventEmitter<RequestDeveloperProfileUpdate<any>>();
   @Output() onDelete = new EventEmitter<RequestDeveloperProfileDelete<any>>();
 
-  protected isModalOpen: boolean = false;
+  private identifier: DeveloperProfileEditFieldsIdentifier = 'DEVELOPER_EDUCATION'
+
   protected editLoading: boolean = false;
+  protected isModalOpen: boolean = false;
   protected academicEducationFormList: FormGroup[] | undefined;
+
+  protected addingNewField: boolean = false;
+  protected newFieldForm: FormGroup | undefined;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -31,42 +37,72 @@ export class DevProfileEducationComponent implements OnChanges {
     private fromMillisecondsToMonthYearPipe: FromMSToMonthYearPipe
   ) { }
 
-  protected menuOptions: PMenuOptions[] = [
-    {
-      label: 'Editar', icon: 'pi pi-file-edit',
-      command: () => this.isModalOpen = true
-    }
-  ]
-
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isOwner) {
       if (changes['educationList'] && changes['educationList'].currentValue) {
         if (this.educationList) {
-          this.updateAcademicFormsList(this.educationList)
+          this.createEducationForms(this.educationList)
         }
       }
     }
   }
 
-  private updateAcademicFormsList(educationList: DeveloperProfileAcademicEducation[]) {
-    this.academicEducationFormList = educationList.map(education =>
-      this.createAcademicEducationForm(education)
-    );
+  private createEducationForms(educationList: DeveloperProfileAcademicEducation[]) {
+
+    this.academicEducationFormList = educationList.map(education => {
+
+      const EDIT_MODE: boolean = true;
+      const form = this.formService.buildDeveloperAcademicEducationForm(EDIT_MODE);
+
+      form.patchValue({
+        ...education,
+        from: this.fromMillisecondsToMonthYearPipe.transform(education.from),
+        to: this.fromMillisecondsToMonthYearPipe.transform(education.to),
+      });
+
+      return form;
+
+    })
   }
 
-  private createAcademicEducationForm(education: DeveloperProfileAcademicEducation): FormGroup {
+  protected onCloseModal() {
+    this.isModalOpen = false
+    this.addingNewField = false
+    this.newFieldForm = undefined
+  }
 
-    const EDIT_MODE: boolean = true;
-    const form = this.formService.buildDeveloperAcademicEducationForm(EDIT_MODE);
+  protected onAdding() {
+    this.isModalOpen = true
+    this.addingNewField = true
+    this.newFieldForm = this.formService.buildDeveloperAcademicEducationForm();
+  }
 
-    form.patchValue({
-      ...education,
-      from: this.fromMillisecondsToMonthYearPipe.transform(education.from),
-      to: this.fromMillisecondsToMonthYearPipe.transform(education.to),
-    });
+  protected addNewField(form: FormGroup) {
 
-    return form;
+    const data = {
+      ...form.value,
+      to: this.componentService.fromMMYYYYToMS(form.value.to).toString(),
+      from: this.componentService.fromMMYYYYToMS(form.value.from).toString()
+    };
 
+    this.editLoading = true
+
+    this.onAdd.emit({
+      data, identifier: this.identifier,
+      onSuccess: (response) => {
+
+        this.editLoading = false
+        this.newFieldForm?.reset();
+
+        this.developerProfileService.addDeveloperProfileAcademicEducationToList(response.data);
+        this.componentService.showMessage({ detail: response.message, type: 'success' });
+      },
+      onError: (error) => {
+
+        this.editLoading = false
+        this.componentService.showMessage({ detail: error.message, type: 'error' });
+      }
+    })
   }
 
   protected updateAcademicEducation(form: FormGroup) {
@@ -81,7 +117,7 @@ export class DevProfileEducationComponent implements OnChanges {
 
     this.onEdit.emit({
       data: body,
-      identifier: 'DEVELOPER_EDUCATION',
+      identifier: this.identifier,
       onSuccess: (response) => {
 
         this.editLoading = false
@@ -108,7 +144,7 @@ export class DevProfileEducationComponent implements OnChanges {
     this.editLoading = true
 
     this.onDelete.emit({
-      body: { id, identifier: 'DEVELOPER_EDUCATION' },
+      body: { id, identifier: this.identifier },
       onError: (error) => {
         this.editLoading = false
         this.componentService.showMessage({ detail: error.message, type: 'error' });

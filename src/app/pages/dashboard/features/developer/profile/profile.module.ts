@@ -4,8 +4,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { SharedFormsModule } from '@app-shared-forms/shared-forms.module';
-import { SharedModulesModule } from "../../../../../shared/modules/shared-modules.module";
+import { DeveloperProfileService } from './services/developer-profile.service';
 import { SharedComponentsModule } from 'app/shared/components/shared-components.module';
+import { SharedModulesModule } from "../../../../../shared/modules/shared-modules.module";
 import { DeveloperFormService } from '@app-shared-forms/services/builder/developer-forms/developer-form.service';
 
 import { TagModule } from 'primeng/tag';
@@ -19,7 +20,10 @@ import { TabViewModule } from 'primeng/tabview';
 import { DividerModule } from 'primeng/divider';
 import { SkeletonModule } from 'primeng/skeleton';
 
+import { DevNewFieldBtnComponent } from './components/dev-new-field-btn/dev-new-field-btn.component';
+import { DevProfilePanelComponent } from './components/dev-profile-panel/dev-profile-panel.component';
 import { DevProfileAboutComponent } from './components/dev-profile-about/dev-profile-about.component';
+import { DevSaveDeleteBtnComponent } from './components/dev-save-delete-btn/dev-save-delete-btn.component';
 import { DevProfileProjectsComponent } from './components/dev-profile-projects/dev-profile-projects.component';
 import { DevProfileStacklistComponent } from './components/dev-profile-stacklist/dev-profile-stacklist.component';
 import { DevProfileLanguagesComponent } from './components/dev-profile-languages/dev-profile-languages.component';
@@ -27,8 +31,6 @@ import { DevProfileEducationComponent } from './components/dev-profile-education
 import { RootDeveloperProfileComponent } from './components/root-developer-profile/root-developer-profile.component';
 import { DevProfileExperiencesComponent } from './components/dev-profile-experiences/dev-profile-experiences.component';
 import { DevProfileCertificatesComponent } from './components/dev-profile-certificates/dev-profile-certificates.component';
-import { DevProfilePanelComponent } from './components/dev-profile-panel/dev-profile-panel.component';
-import { DeveloperProfileService } from './services/developer-profile.service';
 
 @NgModule({
   imports: [
@@ -60,8 +62,10 @@ export class PrimeModule { }
 
 @NgModule({
   declarations: [
+    DevNewFieldBtnComponent,
     DevProfileAboutComponent,
     DevProfilePanelComponent,
+    DevSaveDeleteBtnComponent,
     DevProfileProjectsComponent,
     DevProfileStacklistComponent,
     DevProfileEducationComponent,

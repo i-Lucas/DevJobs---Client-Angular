@@ -1,10 +1,9 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 
 import { HttpService } from '@app-services/http/http.service';
 import { BaseFormService } from '@app-shared-forms/services/base/base-form.service';
-import { CommonFormService } from '@app-shared-forms/services/builder/commom-forms/common-forms.service';
 
 @Component({
   selector: 'app-address-form',
@@ -12,22 +11,22 @@ import { CommonFormService } from '@app-shared-forms/services/builder/commom-for
 })
 export class AddressFormComponent extends BaseFormService implements OnInit, OnDestroy {
 
-  protected addressForm: FormGroup = this.formService.getAddressForm();
+  @Input() addressForm: FormGroup | undefined;
 
   @Output() cepExternApiError = new EventEmitter<ApiError>();
 
-  constructor(
-    private httpService: HttpService,
-    private formService: CommonFormService) {
+  constructor(private httpService: HttpService) {
     super()
   }
 
   ngOnInit(): void {
 
-    this.setFormControlListener({
-      formControl: this.addressForm.get('cep'),
-      callbackFunction: formControl => this.getAddressFromCep(formControl)
-    })
+    if (this.addressForm) {
+      this.setFormControlListener({
+        formControl: this.addressForm.get('cep'),
+        callbackFunction: formControl => this.getAddressFromCep(formControl)
+      })
+    }
   }
 
   private getAddressFromCep(cepControl: AbstractControl) {
@@ -53,17 +52,23 @@ export class AddressFormComponent extends BaseFormService implements OnInit, OnD
   }
 
   private clearFormFields() {
-    this.addressForm.get('city')?.setValue(null);
-    this.addressForm.get('state')?.setValue(null);
-    this.addressForm.get('address')?.setValue(null);
-    this.addressForm.get('neighborhood')?.setValue(null);
+
+    if (this.addressForm) {
+      this.addressForm.get('city')?.setValue(null);
+      this.addressForm.get('state')?.setValue(null);
+      this.addressForm.get('address')?.setValue(null);
+      this.addressForm.get('neighborhood')?.setValue(null);
+    }
   }
 
   private updateFormValues(response: ApiResponseAddressData) {
-    this.addressForm.get('city')?.setValue(response.city);
-    this.addressForm.get('state')?.setValue(response.state);
-    this.addressForm.get('address')?.setValue(response.street);
-    this.addressForm.get('neighborhood')?.setValue(response.neighborhood);
+
+    if (this.addressForm) {
+      this.addressForm.get('city')?.setValue(response.city);
+      this.addressForm.get('state')?.setValue(response.state);
+      this.addressForm.get('address')?.setValue(response.street);
+      this.addressForm.get('neighborhood')?.setValue(response.neighborhood);
+    }
   }
 
 }

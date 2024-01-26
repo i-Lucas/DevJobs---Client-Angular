@@ -7,30 +7,12 @@ import { BaseFormService } from '@app-shared-forms/services/base/base-form.servi
 @Injectable()
 export class DeveloperFormService extends BaseFormService {
 
-  private aboutForm: FormGroup;
-  private contactForm: FormGroup;
-
   constructor(
     private formBuilder: FormBuilder,
     private commomFormService: CommonFormService
   ) {
 
     super()
-
-    this.aboutForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      age: ['', [Validators.required]],
-      occupation: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
-      resume: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(600)]],
-    })
-
-    this.contactForm = this.formBuilder.group({
-      id: [''],
-      phone: ['', [Validators.required, Validators.minLength(11)]],
-      github: ['', [Validators.required, this.validatePattern(this.githubPattern)]],
-      linkedin: ['', [Validators.required, this.validatePattern(this.linkedinPattern)]],
-      email: this.commomFormService.getEmailForm(),
-    })
 
   }
 
@@ -84,12 +66,37 @@ export class DeveloperFormService extends BaseFormService {
     ];
   }
 
-  public getDeveloperAboutForm(): FormGroup {
-    return this.aboutForm
+  public getDeveloperAboutForm(isEditMode: boolean = false): FormGroup {
+
+    const formGroupConfig = {
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      age: ['', [Validators.required]],
+      occupation: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
+      resume: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(600)]],
+    }
+
+    if (isEditMode) {
+      this.addEditFieldsToFormGroup(formGroupConfig);
+    }
+
+    return this.formBuilder.group(formGroupConfig);
   }
 
-  public getDeveloperContactForm(): FormGroup {
-    return this.contactForm
+  public getDeveloperContactForm(isEditMode: boolean = false): FormGroup {
+
+    const formGroupConfig = {
+      id: [''],
+      phone: ['', [Validators.required, Validators.minLength(11)]],
+      github: ['', [Validators.required, this.validatePattern(this.githubPattern)]],
+      linkedin: ['', [Validators.required, this.validatePattern(this.linkedinPattern)]],
+      email: this.commomFormService.getEmailForm(),
+    }
+
+    if (isEditMode) {
+      this.addEditFieldsToFormGroup(formGroupConfig);
+    }
+
+    return this.formBuilder.group(formGroupConfig);
   }
 
   public buildDeveloperProjectsForm(isEditMode: boolean = false): FormGroup {
@@ -105,11 +112,11 @@ export class DeveloperFormService extends BaseFormService {
     }
 
     return this.formBuilder.group(formGroupConfig);
-    
+
   }
 
   public buildDeveloperLanguagesForm(isEditMode: boolean = false): FormGroup {
-   
+
     const formGroupConfig = {
       language: ['', [Validators.required, Validators.minLength(3)]],
       level: ['', [Validators.required]],
@@ -175,13 +182,7 @@ export class DeveloperFormService extends BaseFormService {
 
   }
 
-  private addEditFieldsToFormGroup<T extends {}>(formGroupConfig: T): void {
-    Object.assign(formGroupConfig, {
-      id: [''],
-      createdAt: [''],
-      updatedAt: [''],
-    });
-  }
+
 
   public buildDeveloperAcademicEducationForm(isEditMode: boolean = false): FormGroup {
 
@@ -203,8 +204,8 @@ export class DeveloperFormService extends BaseFormService {
 
   }
 
-  public getAddressForm(): FormGroup {
-    return this.commomFormService.getAddressForm();
+  public getAddressForm(isEditMode: boolean = false): FormGroup {
+    return this.commomFormService.getAddressForm(isEditMode);
   }
 
   public getPasswordForm(): FormGroup {

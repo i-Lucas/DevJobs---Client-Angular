@@ -82,4 +82,12 @@ export class BaseFormService implements OnDestroy {
       .subscribe(() => callbackFunction(formControl));
   }
 
+  protected addEditFieldsToFormGroup<T extends {}>(formGroupConfig: T): void {
+    Object.assign(formGroupConfig, {
+      id: [''],
+      createdAt: [''],
+      updatedAt: [''],
+    });
+  }
+
 }

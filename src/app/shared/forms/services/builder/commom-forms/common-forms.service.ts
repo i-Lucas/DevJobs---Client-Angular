@@ -6,24 +6,12 @@ import { BaseFormService } from '@app-shared-forms/services/base/base-form.servi
 @Injectable()
 export class CommonFormService extends BaseFormService {
 
-  protected addressForm!: FormGroup;
   protected passwordForm!: FormGroup;
   protected emailForm!: FormGroup;
 
   constructor(private formBuilder: FormBuilder) {
 
     super()
-
-    this.addressForm = this.formBuilder.group({
-      id: [''],
-      cep: ['', [Validators.required, Validators.minLength(8)]],
-      address: ['', [Validators.required, Validators.minLength(10)]],
-      number: ['', [Validators.required]],
-      neighborhood: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      complement: ['', [Validators.required]],
-      state: ['', [Validators.required]],
-    })
 
     this.passwordForm = this.formBuilder.group({
       password: this.validatePassword(),
@@ -36,8 +24,24 @@ export class CommonFormService extends BaseFormService {
 
   }
 
-  public getAddressForm(): FormGroup {
-    return this.addressForm;
+  public getAddressForm(isEditMode: boolean = false): FormGroup {
+
+    const formGroupConfig = {
+      id: [''],
+      cep: ['', [Validators.required, Validators.minLength(8)]],
+      address: ['', [Validators.required, Validators.minLength(10)]],
+      number: ['', [Validators.required]],
+      neighborhood: ['', [Validators.required]],
+      city: ['', [Validators.required]],
+      complement: ['', [Validators.required]],
+      state: ['', [Validators.required]],
+    }
+
+    if (isEditMode) {
+      this.addEditFieldsToFormGroup(formGroupConfig);
+    }
+
+    return this.formBuilder.group(formGroupConfig);
   }
 
   public getPasswordForm(): FormGroup {

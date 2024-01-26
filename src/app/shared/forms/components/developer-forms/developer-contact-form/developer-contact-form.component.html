@@ -1,16 +1,19 @@
-<form class="flex flex-column gap-2 m-auto text-sm" [formGroup]="contactForm">
+@if (contactForm) {
 
-    <label class="block font-medium mb-1">Email</label>
-    <app-email-form (emailAvailabilityError)="onEmailAvailabilityError($event)" />
+    <form class="flex flex-column gap-2 m-auto text-sm" [formGroup]="contactForm">
 
-    <label class="block font-medium mb-1">Github</label>
-    <input formControlName="github" type="text" pInputText class="w-full mb-3">
-
-    <label class="block font-medium mb-1">Linkedin</label>
-    <input formControlName="linkedin" type="text" pInputText class="w-full mb-3">
-
-    <label class="block font-medium mb-1">Telefone</label>
-    <p-inputMask formControlName="phone" mask="(99)-9-9999-9999" styleClass="w-full mb-3"
-        placeholder="(99)-9-9999-9999" />
-
-</form>
+        <label class="block font-medium mb-1">Email</label>
+        <app-email-form (emailAvailabilityError)="onEmailAvailabilityError($event)" />
+    
+        <label class="block font-medium mb-1">Github</label>
+        <input formControlName="github" type="text" pInputText class="w-full mb-3">
+    
+        <label class="block font-medium mb-1">Linkedin</label>
+        <input formControlName="linkedin" type="text" pInputText class="w-full mb-3">
+    
+        <label class="block font-medium mb-1">Telefone</label>
+        <p-inputMask formControlName="phone" mask="(99)-9-9999-9999" styleClass="w-full mb-3"
+            placeholder="(99)-9-9999-9999" />
+    
+    </form>
+}

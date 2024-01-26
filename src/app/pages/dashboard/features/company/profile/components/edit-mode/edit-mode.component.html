@@ -13,6 +13,7 @@
 
                     <app-address-form 
                         (cepExternApiError)="onCepExternApiError.emit($event)"
+                        [addressForm]="addressForm"
                     />
                     <div class="mt-4">
                         <p-button 

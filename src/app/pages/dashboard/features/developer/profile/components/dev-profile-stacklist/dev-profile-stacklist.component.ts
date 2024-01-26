@@ -15,12 +15,18 @@ export class DevProfileStacklistComponent implements OnChanges {
   @Input() isOwner: boolean = false;
   @Input() stackList: DeveloperProfile['stack'] | undefined;
 
+  @Output() onAdd = new EventEmitter<RequestDeveloperProfileAdd<any>>();
   @Output() onEdit = new EventEmitter<RequestDeveloperProfileUpdate<any>>();
   @Output() onDelete = new EventEmitter<RequestDeveloperProfileDelete<any>>();
+
+  private identifier: DeveloperProfileEditFieldsIdentifier = 'DEVELOPER_STACKLIST'
 
   protected editLoading: boolean = false;
   protected isModalOpen: boolean = false;
   protected stackFormList: FormGroup[] | undefined;
+
+  protected addingNewField: boolean = false;
+  protected newFieldForm: FormGroup | undefined;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -28,13 +34,6 @@ export class DevProfileStacklistComponent implements OnChanges {
     private componentService: CommonComponentService,
     private developerProfileService: DeveloperProfileService,
   ) { }
-
-  protected menuOptions: PMenuOptions[] = [
-    {
-      label: 'Editar', icon: 'pi pi-file-edit',
-      command: () => this.isModalOpen = true
-    }
-  ]
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isOwner) {
@@ -47,19 +46,54 @@ export class DevProfileStacklistComponent implements OnChanges {
   }
 
   private updateStackFormsList(stackList: DeveloperProfileStackList[]) {
-    this.stackFormList = stackList.map(stack =>
-      this.createStackListForm(stack)
-    );
+
+    this.stackFormList = stackList.map(stack => {
+
+      const EDIT_MODE: boolean = true;
+      const form = this.formService.buildDeveloperStacklistForm(EDIT_MODE);
+      form.patchValue(stack);
+      return form;
+
+    })
+
   }
 
-  private createStackListForm(stack: DeveloperProfileStackList): FormGroup {
+  protected onCloseModal() {
+    this.isModalOpen = false
+    this.addingNewField = false
+    this.newFieldForm = undefined
+  }
 
-    const EDIT_MODE: boolean = true;
-    const form = this.formService.buildDeveloperStacklistForm(EDIT_MODE);
+  protected onAdding() {
+    this.isModalOpen = true
+    this.addingNewField = true
+    this.newFieldForm = this.formService.buildDeveloperStacklistForm();
+  }
 
-    form.patchValue(stack);
-    return form;
+  protected addNewField(form: FormGroup) {
 
+    this.editLoading = true
+
+    const body = { ...form.value }
+    body.workload = body.workload.concat(' ', body.workload_tmp);
+    delete body.workload_tmp;
+
+    this.onAdd.emit({
+      data: body, identifier: this.identifier,
+      onSuccess: (response) => {
+
+        this.editLoading = false
+        this.newFieldForm?.reset();
+
+        this.developerProfileService.addDeveloperProfileStackToList(response.data);
+        this.componentService.showMessage({ detail: response.message, type: 'success' });
+      },
+      onError: (error) => {
+
+        this.editLoading = false
+        this.componentService.showMessage({ detail: error.message, type: 'error' });
+      }
+    })
   }
 
   protected updateStackList(form: FormGroup) {
@@ -72,7 +106,7 @@ export class DevProfileStacklistComponent implements OnChanges {
 
     this.onEdit.emit({
       data: body,
-      identifier: 'DEVELOPER_STACKLIST',
+      identifier: this.identifier,
       onSuccess: (response) => {
 
         this.editLoading = false
@@ -99,7 +133,7 @@ export class DevProfileStacklistComponent implements OnChanges {
     this.editLoading = true
 
     this.onDelete.emit({
-      body: { id, identifier: 'DEVELOPER_STACKLIST' },
+      body: { id, identifier: this.identifier },
       onError: (error) => {
         this.editLoading = false
         this.componentService.showMessage({ detail: error.message, type: 'error' });

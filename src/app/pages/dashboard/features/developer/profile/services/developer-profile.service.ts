@@ -286,7 +286,6 @@ export class DeveloperProfileService {
     let currentLanguageList = currentProfile.languages || [];
 
     const languageIndexToDelete = currentLanguageList.findIndex(item => item.id === languageId);
-    console.log(languageIndexToDelete)
 
     if (languageIndexToDelete !== -1) {
       currentLanguageList.splice(languageIndexToDelete, 1);
@@ -316,5 +315,100 @@ export class DeveloperProfileService {
       });
     }
   };
+
+  // add
+
+  public addDeveloperProfileJobExperienceToList(experience: DeveloperProfileJobExperiences) {
+
+    const currentProfile = this.dashboardService.getProfileSubject() as DeveloperProfile;
+    let currentExperiencesList = currentProfile.professional_experiences || [];
+
+    const updatedExperienceList = [...currentExperiencesList, { ...experience }];
+    updatedExperienceList.sort((a, b) => (a.from > b.from ? -1 : 1));
+
+    this.dashboardService.updateProfile({
+      ...currentProfile,
+      professional_experiences: updatedExperienceList,
+      type: 'CANDIDATE'
+    });
+  }
+
+  public addDeveloperProfileAcademicEducationToList(education: DeveloperProfileAcademicEducation) {
+
+    const currentProfile = this.dashboardService.getProfileSubject() as DeveloperProfile;
+    let currentAcademicList = currentProfile.academic_education || [];
+
+    const updatedAcademicList = [...currentAcademicList, { ...education }];
+    updatedAcademicList.sort((a, b) => (a.from > b.from ? -1 : 1));
+
+    this.dashboardService.updateProfile({
+      ...currentProfile,
+      academic_education: updatedAcademicList,
+      type: 'CANDIDATE'
+    });
+  }
+
+
+  public addDeveloperProfileLanguageToList(language: DeveloperProfileLanguages) {
+
+    const currentProfile = this.dashboardService.getProfileSubject() as DeveloperProfile;
+    let currentLanguageList = currentProfile.languages || [];
+
+    const updatedLanguageList = [...currentLanguageList, { ...language }];
+    updatedLanguageList.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1));
+
+    this.dashboardService.updateProfile({
+      ...currentProfile,
+      languages: updatedLanguageList,
+      type: 'CANDIDATE'
+    });
+  }
+
+  public addDeveloperProfileCertificateToList(certificate: DeveloperProfileCertificates) {
+
+    const currentProfile = this.dashboardService.getProfileSubject() as DeveloperProfile;
+    let currentCertificatesList = currentProfile.certificates || [];
+
+    const updatedCertificatesList = [...currentCertificatesList, { ...certificate }];
+    updatedCertificatesList.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1));
+
+    this.dashboardService.updateProfile({
+      ...currentProfile,
+      certificates: updatedCertificatesList,
+      type: 'CANDIDATE'
+    });
+  }
+
+  public addDeveloperProfileProjectToList(project: DeveloperProfileProjects) {
+
+    const currentProfile = this.dashboardService.getProfileSubject() as DeveloperProfile;
+    let currentProjectsList = currentProfile.projects || [];
+
+    const updatedProjectsList = [...currentProjectsList, { ...project }];
+    updatedProjectsList.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1));
+
+    this.dashboardService.updateProfile({
+      ...currentProfile,
+      projects: updatedProjectsList,
+      type: 'CANDIDATE'
+    });
+  }
+
+
+  public addDeveloperProfileStackToList(project: DeveloperProfileStackList) {
+
+    const currentProfile = this.dashboardService.getProfileSubject() as DeveloperProfile;
+    let currentStackList = currentProfile.stack || [];
+
+    const updatedStackList = [...currentStackList, { ...project }];
+    updatedStackList.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1));
+
+    this.dashboardService.updateProfile({
+      ...currentProfile,
+      stack: updatedStackList,
+      type: 'CANDIDATE'
+    });
+  }
+
 
 }

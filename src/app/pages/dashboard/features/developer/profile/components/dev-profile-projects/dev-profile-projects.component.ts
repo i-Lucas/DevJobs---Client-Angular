@@ -15,12 +15,18 @@ export class DevProfileProjectsComponent implements OnChanges {
   @Input() isOwner: boolean = false;
   @Input() projectsList: DeveloperProfile['projects'] | undefined;
 
+  @Output() onAdd = new EventEmitter<RequestDeveloperProfileAdd<any>>();
   @Output() onEdit = new EventEmitter<RequestDeveloperProfileUpdate<any>>();
   @Output() onDelete = new EventEmitter<RequestDeveloperProfileDelete<any>>();
+
+  private identifier: DeveloperProfileEditFieldsIdentifier = 'DEVELOPER_PROJECTS'
 
   protected isModalOpen: boolean = false;
   protected editLoading: boolean = false;
   protected projectsFormList: FormGroup[] | undefined;
+
+  protected addingNewField: boolean = false;
+  protected newFieldForm: FormGroup | undefined;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -28,13 +34,6 @@ export class DevProfileProjectsComponent implements OnChanges {
     private componentService: CommonComponentService,
     private developerProfileService: DeveloperProfileService,
   ) { }
-
-  protected menuOptions: PMenuOptions[] = [
-    {
-      label: 'Editar', icon: 'pi pi-file-edit',
-      command: () => this.isModalOpen = true
-    }
-  ]
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isOwner) {
@@ -51,19 +50,50 @@ export class DevProfileProjectsComponent implements OnChanges {
   }
 
   private updateProjectFormsList(projectList: DeveloperProfileProjects[]) {
-    this.projectsFormList = projectList.map(project =>
-      this.createProjectForm(project)
-    );
+    this.projectsFormList = projectList.map(project => {
+
+      const EDIT_MODE: boolean = true;
+      const form = this.formService.buildDeveloperProjectsForm(EDIT_MODE);
+
+      form.patchValue(project);
+      return form;
+    
+    })
+
   }
 
-  private createProjectForm(project: DeveloperProfileProjects): FormGroup {
+  protected onCloseModal() {
+    this.isModalOpen = false
+    this.addingNewField = false
+    this.newFieldForm = undefined
+  }
 
-    const EDIT_MODE: boolean = true;
-    const form = this.formService.buildDeveloperProjectsForm(EDIT_MODE);
+  protected onAdding() {
+    this.isModalOpen = true
+    this.addingNewField = true
+    this.newFieldForm = this.formService.buildDeveloperProjectsForm();
+  }
 
-    form.patchValue(project);
-    return form;
+  protected addNewField(form: FormGroup) {
 
+    this.editLoading = true
+
+    this.onAdd.emit({
+      data: form.value, identifier: this.identifier,
+      onSuccess: (response) => {
+
+        this.editLoading = false
+        this.newFieldForm?.reset();
+
+        this.developerProfileService.addDeveloperProfileProjectToList(response.data);
+        this.componentService.showMessage({ detail: response.message, type: 'success' });
+      },
+      onError: (error) => {
+
+        this.editLoading = false
+        this.componentService.showMessage({ detail: error.message, type: 'error' });
+      }
+    })
   }
 
   protected updateProject(form: FormGroup) {
@@ -72,7 +102,7 @@ export class DevProfileProjectsComponent implements OnChanges {
 
     this.onEdit.emit({
       data: form.value,
-      identifier: 'DEVELOPER_PROJECTS',
+      identifier: this.identifier,
       onSuccess: (response) => {
 
         this.editLoading = false
@@ -99,7 +129,7 @@ export class DevProfileProjectsComponent implements OnChanges {
     this.editLoading = true
 
     this.onDelete.emit({
-      body: { id, identifier: 'DEVELOPER_PROJECTS' },
+      body: { id, identifier: this.identifier },
       onError: (error) => {
         this.editLoading = false
         this.componentService.showMessage({ detail: error.message, type: 'error' });

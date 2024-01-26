@@ -15,12 +15,18 @@ export class DevProfileCertificatesComponent implements OnChanges {
   @Input() isOwner: boolean = false;
   @Input() certificatesList: DeveloperProfile['certificates'] | undefined;
 
+  @Output() onAdd = new EventEmitter<RequestDeveloperProfileAdd<any>>();
   @Output() onEdit = new EventEmitter<RequestDeveloperProfileUpdate<any>>();
   @Output() onDelete = new EventEmitter<RequestDeveloperProfileDelete<any>>();
+
+  private identifier: DeveloperProfileEditFieldsIdentifier = 'DEVELOPER_CERTIFICATES'
 
   protected editLoading: boolean = false;
   protected isModalOpen: boolean = false;
   protected certificatesFormList: FormGroup[] | undefined;
+
+  protected addingNewField: boolean = false;
+  protected newFieldForm: FormGroup | undefined;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -28,13 +34,6 @@ export class DevProfileCertificatesComponent implements OnChanges {
     private componentService: CommonComponentService,
     private developerProfileService: DeveloperProfileService,
   ) { }
-
-  protected menuOptions: PMenuOptions[] = [
-    {
-      label: 'Editar', icon: 'pi pi-file-edit',
-      command: () => this.isModalOpen = true
-    }
-  ]
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.isOwner) {
@@ -51,19 +50,54 @@ export class DevProfileCertificatesComponent implements OnChanges {
   }
 
   private updateCertificatesFormsList(certificatesList: DeveloperProfileCertificates[]) {
-    this.certificatesFormList = certificatesList.map(certificate =>
-      this.createCertificateForm(certificate)
-    );
+    this.certificatesFormList = certificatesList.map(certificate => {
+
+      const EDIT_MODE: boolean = true;
+      const form = this.formService.buildDeveloperCertificatesForm(EDIT_MODE);
+
+      form.patchValue(certificate);
+      return form;
+
+    })
+
   }
 
-  private createCertificateForm(certificate: DeveloperProfileCertificates): FormGroup {
+  protected onCloseModal() {
+    this.isModalOpen = false
+    this.addingNewField = false
+    this.newFieldForm = undefined
+  }
 
-    const EDIT_MODE: boolean = true;
-    const form = this.formService.buildDeveloperCertificatesForm(EDIT_MODE);
+  protected onAdding() {
+    this.isModalOpen = true
+    this.addingNewField = true
+    this.newFieldForm = this.formService.buildDeveloperCertificatesForm();
+  }
 
-    form.patchValue(certificate);
-    return form;
+  protected addNewField(form: FormGroup) {
 
+    this.editLoading = true
+
+    const body = { ...form.value }
+    body.workload = body.workload.concat(' ', body.workload_tmp);
+    delete body.workload_tmp;
+
+    this.onAdd.emit({
+      data: body, identifier: this.identifier,
+      onSuccess: (response) => {
+
+        this.editLoading = false
+        this.newFieldForm?.reset();
+
+        this.developerProfileService.addDeveloperProfileCertificateToList(response.data);
+        this.componentService.showMessage({ detail: response.message, type: 'success' });
+      },
+      onError: (error) => {
+
+        this.editLoading = false
+        this.componentService.showMessage({ detail: error.message, type: 'error' });
+      }
+    })
   }
 
   protected updateCertificate(form: FormGroup) {
@@ -76,7 +110,7 @@ export class DevProfileCertificatesComponent implements OnChanges {
 
     this.onEdit.emit({
       data: body,
-      identifier: 'DEVELOPER_CERTIFICATES',
+      identifier: this.identifier,
       onSuccess: (response) => {
 
         this.editLoading = false
@@ -103,7 +137,7 @@ export class DevProfileCertificatesComponent implements OnChanges {
     this.editLoading = true
 
     this.onDelete.emit({
-      body: { id, identifier: 'DEVELOPER_CERTIFICATES' },
+      body: { id, identifier: this.identifier },
       onError: (error) => {
         this.editLoading = false
         this.componentService.showMessage({ detail: error.message, type: 'error' });

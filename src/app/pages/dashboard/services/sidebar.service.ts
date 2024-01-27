@@ -50,7 +50,7 @@ export class SidebarService {
       profile_field,
       {
         icon: 'work', label: 'Recrutamento',
-        link: { path: '/dashboard' },
+        link: { path: '/dashboard/company/recruitment' },
         tooltip: 'Visualize ou inicie processos seletivos'
       },
       {

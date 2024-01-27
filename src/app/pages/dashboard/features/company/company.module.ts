@@ -8,6 +8,10 @@ const routes: Routes = [
     loadChildren: () => import('./profile/profile.module')
   },
   {
+    path: 'recruitment',
+    loadChildren: () => import('./recruitment/recruitment.module')
+  },
+  {
     path: '**',
     redirectTo: '/dashboard'
   }

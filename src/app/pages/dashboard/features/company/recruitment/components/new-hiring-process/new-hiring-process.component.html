@@ -1,0 +1,174 @@
+<main class="flex flex-column gap-3">
+
+    <p-button 
+        size="small" 
+        label="Novo" 
+        icon="pi pi-plus" 
+        (click)="startNewProcess = !startNewProcess"
+    />
+
+    @if (startNewProcess) {
+
+        <p-panel [toggleable]="true">
+
+            <ng-template pTemplate="header">
+                <div class="flex align-items-center gap-2">
+                    <i class="material-icons">content_paste_go</i>
+                    <p>Novo Processo</p>
+                </div>
+            </ng-template>
+
+            @if (hiringProcessForm) {
+
+                <form class="flex flex-column lg:flex-row gap-4 lg:gap-2 m-auto text-sm" [formGroup]="hiringProcessForm">
+
+                    <section class="flex flex-column w-full gap-2">
+                        <label class="block font-medium mb-1">Título</label>
+                        <input formControlName="title" type="text" pInputText class="w-full mb-3">
+
+                        <label class="block font-medium mb-1">Descrição</label>
+                        <textarea rows="4" formControlName="description" cols="30" class="w-full mb-3" pInputTextarea
+                            [autoResize]="true"></textarea>
+
+                        <label class="block font-medium mb-1">Categoria</label>
+                        <p-dropdown formControlName="category" styleClass="mb-3 w-full" [options]="categoryList"
+                            optionValue="name" optionLabel="name" placeholder="Selecione" />
+
+                        <label class="block font-medium mb-1">Senioridade</label>
+                        <p-dropdown formControlName="seniority" styleClass="mb-3 w-full" [options]="seniorityList"
+                            optionValue="name" optionLabel="name" placeholder="Selecione" />
+
+                        <label class="block font-medium mb-1">Contrato</label>
+                        <p-dropdown formControlName="contractType" styleClass="mb-3 w-full" [options]="contractTypeList"
+                            optionValue="name" optionLabel="name" placeholder="Selecione" />          
+
+                        <label class="block font-medium mb-1">Modelo</label>
+                        <p-dropdown formControlName="locationType" styleClass="mb-3 w-full" [options]="locationTypeList"
+                            optionValue="name" optionLabel="name" placeholder="Selecione" />
+                    
+                        <label class="block font-medium mb-1">Carga Horária</label>
+                        <p-dropdown formControlName="workload" styleClass="mb-3 w-full" [options]="workloadList"
+                            optionValue="name" optionLabel="name" placeholder="Selecione" />
+                            
+                        <div class="flex align-items-center gap-2">
+                            <label class="block font-medium mb-1">Habilitar Sugestões</label>
+                            <i pTooltip="Preencher os campos de requisitos com base no perfil da vaga" class="material-icons cursor-pointer small-icon">help</i>
+                            <p-inputSwitch formControlName="enableSuggestions" />
+                        </div>
+
+                    </section>
+
+                    <p-divider class="hidden lg:block" layout="vertical" />
+
+                    <section class="flex flex-column w-full gap-2">
+
+                        <div class="flex align-items-center gap-2">
+                            <label class="block font-medium mb-1">Lista de Habilidades</label>
+                            <i pTooltip="Pressione 'backspace' para remover uma habilidade" class="material-icons cursor-pointer small-icon">help</i>
+                            <!-- @if (hiringProcessForm.value.stacklist.length > 0) {
+                                <i (click)="editStacklist = true" class="material-icons cursor-pointer small-icon">settings</i>
+                            } -->
+                        </div>
+                        
+                        <p-chips formControlName="stacklist" />
+
+                        <!-- <p-chips formControlName="stacklist" [field]="'name'">
+                            <ng-template let-item pTemplate="item">{{ item.name }}</ng-template>                                                        
+                            <ng-template let-item pTemplate="chip">
+                                <span pTooltip="{{ item.workload }}">{{ item.name }}</span>
+                            </ng-template>
+                        </p-chips> -->
+                          
+                        <small class="mb-3 text-gray-700 text-xs">Habilidades requisito da vaga. (Ex: Java, C++, Docker)</small>
+
+                        <div class="flex align-items-center gap-2">
+                            <label class="block font-medium mb-1">Lista de Requisitos</label>
+                            <i pTooltip="Pressione 'Enter' para inserir uma nova frase" class="material-icons cursor-pointer small-icon">help</i>
+                        </div>
+
+                        <p-chips formControlName="requirements" />
+                        <small class="mb-3 text-gray-700 text-xs">Requesitos da vaga. (Ex: Conhecimento avançado em orientação à objetos)</small>
+
+                        <label class="block font-medium mb-1">Lista de Diferenciais</label>
+                        <p-chips formControlName="differences" />
+                        <small class="mb-3 text-gray-700 text-xs">Habilidades desejáveis (Ex: Graduação em Telecomunicações)</small>                        
+
+                        <label class="block font-medium mb-1">Lista de Benefícios</label>
+                        <p-chips formControlName="benefits" />
+                        <small class="mb-3 text-gray-700 text-xs">Benefícios da vaga. (Ex: Plano Odontológico)</small>
+
+                        <p-divider />
+
+                        <div class="flex flex-column gap-3 md:flex-row md:justify-content-between md:align-items-center md:w-10">                            
+                            <div class="flex align-items-center gap-2">
+                                <label class="block font-medium mb-1">Vaga para PCD ?</label>
+                                <p-inputSwitch formControlName="pcd" />
+                            </div>
+
+                            <div>
+                                <label class="block font-medium mb-1">Prazo para Inscrição</label>
+                                <p-calendar class="mb-3" formControlName="deadline" dateFormat="dd.mm.yy" [showIcon]="true" />
+                            </div>
+                        </div>
+                                                
+                        <label class="block font-medium mt-3 mb-1">Faixa Salarial</label>
+
+                        <label class="block text-xs text-gray-700 font-medium mb-1">Negociável</label>
+                        <p-inputSwitch formControlName="negotiable" />
+
+                        @if (!hiringProcessForm.value.negotiable) {
+
+                            <section class="flex flex-column lg:flex-row gap-2 mt-2">
+
+                                <div class="flex flex-column w-full">
+                                    <label class="block text-gray-700 text-xs mb-1">Entre</label>
+                                    <p-inputNumber
+                                        [maxlength]="11"
+                                        styleClass="flex-1"
+                                        currency="BRL" locale="pt-BR" 
+                                        formControlName="salaryRange_from"
+                                        mode="currency" inputId="currency-brazil" 
+                                    />
+                                </div>
+                                <div class="flex flex-column w-full">
+                                    <label class="block text-gray-700 text-xs mb-1">Até</label>                             
+                                    <p-inputNumber
+                                        [maxlength]="11"
+                                        styleClass="flex-1"
+                                        currency="BRL" locale="pt-BR" 
+                                        formControlName="salaryRange_to"
+                                        mode="currency" inputId="currency-brazil" 
+                                    />
+                                </div>
+    
+                            </section>
+                        }
+
+                        <section class="flex gap-2 mt-5">
+                            <p-button                    
+                                size="small" 
+                                label="Salvar"
+                                severity="success"
+                                icon="pi pi-plus" 
+                                [disabled]="hiringProcessForm.invalid"
+                                (click)="save()"
+                            />
+                            <!-- Visualizar -> abrir modal tela cheia -->
+                            <p-button
+                                size="small"                                
+                                icon="pi pi-eye" 
+                                
+                                label="Visualizar"
+                            />
+                        </section>
+                                                
+                    </section>
+
+                </form>
+
+            }
+
+        </p-panel>
+    }
+
+</main>

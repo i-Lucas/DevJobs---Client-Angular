@@ -26,17 +26,4 @@ export class FromMsToDayMonthYearPipe implements PipeTransform {
       return this.dateService.fromMStoDayMonthYear(parseInt(value));
   }
 
-  // transform(milliseconds: string, format: string = 'dd/MM/yyyy') {
-
-  //   const date = new Date(parseInt(milliseconds, 10));
-  //   const day = this.padZero(date.getDate());
-  //   const month = this.padZero(date.getMonth() + 1);
-  //   const year = date.getFullYear();
-  //   return `${day}/${month}/${year}`;
-  // }
-
-  // private padZero(value: number): string {
-  //   return value < 10 ? `0${value}` : `${value}`;
-  // }
-
 }

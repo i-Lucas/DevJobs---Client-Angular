@@ -1,1 +1,92 @@
-<p>root-recruitment works!</p>
+<main class="min-h-screen p-4">
+
+    <section>
+        <company-new-hiring-process />
+    </section>
+
+    <section class="my-8">
+
+        <div class="flex gap-2 justify-content-center align-items-center mb-6">
+            <h1>Processos em andamento</h1>
+            <i pTooltip="Clique em um processo da lista para gerencia-lo" class="material-icons cursor-pointer">help</i>
+        </div>
+
+        <p-table 
+            [value]="hiringList"
+            [breakpoint]="'960px'" 
+            responsiveLayout="stack" 
+            [styleClass]="'p-datatable-striped p-datatable-sm'">
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Título</th>
+                    <th>Categoria</th>
+                    <th>Senioridade</th>
+                    <th>Candidatos</th>
+                    <th>Responsável</th>
+                    <th>Início</th>
+                    <th>Atualização</th>
+                    <th>Encerramento</th>
+                    <th>Status</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-process>
+
+                <tr [routerLink]="['/dashboard/company/recruitment/', process.id]"
+                    class="hover:bg-primary cursor-pointer">
+
+                    <td class="text-xs lg:text-base">
+                        <span class="my-3 text-xs font-bold p-column-title">Título</span>
+                        {{process.title}}
+                    </td>
+
+                    <td class="text-xs lg:text-base">
+                        <span class="my-3 text-xs font-bold p-column-title">Categoria</span>
+                        {{process.category}}
+                    </td>
+
+                    <td class="text-xs lg:text-base">
+                        <span class="my-3 text-xs font-bold p-column-title">Senioridade</span>
+                        {{process.seniority}}
+                    </td>
+
+                    <td class="text-xs lg:text-base">
+                        <span class="my-3 text-xs font-bold p-column-title">Candidatos</span>
+                        {{process.subscribersList.length}}
+                    </td>
+
+                    <td class="text-xs lg:text-base">
+                        <span class="my-3 text-xs font-bold p-column-title">Responsável</span>
+                        {{process.recruiter}}
+                    </td>
+
+                    <td class="text-xs lg:text-base">
+                        <span class="my-3 text-xs font-bold p-column-title">Início</span>
+                        {{process.createdAt | DD_MM_YYYY}}
+                    </td>
+
+                    <td class="text-xs lg:text-base">
+                        <span class="my-3 text-xs font-bold p-column-title">Atualização</span>
+                        {{process.updatedAt | DD_MM_YYYY}}
+                    </td>
+
+                    <td class="text-xs lg:text-base">
+                        <span class="my-3 text-xs font-bold p-column-title">Encerramento</span>
+                        {{process.deadline | DD_MM_YYYY}}
+                    </td>
+
+                    <td>
+                        <span class="my-3 text-xs font-bold p-column-title">Status</span>
+                        <p-tag [value]="getLabel(process.status)" [styleClass]="getSeverity(process.status)"/>
+                    </td>
+
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </section>
+
+</main>
+
+
+<!-- [severity]="getSeverity(process.status)" -->

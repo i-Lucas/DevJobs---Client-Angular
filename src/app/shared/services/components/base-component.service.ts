@@ -69,7 +69,7 @@ export class CommonComponentService {
 
       message,
       rejectLabel: 'Não',
-      acceptLabel: 'Sim',
+      acceptLabel: 'Sim',      
       icon: 'pi pi-exclamation-triangle',
       target: event.target as EventTarget,
 

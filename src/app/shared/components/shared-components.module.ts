@@ -6,10 +6,12 @@ import { SharedModalComponent } from './shared-modal/shared-modal.component';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
+import { UnsavedChangesAlertComponent } from './unsaved-changes-alert/unsaved-changes-alert.component';
 
 @NgModule({
   declarations: [
-    SharedModalComponent
+    SharedModalComponent,
+    UnsavedChangesAlertComponent
   ],
   imports: [
     CommonModule,
@@ -19,7 +21,8 @@ import { DividerModule } from 'primeng/divider';
     DividerModule,
   ],
   exports: [
-    SharedModalComponent
+    SharedModalComponent,
+    UnsavedChangesAlertComponent
   ]
 })
 export class SharedComponentsModule { }

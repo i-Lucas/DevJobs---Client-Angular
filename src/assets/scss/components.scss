@@ -14,12 +14,30 @@ header {
     }
 }
 
+.cursor-not {
+    cursor: not-allowed;
+}
+
+.hidden-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.p-tag-value {
+
+    font-size: 11px;
+}
+
+.app-border {
+
+    border: var(--app-border);
+}
+
 .small-icon {
 
-    font-size: 17px; 
+    font-size: 17px;
 }
 
 .p-tooltip {
-    
+
     font-size: 0.8rem;
 }

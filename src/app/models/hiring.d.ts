@@ -12,9 +12,7 @@ interface HiringStackListForm {
   workload: string;
 }
 
-interface HiringProcess {
-
-  id: string;
+interface HiringProcessForm {
 
   title: string;
   description: string;
@@ -37,9 +35,32 @@ interface HiringProcess {
   deadline: string;
   pcd: boolean;
 
+}
+
+interface HiringProcessStepLists {
+
+  id: string;
+  name: string
+  description: string
+  candidates: HiringDeveloperSubscriber[]
+}
+
+interface ProcessStepsList {
+
+  identifier: HiringProcessSteps
+  candidatesLists: HiringProcessStepLists[]
+}
+
+interface HiringProcess extends HiringProcessForm {
+
+  id: string;
+
   recruiter: string
-  subscribersList: HiringDeveloperSubscriber[];
-  status: HiringProcessStatus;
+  // subscribersList: HiringDeveloperSubscriber[];
+  // step: HiringProcessSteps;
+
+  steps: ProcessStepsList[];
+  subscribersCount: number;
 
   createdAt: string;
   updatedAt: string;
@@ -50,9 +71,10 @@ interface HiringDeveloperSubscriber {
   id: string;
   name: string;
   picture: string;
+  profileId: string;
 }
 
-type HiringProcessStatus =
+type HiringProcessSteps =
   | 'OPEN_FOR_APPLICATIONS'   // Vaga aberta para candidaturas
   | 'RESUME_SCREENING'        // Triagem inicial de currículos
   | 'INTERVIEW_SELECTION'     // Seleção de candidatos para entrevistas

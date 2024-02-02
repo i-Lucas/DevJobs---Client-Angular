@@ -1,1 +1,320 @@
-<p>manage-process works!</p>
+<!-- modal canDeactivate -->
+<app-unsaved-changes-alert 
+    [unsavedContent]="unsavedThings"
+    [isOpen]="openUnsavedChangesAlert"
+    (onCancel)="openUnsavedChangesAlert = !openUnsavedChangesAlert"
+    (onConfirm)="continueNavigation()"
+/>
+
+<main class="min-h-screen flex flex-column gap-4 p-4">
+
+    @if (hiringprocess && panelControlForm) {
+
+        <p-panel [toggleable]="true">
+
+            <ng-template pTemplate="header">
+                <div class="flex align-items-center gap-2">
+                    <i class="material-icons">settings</i>
+                    <p>Painel de Controle</p>
+                </div>
+            </ng-template>
+
+            <section class="flex align-items-center">
+
+                <form class="flex w-full justify-content-between px-4" [formGroup]="panelControlForm">
+
+                    <section class="flex flex-column gap-2">
+                        <label class="block font-bold text-sm mb-1">Título</label>
+                        <label class="block font-medium text-xs mb-1">{{hiringprocess.title}}</label>
+                    </section>
+
+                    <section class="flex flex-column gap-2">
+                        <label class="block font-bold text-sm mb-1">Nº de inscritos:</label>
+                        <label class="block font-medium text-xs mb-1">{{panelControlForm.value.subscribers}}</label>
+                    </section>
+        
+                    <section class="flex flex-column gap-2">
+                        <label class="block font-bold text-sm mb-1">Criado em:</label>
+                        <label class="block font-medium text-xs mb-1">{{hiringprocess.createdAt | DD_MM_YYYY}}</label>
+                    </section>
+        
+                    <section class="flex flex-column gap-2">
+                        <label class="block font-bold text-sm mb-1">Atualizado em:</label>
+                        <label class="block font-medium text-xs mb-1">{{hiringprocess.updatedAt | DD_MM_YYYY}}</label>
+                    </section>
+        
+                    <section class="flex flex-column gap-2">
+                        <label class="block font-bold text-sm mb-1">Responsável</label>
+                        <label class="block font-medium text-xs mb-1">{{hiringprocess.recruiter}}</label>
+                    </section>
+        
+                    @if (currentProcessStepIdentifier) {
+
+                        <section class="flex flex-column gap-2">
+                            <label class="block font-bold text-sm mb-1">Etapa Atual</label>
+                            <p-tag 
+                                [value]="getLabel(currentProcessStepIdentifier)" 
+                                [styleClass]="getSeverity(currentProcessStepIdentifier)"
+                            />
+                        </section>
+                    }
+        
+                    <section class="flex flex-column gap-2">
+        
+                        <label class="block font-bold text-sm mb-1">Alterar Etapa</label>
+        
+                        <p-dropdown
+                            [options]="hiringProcessStatusLabels" 
+                            formControlName="step"
+                            styleClass="mb-3 w-full"
+                            optionValue="name" 
+                            optionLabel="name"
+                            placeholder="Selecione">
+        
+                            <ng-template let-item pTemplate="item">
+                                <div [class]="item.color" class="p-1">
+                                    <p class="font-bold text-xs">{{item.name}}</p>
+                                </div>
+                            </ng-template>
+        
+                        </p-dropdown>
+        
+                    </section>
+        
+                    <section class="flex flex-column gap-2">
+        
+                        <label class="block font-bold text-sm mb-1">Salvar Alterações</label>
+                        
+                        <p-button 
+                            label="Confirmar"
+                            icon="pi pi-check"
+                            severity="warning"
+                            size="small"
+                        />
+        
+                    </section>
+        
+                </form>
+
+            </section>
+
+            <section class="flex align-items-center">
+                <section class="flex w-full justify-content-between px-4">
+
+                    <section class="flex flex-column gap-2">
+
+                        <label class="block font-bold text-sm mb-1">Visualizar</label>
+
+                        <!-- redirecionar para a página da vaga -->
+                        <p-button
+                            pTooltip="Exbir perfil da vaga"
+                            size="small"                                
+                            icon="pi pi-eye"                                                         
+                        />
+                    </section>
+
+                </section>
+            </section>
+
+        </p-panel>
+
+        <p-panel [toggleable]="true">
+
+            <ng-template pTemplate="header">
+                <div class="flex align-items-center gap-2">
+                    <i class="material-icons">badge</i>
+                    <p>Etapas</p>
+                </div>
+            </ng-template>
+
+            @if (currentProcessStepsList) {
+
+                <section class="flex flex-column gap-4">
+
+                    @for (step of currentProcessStepsList; track step; let current_step_index = $index) {
+
+                        <p-accordion [activeIndex]="current_step_index">
+
+                            <p-accordionTab> 
+                            
+                                <ng-template pTemplate="header">
+                                    <section class="flex w-full align-items-center justify-content-between px-4">
+
+                                    <p-tag class="text-lg"
+                                        [value]="getLabel(step.identifier)"
+                                        [styleClass]="getSeverity(step.identifier)"
+                                    />
+
+                                    @if (checkIfIsCurrentStep(step.identifier)) {
+                                        <p-tag severity="success" value="Etapa Atual" />            
+                                    }
+
+                                    </section>
+                                </ng-template>
+                                
+                                <section class="flex gap-2">
+
+                                    <section class="flex flex-1 gap-6">
+
+                                        @for (list of step.candidatesLists; track list) {
+
+                                            <section
+                                                cdkDropList
+                                                [id]="list.id"
+                                                style="height: 30rem"
+                                                [cdkDropListData]="list.candidates"
+                                                (cdkDropListDropped)="handleItemDrop($event)"
+                                                class="list app-border border-round overflow-y-auto py-4 hidden-scroll"
+                                                [cdkDropListConnectedTo]="getCandidateListIds(step.candidatesLists)"
+                                                [cdkDropListDisabled]="checkIfIsCurrentStep(step.identifier) === false">
+                                                                
+                                                <div class="pb-4 px-4 flex flex-column gap-2 justify-content-center align-items-center">
+                            
+                                                    <div class="flex justify-content-center align-items-center gap-2">
+                                                        <h5>{{ list.name }}</h5>
+                                                        <i pTooltip="{{list.description}}" class="material-icons small-icon cursor-pointer">help</i>
+                                                    </div>
+                            
+                                                    <input 
+                                                        pInputText
+                                                        class="p-inputtext-sm"
+                                                        [(ngModel)]="searchTerms[list.id]"
+                                                        (input)="onSearch(step.identifier, list.id)"
+                                                        placeholder="Procurar"
+                                                    >
+                                                </div>
+                            
+                                                @for (candidate of list.candidates; track candidate) {
+                                                                        
+                                                    <section cdkDrag                                                        
+                                                        (click)="confirmViewProfile($event, candidate)"                                                        
+                                                        class="list-item hover:bg-primary cursor-pointer py-2 px-4" >
+                            
+                                                        <div [ngClass]="{'cursor-not': !checkIfIsCurrentStep(step.identifier)}"                                                        
+                                                        class="flex gap-2 align-items-center">
+
+                                                            <p-avatar
+                                                                size="normal"
+                                                                shape="circle"                                
+                                                                image={{candidate.picture}}
+                                                                styleClass="mr-2"
+                                                            />
+                            
+                                                            <p class="text-sm">{{ candidate.name }}</p>      
+                            
+                                                        </div>
+                                                                            
+                                                    </section>
+                                                }
+                                                
+                                            </section>
+                                        }
+
+                                    </section>                                    
+
+                                    @if (checkIfIsCurrentStep(step.identifier)) {
+
+                                        <section>     
+                                            <p-menu #menu [model]="listOptionsMenu" [popup]="true"></p-menu>
+                                            <p-button
+                                                pTooltip="Abrir menu" [tooltipPosition]="'left'"
+                                                size="small"                            
+                                                icon="pi pi-cog"                                                
+                                                (click)="menu.toggle($event)"                                    
+                                            />
+                                        </section>
+                                    }
+
+                                </section>
+
+                            </p-accordionTab>
+
+                        </p-accordion>
+
+                    }
+
+                </section>
+            }
+
+        </p-panel>
+    }
+
+</main>
+
+
+<!-- 
+
+
+                <p-panel [toggleable]="true" [collapsed]="false">
+
+            <ng-template pTemplate="header">
+                <div class="flex align-items-center gap-2">
+                    <i class="material-icons">badge</i>
+                    <p>Etapas</p>
+                </div>
+            </ng-template>
+
+            
+            <p-accordion>
+                <p-accordionTab header="{{getLabel(hiringprocess.step[0].identifier)}}">
+    
+                    <button class="mb-4" pButton (click)="criarNovaLista()">Nova Lista</button>
+    
+                    <section class="flex gap-8">
+            
+                        @for (list of candidateLists; track list; let idx = $index) {
+            
+                            <section
+                                class="list app-border border-round overflow-y-auto py-4" [id]="list.id"
+                                (cdkDropListDropped)="handleItemDrop($event)"
+                                cdkDropList [cdkDropListData]="list.candidates"
+                                [cdkDropListConnectedTo]="getCandidateListIds()"
+                                style="height: 30rem">
+            
+                                <div class="pb-4 px-4 flex flex-column gap-2 justify-content-center align-items-center">
+            
+                                    <h5>{{ list.listname }}</h5>
+            
+                                    <input 
+                                        pInputText
+                                        class="p-inputtext-sm"
+                                        [(ngModel)]="searchTerms[list.id]"
+                                        (input)="onSearch(list.id)"
+                                        placeholder="Procurar">
+                                </div>
+            
+                                @for (candidate of list.candidates; track candidate; let idx = $index) {
+                                                           
+                                    <section 
+                                        cdkDrag
+                                        [routerLink]="['/dashboard/developer/profile', candidate.profileId]"
+                                        class="list-item hover:bg-primary cursor-pointer py-2 px-4" >
+            
+                                        <div class="flex gap-2 align-items-center">
+            
+                                            <p-avatar
+                                                size="normal"
+                                                shape="circle"
+                                                pTooltip="Opções"
+                                                image={{candidate.picture}}
+                                                styleClass="mr-2 cursor-pointer"
+                                            />
+            
+                                            <p class="text-sm">{{ candidate.name }}</p>      
+            
+                                        </div>
+                                                            
+                                    </section>
+                                }
+                                
+                            </section>
+                        }
+            
+                    </section>
+    
+                </p-accordionTab>
+            </p-accordion>        
+
+        </p-panel>
+
+ -->

@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 
 import { Subject, distinctUntilChanged, takeUntil } from 'rxjs';
 
-import { NewRecruitmentService } from '../../services/new-recruitment.service';
+import { NewRecruitmentFormService } from '../../services/new-recruitment.service';
 import { HiringListService } from '../../services/hiring-list.service';
 
 /*
@@ -27,21 +27,21 @@ export class NewHiringProcessComponent implements OnDestroy {
   protected startNewProcess: boolean = false;
   protected hiringProcessForm: FormGroup | undefined;
 
-  protected categoryList = this.recruitmentService.getCategoryList();
-  protected seniorityList = this.recruitmentService.getSeniorityList();
-  protected contractTypeList = this.recruitmentService.getContractTypes();
-  protected locationTypeList = this.recruitmentService.getLocationTypes();
-  protected workloadList = this.recruitmentService.getWorkloadList();
+  protected categoryList = this.recruitmentFormService.getCategoryList();
+  protected seniorityList = this.recruitmentFormService.getSeniorityList();
+  protected contractTypeList = this.recruitmentFormService.getContractTypes();
+  protected locationTypeList = this.recruitmentFormService.getLocationTypes();
+  protected workloadList = this.recruitmentFormService.getWorkloadList();
 
   constructor(
     private formBuilder: FormBuilder,
     private hiringService: HiringListService,
-    private recruitmentService: NewRecruitmentService,
+    private recruitmentFormService: NewRecruitmentFormService,
   ) {
 
     this.hiringProcessForm = this.formBuilder.group({
 
-      id: [''],
+      // id: [''], 
 
       title: ['', [Validators.required, Validators.minLength(5)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
@@ -68,9 +68,8 @@ export class NewHiringProcessComponent implements OnDestroy {
       deadline: ['', [Validators.required]], // prazo limite para inscrição,
       pcd: [false],
 
-      createdAt: [''],
-      updatedAt: [''],
-
+      // createdAt: [''],
+      // updatedAt: [''],
     })
 
     this.setupEnableSuggestionsListener();
@@ -82,6 +81,34 @@ export class NewHiringProcessComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  // id, createdAt e updatedAt virão do backend
+
+  protected save() {
+
+    if (this.hiringProcessForm) {
+
+      const formData = this.hiringProcessForm.value;
+      // const now = new Date().getTime().toString();
+
+      const data: HiringProcessForm = {
+        ...formData,
+        // id: now,
+        // createdAt: now,
+        // updatedAt: now,
+        salaryRange: this.getFormattedSalaryRange(formData),
+        deadline: this.getFormattedDeadline(formData.deadline),
+      };
+
+      console.log(data);
+      this.hiringService.addHiringProcess(data);
+
+      // antes de fazer a requisição tem que confirmar ... pois nao vai ser possível editar
+      // depois que a vaga for publicada, nada poderá ser editado .. pq se a galera fizer subscribe e 
+      // os requesitos mudarem .. vai ser compliqued
+
+    }
   }
 
   private minArrayLength(control: AbstractControl, minLength: number) {
@@ -122,20 +149,19 @@ export class NewHiringProcessComponent implements OnDestroy {
   }
 
   private updateRequirements(seniorityValue: SeniorityLevels): void {
-    const suggestions = this.recruitmentService.getSuggestionsRequirements(seniorityValue);
+    const suggestions = this.recruitmentFormService.getSuggestionsRequirements(seniorityValue);
     this.hiringProcessForm?.get('requirements')?.patchValue(suggestions);
   }
 
   private updateStacklist(categoryValue: any): void {
-
-    const suggestions = this.recruitmentService.getSuggestionsStacklist(categoryValue);
+    const suggestions = this.recruitmentFormService.getSuggestionsStacklist(categoryValue);
     this.hiringProcessForm?.get('stacklist')?.patchValue(suggestions);
   }
 
   private updateBenefitsAndDifferences(): void {
 
-    const benefits = this.recruitmentService.getSuggestionsBenefits();
-    const differences = this.recruitmentService.getSuggestionsDifferentials();
+    const benefits = this.recruitmentFormService.getSuggestionsBenefits();
+    const differences = this.recruitmentFormService.getSuggestionsDifferentials();
 
     this.hiringProcessForm?.get('benefits')?.patchValue(benefits);
     this.hiringProcessForm?.get('differences')?.patchValue(differences);
@@ -197,31 +223,6 @@ export class NewHiringProcessComponent implements OnDestroy {
         salaryRangeToControl?.updateValueAndValidity();
 
       })
-  }
-
-  protected save() {
-
-    if (this.hiringProcessForm) {
-      const formData = this.hiringProcessForm.value;
-      const now = new Date().getTime().toString();
-
-      const data: HiringProcess = {
-        ...formData,
-        id: now,
-        createdAt: now,
-        updatedAt: now,
-        salaryRange: this.getFormattedSalaryRange(formData),
-        deadline: this.getFormattedDeadline(formData.deadline),
-      };
-
-      console.log(data);
-      this.hiringService.addHiringProcess(data);
-
-      // antes de fazer a requisição tem que confirmar ... pois nao vai ser possível editar
-      // depois que a vaga for publicada, nada poderá ser editado .. pq se a galera fizer subscribe e 
-      // os requesitos mudarem .. vai ser compliqued
-
-    }
   }
 
   private getFormattedSalaryRange(

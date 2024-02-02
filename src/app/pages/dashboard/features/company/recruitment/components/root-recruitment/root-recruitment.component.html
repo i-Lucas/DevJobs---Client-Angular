@@ -19,15 +19,15 @@
 
             <ng-template pTemplate="header">
                 <tr>
-                    <th>Título</th>
-                    <th>Categoria</th>
-                    <th>Senioridade</th>
-                    <th>Candidatos</th>
-                    <th>Responsável</th>
-                    <th>Início</th>
-                    <th>Atualização</th>
-                    <th>Encerramento</th>
-                    <th>Status</th>
+                    <th class="text-sm">Título</th>
+                    <th class="text-sm">Categoria</th>
+                    <th class="text-sm">Senioridade</th>
+                    <th class="text-sm">Candidatos</th>
+                    <th class="text-sm">Responsável</th>
+                    <th class="text-sm">Início</th>
+                    <th class="text-sm">Atualização</th>
+                    <th class="text-sm">Encerramento</th>
+                    <th class="text-sm">Status</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-process>
@@ -37,47 +37,50 @@
 
                     <td class="text-xs lg:text-base">
                         <span class="my-3 text-xs font-bold p-column-title">Título</span>
-                        {{process.title}}
+                        <p class="text-xs">{{process.title}}</p>
                     </td>
 
                     <td class="text-xs lg:text-base">
                         <span class="my-3 text-xs font-bold p-column-title">Categoria</span>
-                        {{process.category}}
+                        <p class="text-xs">{{process.category}}</p>
                     </td>
 
                     <td class="text-xs lg:text-base">
                         <span class="my-3 text-xs font-bold p-column-title">Senioridade</span>
-                        {{process.seniority}}
+                        <p class="text-xs">{{process.seniority}}</p>
                     </td>
 
                     <td class="text-xs lg:text-base">
-                        <span class="my-3 text-xs font-bold p-column-title">Candidatos</span>
-                        {{process.subscribersList.length}}
+                        <span class="my-3 text-xs font-bold p-column-title">Candidatos</span>                        
+                        <p class="text-xs">{{process.subscribersCount}}</p>
                     </td>
 
                     <td class="text-xs lg:text-base">
-                        <span class="my-3 text-xs font-bold p-column-title">Responsável</span>
-                        {{process.recruiter}}
+                        <span class="my-3 text-xs font-bold p-column-title">Responsável</span>                        
+                        <p class="text-xs">{{process.recruiter}}</p>
                     </td>
 
                     <td class="text-xs lg:text-base">
                         <span class="my-3 text-xs font-bold p-column-title">Início</span>
-                        {{process.createdAt | DD_MM_YYYY}}
+                        <p class="text-xs">{{process.createdAt | DD_MM_YYYY}}</p>
                     </td>
 
                     <td class="text-xs lg:text-base">
                         <span class="my-3 text-xs font-bold p-column-title">Atualização</span>
-                        {{process.updatedAt | DD_MM_YYYY}}
+                        <p class="text-xs">{{process.updatedAt | DD_MM_YYYY}}</p>
                     </td>
 
                     <td class="text-xs lg:text-base">
                         <span class="my-3 text-xs font-bold p-column-title">Encerramento</span>
-                        {{process.deadline | DD_MM_YYYY}}
+                        <p class="text-xs">{{process.deadline | DD_MM_YYYY}}</p>
                     </td>
 
                     <td>
                         <span class="my-3 text-xs font-bold p-column-title">Status</span>
-                        <p-tag [value]="getLabel(process.status)" [styleClass]="getSeverity(process.status)"/>
+                        <p-tag class="text-lg"
+                            [value]="getLabel(process.steps[0].identifier)"
+                            [styleClass]="getSeverity(process.steps[0].identifier)"
+                        />
                     </td>
 
                 </tr>
@@ -87,6 +90,3 @@
     </section>
 
 </main>
-
-
-<!-- [severity]="getSeverity(process.status)" -->

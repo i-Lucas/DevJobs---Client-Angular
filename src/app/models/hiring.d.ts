@@ -56,8 +56,6 @@ interface HiringProcess extends HiringProcessForm {
   id: string;
 
   recruiter: string
-  // subscribersList: HiringDeveloperSubscriber[];
-  // step: HiringProcessSteps;
 
   steps: ProcessStepsList[];
   subscribersCount: number;
@@ -89,3 +87,6 @@ type HiringProcessSteps =
   | 'PROCESS_COMPLETED'       // Processo de contratação concluído
   | 'CANCELLED'               // Processo de contratação cancelado
   | 'FROZEN';                 // Processo de contratação congelado ou suspenso temporariamente
+
+
+  type HiringProcessStepMenuOptions = 'NEW_LIST' | 'SAVE_LIST' | 'HELP';

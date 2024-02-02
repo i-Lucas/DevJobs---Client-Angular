@@ -10,7 +10,7 @@ export class SharedModalComponent {
   @Input() title: string | undefined
   @Input() icon: string | undefined;
   @Input() loading: boolean = false;
-  // @Input() editLoading: boolean = false;
+  @Input() width: string | undefined;
 
   @Output() onClose = new EventEmitter<void>();
 

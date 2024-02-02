@@ -36,6 +36,8 @@ import { NewHiringProcessComponent } from './components/new-hiring-process/new-h
 
 import { SharedComponentsModule } from 'app/shared/components/shared-components.module';
 import { SharedModulesModule } from 'app/shared/modules/shared-modules.module';
+import { ProcessControlPanelComponent } from './components/process-control-panel/process-control-panel.component';
+import { ProcessStepsComponent } from './components/process-steps/process-steps.component';
 
 const routes: Routes = [
   {
@@ -54,6 +56,8 @@ const routes: Routes = [
     ManageProcessComponent,
     RootRecruitmentComponent,
     NewHiringProcessComponent,
+    ProcessControlPanelComponent,
+    ProcessStepsComponent,
   ],
   providers: [
     NewRecruitmentFormService,

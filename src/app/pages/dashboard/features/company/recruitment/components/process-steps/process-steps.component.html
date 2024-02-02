@@ -1,0 +1,119 @@
+<p-panel [toggleable]="true">
+
+    <ng-template pTemplate="header">
+        <div class="flex align-items-center gap-2">
+            <i class="material-icons">badge</i>
+            <p>Etapas</p>
+        </div>
+    </ng-template>
+
+    @if (currentProcessStepsList) {
+
+        <section class="flex flex-column gap-4">
+
+            @for (step of currentProcessStepsList; track step; let current_step_index = $index) {
+
+                <p-accordion [activeIndex]="current_step_index">
+
+                    <p-accordionTab> 
+                    
+                        <ng-template pTemplate="header">
+                            <section class="flex w-full align-items-center justify-content-between px-4">
+
+                            <p-tag class="text-lg"
+                                [value]="getLabel(step.identifier)"
+                                [styleClass]="getSeverity(step.identifier)"
+                            />
+
+                            @if (checkIfIsCurrentStep(step.identifier)) {
+                                <p-tag severity="success" value="Etapa Atual" />            
+                            }
+
+                            </section>
+                        </ng-template>
+                        
+                        <section class="flex flex-column gap-2 xl:flex-row">
+
+                            <section class="flex justify-content-center flex-1 p-2 flex-wrap gap-4 xl:justify-content-start">
+
+                                @for (list of step.candidatesLists; track list;) {
+
+                                    <section
+                                        cdkDropList
+                                        [id]="list.id"
+                                        [cdkDropListData]="list.candidates"
+                                        style="height: 30rem; width: 25rem;"
+                                        (cdkDropListDropped)="itemdrop.emit($event)"
+                                        [cdkDropListConnectedTo]="getCandidateListIds(step.candidatesLists)"
+                                        class="list app-border border-round overflow-y-auto py-4 hidden-scroll"
+                                        [cdkDropListDisabled]="checkIfIsCurrentStep(step.identifier) === false">
+                                                        
+                                        <div class="pb-4 px-4 flex flex-column gap-2 justify-content-center align-items-center">
+                    
+                                            <div class="flex justify-content-center align-items-center gap-2">
+                                                <h5>{{ list.name }} ( {{ list.candidates.length }} )</h5>
+                                                <i pTooltip="{{list.description}}" class="material-icons small-icon cursor-pointer">help</i>
+                                            </div>
+                    
+                                            <input 
+                                                pInputText
+                                                placeholder="Procurar"                                          
+                                                class="p-inputtext-sm w-full"
+                                                [(ngModel)]="searchTerms[list.id]"
+                                                (input)="onSearch(step.identifier, list.id)"
+                                            >
+                                        </div>
+                    
+                                        @for (candidate of list.candidates; track candidate) {
+                                                                
+                                            <section cdkDrag                                                        
+                                                (click)="confirmViewProfile($event, candidate)"
+                                                class="list-item hover:bg-primary cursor-pointer py-2 px-4"
+                                                pTooltip="Clique para ver o perfil" tooltipPosition="bottom" [showDelay]="650">
+                    
+                                                <div [ngClass]="{'cursor-not': !checkIfIsCurrentStep(step.identifier)}"                                                        
+                                                class="flex gap-2 align-items-center">
+
+                                                    <p-avatar
+                                                        size="normal"
+                                                        shape="circle"                                
+                                                        image={{candidate.picture}}
+                                                        styleClass="mr-2"
+                                                    />
+                    
+                                                    <p class="text-sm">{{ candidate.name }}</p>      
+                    
+                                                </div>
+                                                                    
+                                            </section>
+                                        }
+                                        
+                                    </section>
+                                }
+
+                            </section>                                    
+
+                            @if (checkIfIsCurrentStep(step.identifier)) {
+
+                                <section class="flex justify-content-center align-items-center xl:py-0 xl:align-items-start">     
+                                    <p-menu #menu [model]="listOptionsMenu" [popup]="true"></p-menu>
+                                    <p-button
+                                        size="small"                            
+                                        icon="pi pi-cog"                                                
+                                        (click)="menu.toggle($event)"                                    
+                                        pTooltip="Abrir menu" [tooltipPosition]="'left'"
+                                    />
+                                </section>
+                            }
+
+                        </section>
+
+                    </p-accordionTab>
+
+                </p-accordion>
+            }
+
+        </section>
+    }
+
+</p-panel>

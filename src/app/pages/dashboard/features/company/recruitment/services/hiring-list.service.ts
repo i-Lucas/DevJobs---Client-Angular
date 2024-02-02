@@ -31,7 +31,7 @@ export class HiringListService {
 
       subscribersCount: 0,
       recruiter: 'lucas@dev.com',
-      
+
       // importante: sempre criar um novo processo com a etapa 'OPEN_FOR_APPLICATIONS'
       // para o array de steps ter pelo menos 1 item
 
@@ -40,7 +40,7 @@ export class HiringListService {
 
       steps: [
         {
-          identifier: 'OPEN_FOR_APPLICATIONS', 
+          identifier: 'OPEN_FOR_APPLICATIONS',
           candidatesLists: []
         }
       ]
@@ -70,6 +70,20 @@ export class HiringListService {
       (currentList[indexToUpdate][fieldName] as HiringProcess[keyof HiringProcess]) = value;
       this.hiringList.next(currentList);
     }
+  }
+
+  public addProcessStepList(processId: string, stepIndex: number, stepdata: HiringProcessStepLists) {
+
+    const currentList = this.hiringList.getValue();
+    const process = currentList.find((process) => process.id === processId);
+
+    if (process && process.steps && process.steps[stepIndex]) {
+
+      const currentStep = process.steps[stepIndex];
+      currentStep.candidatesLists.push(stepdata);
+      this.hiringList.next(currentList);
+    }
+
   }
 
   public getHiringProcessDropDownLabels(): { name: string; color: string }[] {
@@ -118,20 +132,20 @@ export class HiringListService {
   private getProcessStepIndex() {
 
     const hiringProcessStatusTranslations: Record<HiringProcessSteps, number> = {
-      OPEN_FOR_APPLICATIONS:            0,
-      RESUME_SCREENING:                 1,
-      INTERVIEW_SELECTION:              2,
-      INITIAL_INTERVIEWS:               3,
-      TECHNICAL_ASSESSMENT:             4,
-      FINAL_INTERVIEWS:                 5,
-      BEHAVIORAL_ASSESSMENT:            6,
-      PROJECT_CHALLENGE:                7,
-      MANAGER_INTERVIEWS:               8,
-      REFERENCE_CHECK:                  9,
-      JOB_OFFER:                        10,
-      PROCESS_COMPLETED:                11,
-      CANCELLED:                        12,
-      FROZEN:                           13
+      OPEN_FOR_APPLICATIONS: 0,
+      RESUME_SCREENING: 1,
+      INTERVIEW_SELECTION: 2,
+      INITIAL_INTERVIEWS: 3,
+      TECHNICAL_ASSESSMENT: 4,
+      FINAL_INTERVIEWS: 5,
+      BEHAVIORAL_ASSESSMENT: 6,
+      PROJECT_CHALLENGE: 7,
+      MANAGER_INTERVIEWS: 8,
+      REFERENCE_CHECK: 9,
+      JOB_OFFER: 10,
+      PROCESS_COMPLETED: 11,
+      CANCELLED: 12,
+      FROZEN: 13
     };
 
     return hiringProcessStatusTranslations
@@ -140,20 +154,20 @@ export class HiringListService {
   private getProcessStepLabel() {
 
     const hiringProcessStatusTranslations: Record<HiringProcessSteps, string> = {
-      OPEN_FOR_APPLICATIONS:            'Vaga aberta para candidaturas',
-      RESUME_SCREENING:                 'Triagem inicial de currículos',
-      INTERVIEW_SELECTION:              'Seleção de candidatos para entrevistas',
-      INITIAL_INTERVIEWS:               'Entrevistas iniciais',
-      TECHNICAL_ASSESSMENT:             'Avaliação técnica',
-      FINAL_INTERVIEWS:                 'Entrevistas finais',
-      BEHAVIORAL_ASSESSMENT:            'Avaliação de habilidades comportamentais',
-      PROJECT_CHALLENGE:                'Desafio de projeto',
-      MANAGER_INTERVIEWS:               'Entrevistas com gestores',
-      REFERENCE_CHECK:                  'Verificação de referências',
-      JOB_OFFER:                        'Oferta de emprego',
-      PROCESS_COMPLETED:                'Processo concluído',
-      CANCELLED:                        'Processo cancelado',
-      FROZEN:                           'Processo suspenso temporariamente',
+      OPEN_FOR_APPLICATIONS: 'Vaga aberta para candidaturas',
+      RESUME_SCREENING: 'Triagem inicial de currículos',
+      INTERVIEW_SELECTION: 'Seleção de candidatos para entrevistas',
+      INITIAL_INTERVIEWS: 'Entrevistas iniciais',
+      TECHNICAL_ASSESSMENT: 'Avaliação técnica',
+      FINAL_INTERVIEWS: 'Entrevistas finais',
+      BEHAVIORAL_ASSESSMENT: 'Avaliação de habilidades comportamentais',
+      PROJECT_CHALLENGE: 'Desafio de projeto',
+      MANAGER_INTERVIEWS: 'Entrevistas com gestores',
+      REFERENCE_CHECK: 'Verificação de referências',
+      JOB_OFFER: 'Oferta de emprego',
+      PROCESS_COMPLETED: 'Processo concluído',
+      CANCELLED: 'Processo cancelado',
+      FROZEN: 'Processo suspenso temporariamente',
     };
 
     return hiringProcessStatusTranslations
@@ -203,7 +217,7 @@ export class HiringListService {
           subs.push({
             id: index.toString(),
             name: randomNames(),
-            profileId: 'f0f4e171-3532-40b8-84a4-87b40d0e0a39',
+            profileId: '1c866c33-02c4-404f-9573-05f481606016',
             picture: 'https://picsum.photos/200/300/?random'
           });
         }
@@ -235,7 +249,7 @@ export class HiringListService {
 
         recruiter: 'laura@dev.com',
         subscribersCount: subscribers.length,
-        
+
         // a etapa atual deve ser sempre o primeiro item da lista ! ( unshift para inserir )
         steps: [
           {

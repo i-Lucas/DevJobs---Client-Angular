@@ -57,6 +57,15 @@
                             <p-inputSwitch formControlName="enableSuggestions" />
                         </div>
 
+                        <div class="mt-2">
+                        <p-button 
+                            size="small"
+                            pTooltip="Limpar todos os campos do formulário"
+                            label="Limpar Formulário"
+                            styleClass="p-button-info"
+                            (click)="setupHiringForm()"
+                        />
+                    </div>
                     </section>
 
                     <p-divider class="hidden lg:block" layout="vertical" />
@@ -107,8 +116,19 @@
                             </div>
 
                             <div>
-                                <label class="block font-medium mb-1">Prazo para Inscrição</label>
-                                <p-calendar class="mb-3" formControlName="deadline" dateFormat="dd.mm.yy" [showIcon]="true" />
+                                <div class="flex gap-2">
+                                    <label class="block font-medium mb-1">Prazo para Inscrição</label>
+                                    <i pTooltip="Tempo mínimo para inscrições: 3 dias, máximo: 14 dias" 
+                                    class="material-icons cursor-pointer small-icon">help</i>
+                                </div>
+                                <p-calendar 
+                                    class="mb-3" 
+                                    [showIcon]="true"
+                                    [minDate]="minDate!"
+                                    [maxDate]="maxDate!" 
+                                    dateFormat="dd.mm.yy" 
+                                    formControlName="deadline" 
+                                />
                             </div>
                         </div>
                                                 
@@ -152,14 +172,14 @@
                                 severity="success"
                                 icon="pi pi-plus" 
                                 [disabled]="hiringProcessForm.invalid"
-                                (click)="save()"
+                                (click)="this.openConfirmationModal = true"
                             />
                             <!-- Visualizar -> abrir modal tela cheia -->
                             <p-button
-                                size="small"                                
-                                icon="pi pi-eye" 
-                                
+                                size="small"
+                                icon="pi pi-eye"
                                 label="Visualizar"
+                                [disabled]="true"
                             />
                         </section>
                                                 
@@ -173,3 +193,34 @@
     }
 
 </main>
+
+<app-modal 
+    [width]="'35vw'"
+    [title]="'Aviso'"
+    [icon]="'feedback'"
+    [isOpen]="openConfirmationModal"
+    (onClose)="openConfirmationModal = false"
+>
+    <section class="mb-6">
+
+        <h4 class="text-center">Confirmar Novo Processo Seletivo</h4>
+
+        <div class="p-4 line-height-3">
+            <p>Ao criar um novo processo seletivo, todas as informações e requisitos fornecidos serão finais e não poderão ser editados posteriormente. Isso garante a integridade do processo e evita qualquer impacto negativo nos candidatos que se inscreverem para a vaga.</p>
+            <p>Por favor, revise cuidadosamente todas as informações e certifique-se de que estão corretas antes de confirmar a criação do processo seletivo. Uma vez confirmado, as informações serão permanentes e não poderão ser alteradas.</p>
+            <p>Deseja prosseguir e criar o novo processo seletivo ?</p>
+        </div>
+
+    </section>
+
+    <div class="flex justify-content-center align-items-center">
+        <p-button 
+            size="small"
+            icon="pi pi-check"
+            label="Vamos lá!"
+            styleClass="p-button-info"
+            (click)="createProcess()"
+        />
+    </div>
+
+</app-modal>

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { SharedFormsModule } from '@app-shared-forms/shared-forms.module';
 import { DeveloperProfileService } from './services/developer-profile.service';
@@ -32,19 +32,14 @@ import { RootDeveloperProfileComponent } from './components/root-developer-profi
 import { DevProfileExperiencesComponent } from './components/dev-profile-experiences/dev-profile-experiences.component';
 import { DevProfileCertificatesComponent } from './components/dev-profile-certificates/dev-profile-certificates.component';
 
+const routes: Routes = [
+  {
+    path: '',
+    component: RootDeveloperProfileComponent
+  }
+];
+
 @NgModule({
-  imports: [
-    TagModule,
-    ChipModule,
-    MenuModule,
-    PanelModule,
-    RatingModule,
-    ImageModule,
-    ButtonModule,
-    DividerModule,
-    TabViewModule,
-    SkeletonModule,
-  ],
   exports: [
     TagModule,
     ChipModule,
@@ -85,12 +80,7 @@ export class PrimeModule { }
     SharedFormsModule,
     SharedModulesModule,
     SharedComponentsModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: RootDeveloperProfileComponent
-      }
-    ]),
+    RouterModule.forChild(routes),
   ]
 })
 export default class ProfileModule { }

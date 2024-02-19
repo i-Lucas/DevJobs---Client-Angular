@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SigninRootComponent } from './container/signin-root.component';
@@ -11,13 +11,14 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { PasswordModule } from 'primeng/password';
 import { InputTextModule } from 'primeng/inputtext';
 
+const routes: Routes = [
+  {
+    path: '',
+    component: SigninRootComponent
+  }
+];
+
 @NgModule({
-  imports: [
-    ButtonModule,
-    CheckboxModule,
-    PasswordModule,
-    InputTextModule,
-  ],
   exports: [
     ButtonModule,
     CheckboxModule,
@@ -38,12 +39,7 @@ export class PrimeModule { }
     PrimeModule,
     SharedFormsModule,
     ReactiveFormsModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: SigninRootComponent
-      }
-    ])
+    RouterModule.forChild(routes)
   ]
 })
 export default class SigninModule { }

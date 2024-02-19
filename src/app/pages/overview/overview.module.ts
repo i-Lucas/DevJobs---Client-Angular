@@ -1,9 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { OverviewRootComponent } from './container/overview-root.component';
 import { OverviewHeaderComponent } from './components/overview-header/overview-header.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: OverviewRootComponent
+  }
+];
 
 @NgModule({
   declarations: [
@@ -12,12 +19,7 @@ import { OverviewHeaderComponent } from './components/overview-header/overview-h
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: OverviewRootComponent
-      }
-    ])
+    RouterModule.forChild(routes)
   ]
 })
 export default class OverviewModule { }

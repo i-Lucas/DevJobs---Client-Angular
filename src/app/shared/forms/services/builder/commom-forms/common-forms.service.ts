@@ -27,7 +27,6 @@ export class CommonFormService extends BaseFormService {
   public getAddressForm(isEditMode: boolean = false): FormGroup {
 
     const formGroupConfig = {
-      id: [''],
       cep: ['', [Validators.required, Validators.minLength(8)]],
       address: ['', [Validators.required, Validators.minLength(10)]],
       number: ['', [Validators.required]],

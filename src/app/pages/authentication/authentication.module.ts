@@ -1,11 +1,32 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
-import { AuthHeaderComponent } from './components/auth-header/auth-header.component';
 import { AuthRootComponent } from './container/auth-root.component';
+import { AuthHeaderComponent } from './components/auth-header/auth-header.component';
 
 import { ProgressBarModule } from 'primeng/progressbar';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: AuthRootComponent,
+    children: [
+      {
+        path: 'signin',
+        loadChildren: () => import('./features/signin/signin.module')
+      },
+      {
+        path: 'signup',
+        loadChildren: () => import('./features/signup/signup.module')
+      },
+      {
+        path: '**',
+        redirectTo: 'signin'
+      }
+    ]
+  }
+];
 
 @NgModule({
   declarations: [
@@ -15,27 +36,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
   imports: [
     CommonModule,
     ProgressBarModule,
-
-    RouterModule.forChild([
-      {
-        path: '',
-        component: AuthRootComponent,
-        children: [
-          {
-            path: 'signin',
-            loadChildren: () => import('./features/signin/signin.module')
-          },
-          {
-            path: 'signup',
-            loadChildren: () => import('./features/signup/signup.module')
-          },
-          {
-            path: '**',
-            redirectTo: 'signin'
-          }
-        ]
-      }
-    ])
+    RouterModule.forChild(routes)
   ]
 })
 export default class AuthenticationModule { }

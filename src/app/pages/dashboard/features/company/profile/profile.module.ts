@@ -28,15 +28,6 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [
-    BadgeModule,
-    ImageModule,
-    ButtonModule,
-    TooltipModule,
-    TabViewModule,
-    DividerModule,
-    SkeletonModule,
-  ],
   exports: [
     BadgeModule,
     ImageModule,

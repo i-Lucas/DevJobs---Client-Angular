@@ -54,16 +54,6 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [
-    TagModule,
-    ChipModule,
-    ButtonModule,
-    TooltipModule,
-    TabViewModule,
-    InputTextModule,
-    AccordionModule,
-    ConfirmPopupModule,
-  ],
   exports: [
     TagModule,
     ChipModule,

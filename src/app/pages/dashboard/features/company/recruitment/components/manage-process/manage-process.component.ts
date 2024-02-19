@@ -84,6 +84,11 @@ export class ManageProcessComponent implements OnDestroy {
       this.currentProcessStepIdentifier = this.hiringprocess.steps[firstStepIndex].identifier;
       this.currentProcessStepsList = this.hiringprocess.steps;
       this.buildForm();
+
+    } else {
+
+      this.router.navigate(['/dashboard/company/recruitment']);
+
     }
   }
 

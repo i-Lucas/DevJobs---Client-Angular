@@ -1,19 +1,16 @@
 import { Component, OnDestroy } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 
 import { Subject, distinctUntilChanged, takeUntil } from 'rxjs';
 
-import { NewRecruitmentFormService } from '../../services/new-recruitment.service';
 import { HiringListService } from '../../services/hiring-list.service';
+import { NewRecruitmentFormService } from '../../services/new-recruitment.service';
 
-/*
-
-  uma boa ideia para suprimir a dificuldade em editar o tempo mínimo de cada stack é 
-  organizar a lista de candidatos com base na stack do candidato
-
-  ex: lista dos candidatos que possuem + de 1 ano em java .. 
-  dessa forma o recrutador vai ter de forma agrupada os candidatos com base no tempo
-  de experiencia que eles tem em cada stack ( uma lista para cada tempo ( mes, ano ) sorted by > )
+/* 
+  TODO 
+  
+  * Ainda tenho que resolver o problema do recrutador definir um tempo mínimo de experiência em cada stack 
+  
 */
 
 @Component({
@@ -24,58 +21,28 @@ export class NewHiringProcessComponent implements OnDestroy {
 
   protected destroy$ = new Subject<void>();
 
-  protected startNewProcess: boolean = false;
+  protected startNewProcess: boolean = true;
   protected hiringProcessForm: FormGroup | undefined;
 
+  protected workloadList = this.recruitmentFormService.getWorkloadList();
   protected categoryList = this.recruitmentFormService.getCategoryList();
   protected seniorityList = this.recruitmentFormService.getSeniorityList();
   protected contractTypeList = this.recruitmentFormService.getContractTypes();
   protected locationTypeList = this.recruitmentFormService.getLocationTypes();
-  protected workloadList = this.recruitmentFormService.getWorkloadList();
+
+  protected openConfirmationModal: boolean = false;
+
+  // inscrições
+  protected minDate: Date | undefined; 
+  protected maxDate: Date | undefined;
 
   constructor(
-    private formBuilder: FormBuilder,
     private hiringService: HiringListService,
     private recruitmentFormService: NewRecruitmentFormService,
   ) {
 
-    this.hiringProcessForm = this.formBuilder.group({
-
-      // id: [''], 
-
-      title: ['', [Validators.required, Validators.minLength(5)]],
-      description: ['', [Validators.required, Validators.minLength(10)]],
-      category: ['', [Validators.required]], // devops, QA, frontend, backend, fullstack ..
-      seniority: ['', [Validators.required]], // júnior, pleno, sênior ...
-
-      differences: new FormControl<string[]>([]), // lista de diferenciais ex ( Graduação em Telecomunicações )
-
-      stacklist: new FormControl<HiringStackListForm[]>([], [control => this.minArrayLength(control, 3)]), // .. node, typescript, docker
-      requirements: new FormControl<string[]>([], [control => this.minArrayLength(control, 3)]), // ... git,  metodologias ágeis
-      benefits: new FormControl<string[]>([], [control => this.minArrayLength(control, 3)]),  //  ...  plano de saúde, vale refeição
-
-      salaryRange: [''], // faixa salarial ex ( R$ 7.000,00 - R$ 8.000,00 )
-      salaryRange_from: [''],
-      salaryRange_to: [''],
-      negotiable: [true], // salário negociável
-
-      contractType: ['', [Validators.required]], // ...CLT, PJ, Flex, Freelance
-      locationType: ['', [Validators.required]], // ... remoto, híbrido, presencial 
-      workload: ['', [Validators.required]], // ... full-time, meio período 
-
-      enableSuggestions: [true], // autocomplete
-
-      deadline: ['', [Validators.required]], // prazo limite para inscrição,
-      pcd: [false],
-
-      // createdAt: [''],
-      // updatedAt: [''],
-    })
-
-    this.setupEnableSuggestionsListener();
-    this.setupSeniorityListener();
-    this.setupCategoryListener();
-    this.setupNegotiableSalaryListner();
+    this.setupHiringForm();
+    this.setupMinAndMaxCalendarDates(3, 14);
   }
 
   ngOnDestroy(): void {
@@ -83,37 +50,37 @@ export class NewHiringProcessComponent implements OnDestroy {
     this.destroy$.complete();
   }
 
-  // id, createdAt e updatedAt virão do backend
+  protected setupHiringForm() {
 
-  protected save() {
+    this.hiringProcessForm = this.recruitmentFormService.getNewProcessForm();
+    this.setupFormListeners();
+  }
+
+  protected createProcess() {
+
+    this.startNewProcess = false;
+    this.openConfirmationModal = false;
 
     if (this.hiringProcessForm) {
 
       const formData = this.hiringProcessForm.value;
-      // const now = new Date().getTime().toString();
 
+      // id, createdAt e updatedAt virão do backend
       const data: HiringProcessForm = {
         ...formData,
         // id: now,
         // createdAt: now,
         // updatedAt: now,
         salaryRange: this.getFormattedSalaryRange(formData),
-        deadline: this.getFormattedDeadline(formData.deadline),
+        deadline: new Date(formData.deadline).getTime().toString()
       };
 
       console.log(data);
       this.hiringService.addHiringProcess(data);
 
-      // antes de fazer a requisição tem que confirmar ... pois nao vai ser possível editar
-      // depois que a vaga for publicada, nada poderá ser editado .. pq se a galera fizer subscribe e 
-      // os requesitos mudarem .. vai ser compliqued
+      // requisição
 
     }
-  }
-
-  private minArrayLength(control: AbstractControl, minLength: number) {
-    const array = control.value as string[];
-    return array && array.length >= minLength ? null : { minLength: true };
   }
 
   private setupEnableSuggestionsListener(): void {
@@ -238,9 +205,25 @@ export class NewHiringProcessComponent implements OnDestroy {
     return `R$ ${salaryRange_from} - R$ ${salaryRange_to}`;
   }
 
-  private getFormattedDeadline(deadline: string) {
-    return new Date(deadline).getTime().toString();
+  private setupMinAndMaxCalendarDates(min: number, max: number) {
+
+    const today = new Date();
+
+    let minDate = new Date(today);
+    minDate.setDate(today.getDate() + min);
+
+    let maxDate = new Date(today);
+    maxDate.setDate(today.getDate() + max);
+
+    this.minDate = minDate;
+    this.maxDate = maxDate;
+  }
+
+  private setupFormListeners() {
+    this.setupCategoryListener();
+    this.setupSeniorityListener();
+    this.setupNegotiableSalaryListner();
+    this.setupEnableSuggestionsListener();
   }
 
 }
-

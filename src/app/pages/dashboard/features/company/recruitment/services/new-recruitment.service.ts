@@ -1,21 +1,138 @@
 import { Injectable } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 @Injectable()
 export class NewRecruitmentFormService {
 
-  constructor() { }
+  constructor(private formBuilder: FormBuilder) { }
 
-  protected workloadList: DropdownOptionsList[] = [
-    { name: 'Full-Time' },
-    { name: 'Meio Período' },
-    { name: 'Flexível' },
-  ]
+  public getNewProcessForm() {
+    return this.createForm();
+  }
 
   public getWorkloadList() {
     return this.workloadList
   }
 
-  protected categoryList: DropdownOptionsList[] = [
+  public getCategoryList() {
+    return this.categoryList
+  }
+
+  public getSeniorityList() {
+    return this.seniorityList
+  }
+
+  public getSuggestionsDifferentials(): string[] {
+    return this.differentials
+  }
+
+  public getContractTypes() {
+    return this.contractTypeList
+  }
+
+  public getLocationTypes() {
+    return this.locationTypeList
+  }
+
+  public getSuggestionsBenefits(): string[] {
+    return this.benefits
+  }
+
+  public getSuggestionsRequirements(seniority: SeniorityLevels): string[] {
+    return this.requirements[seniority]
+  }
+
+  public getSuggestionsStacklist(category: CategoryList): string[] {
+
+    if (category === 'Full-Stack') {
+
+      return [
+        ...this.stacklist['DevOps'],
+        ...this.stacklist['Back-End'],
+        ...this.stacklist['Front-End'],
+        ...this.stacklist['Banco de Dados']
+      ]
+    }
+
+    else return this.stacklist[category]
+  }
+
+  private createForm() {
+
+    return this.formBuilder.group({
+
+      // id: [''], 
+
+      title: ['', [Validators.required, Validators.minLength(5)]],
+      description: ['', [Validators.required, Validators.minLength(10)]],
+      category: ['', [Validators.required]], // devops, QA, frontend, backend, fullstack ..
+      seniority: ['', [Validators.required]], // júnior, pleno, sênior ...
+
+      differences: new FormControl<string[]>([]), // lista de diferenciais ex ( Graduação em Telecomunicações )
+
+      stacklist: new FormControl<HiringStackListForm[]>([], [control => this.minArrayLength(control, 3)]), // .. node, typescript, docker
+      requirements: new FormControl<string[]>([], [control => this.minArrayLength(control, 3)]), // ... git,  metodologias ágeis
+      benefits: new FormControl<string[]>([], [control => this.minArrayLength(control, 3)]),  //  ...  plano de saúde, vale refeição
+
+      salaryRange: [''], // faixa salarial ex ( R$ 7.000,00 - R$ 8.000,00 )
+      salaryRange_from: [''],
+      salaryRange_to: [''],
+      negotiable: [true], // salário negociável
+
+      contractType: ['', [Validators.required]], // ...CLT, PJ, Flex, Freelance
+      locationType: ['', [Validators.required]], // ... remoto, híbrido, presencial 
+      workload: ['', [Validators.required]], // ... full-time, meio período 
+
+      enableSuggestions: [true], // autocomplete
+
+      deadline: ['', [Validators.required]], // prazo limite para inscrição,
+      pcd: [false],
+
+      // createdAt: [''],
+      // updatedAt: [''],
+    })
+  }
+
+  /*
+  private validateMinMaxDate(minDays: number, maxDays: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const selectedDate = new Date(control.value);
+      const minDate = new Date();
+      const maxDate = new Date();
+      minDate.setDate(minDate.getDate() + minDays);
+      maxDate.setDate(maxDate.getDate() + maxDays);
+      if (selectedDate < minDate) {
+        return { minDate: true };
+      } else if (selectedDate > maxDate) {
+        return { maxDate: true };
+      } else {
+        return null;
+      }
+    };
+  }
+
+  private validateMinDate(days: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const selectedDate = new Date(control.value);
+      const minDate = new Date();
+      minDate.setDate(minDate.getDate() + days);
+      return selectedDate < minDate ? { minDate: true } : null;
+    };
+  }
+  */
+
+  private minArrayLength(control: AbstractControl, minLength: number) {
+    const array = control.value as string[];
+    return array && array.length >= minLength ? null : { minLength: true };
+  }
+
+  private workloadList: DropdownOptionsList[] = [
+    { name: 'Full-Time' },
+    { name: 'Meio Período' },
+    { name: 'Flexível' },
+  ]
+
+  private categoryList: DropdownOptionsList[] = [
     { name: 'Back-End' },
     { name: 'Front-End' },
     { name: 'Full-Stack' },
@@ -30,23 +147,14 @@ export class NewRecruitmentFormService {
     { name: 'Marketing' },
   ]
 
-
-  public getCategoryList() {
-    return this.categoryList
-  }
-
-  protected seniorityList: DropdownOptionsList[] = [
+  private seniorityList: DropdownOptionsList[] = [
     { name: 'Estudante' },
     { name: 'Júnior' },
     { name: 'Pleno' },
     { name: 'Sênior' },
   ]
 
-  public getSeniorityList() {
-    return this.seniorityList
-  }
-
-  protected contractTypeList: DropdownOptionsList[] = [
+  private contractTypeList: DropdownOptionsList[] = [
     { name: 'CLT' },
     { name: 'PJ' },
     { name: 'Flexível' },
@@ -54,19 +162,11 @@ export class NewRecruitmentFormService {
     { name: 'Estágio ' }
   ]
 
-  public getContractTypes() {
-    return this.contractTypeList
-  }
-
-  protected locationTypeList: DropdownOptionsList[] = [
+  private locationTypeList: DropdownOptionsList[] = [
     { name: 'Remoto' },
     { name: 'Híbrido ' },
     { name: 'Presencial' },
   ]
-
-  public getLocationTypes() {
-    return this.locationTypeList
-  }
 
   private differentials = [
     'Certificações relevantes para as tecnologias utilizadas',
@@ -87,10 +187,6 @@ export class NewRecruitmentFormService {
     'Habilidade de aprendizado rápido', 'Pensamento crítico e analítico', 'Participação ativa em meetups, conferências e grupos de desenvolvedores',
   ];
 
-  public getSuggestionsDifferentials(): string[] {
-    return this.differentials
-  }
-
   private benefits: string[] = [
     'Ajuda de Custo', 'Horário Flexível', 'Seguro de Vida', 'Licença Maternidade/Paternidade Estendida',
     'Descontos em Graduações e Pós-graduações', 'Bolsa de 90% para Estudos de Idiomas', 'Home Office',
@@ -102,10 +198,6 @@ export class NewRecruitmentFormService {
     'Day Off no Aniversário', 'Programas de Mentoria', 'Desenvolvimento Profissional Contínuo',
     'Assinatura de Plataformas de Aprendizado Online', 'Benefícios de Academia (Gympass)',
   ]
-
-  public getSuggestionsBenefits(): string[] {
-    return this.benefits
-  }
 
   private stacklist: { [key in CategoryList]: string[] } = {
     'Back-End': [
@@ -165,21 +257,6 @@ export class NewRecruitmentFormService {
     ]
   }
 
-  public getSuggestionsStacklist(category: CategoryList): string[] {
-
-    if (category === 'Full-Stack') {
-
-      return [
-        ...this.stacklist['DevOps'],
-        ...this.stacklist['Back-End'],
-        ...this.stacklist['Front-End'],
-        ...this.stacklist['Banco de Dados']
-      ]
-    }
-
-    else return this.stacklist[category]
-  }
-
   private requirements: { [key in SeniorityLevels]: string[] } = {
     'Estudante': [
       'Disposição para aprender e crescer profissionalmente',
@@ -222,7 +299,4 @@ export class NewRecruitmentFormService {
     ]
   };
 
-  public getSuggestionsRequirements(seniority: SeniorityLevels): string[] {
-    return this.requirements[seniority]
-  }
 }

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {  FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
@@ -38,6 +38,7 @@ import { SharedComponentsModule } from 'app/shared/components/shared-components.
 import { SharedModulesModule } from 'app/shared/modules/shared-modules.module';
 import { ProcessControlPanelComponent } from './components/process-control-panel/process-control-panel.component';
 import { ProcessStepsComponent } from './components/process-steps/process-steps.component';
+import { ProcessTablesListComponent } from './components/process-tables-list/process-tables-list.component';
 
 const routes: Routes = [
   {
@@ -52,31 +53,13 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  declarations: [
-    ManageProcessComponent,
-    RootRecruitmentComponent,
-    NewHiringProcessComponent,
-    ProcessControlPanelComponent,
-    ProcessStepsComponent,
-  ],
-  providers: [
-    NewRecruitmentFormService,
-    HiringListService
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SharedModulesModule,
-    SharedComponentsModule,
-
-    DragDropModule,
-
+  exports: [
     TagModule,
     MenuModule,
     ChipsModule,
     PanelModule,
     TableModule,
+    AvatarModule,
     ButtonModule,
     DividerModule,
     TooltipModule,
@@ -85,16 +68,37 @@ const routes: Routes = [
     FieldsetModule,
     AccordionModule,
     CalendarModule,
-    KeyFilterModule,
     InputTextModule,
+    KeyFilterModule,
     InputSwitchModule,
+    AvatarGroupModule,
     InputNumberModule,
     SelectButtonModule,
     InputTextareaModule,
+  ]
+}) export class PrimeModule { }
 
-    AvatarModule,
-    AvatarGroupModule,
-
+@NgModule({
+  declarations: [
+    ProcessStepsComponent,
+    ManageProcessComponent,
+    RootRecruitmentComponent,
+    NewHiringProcessComponent,
+    ProcessTablesListComponent,
+    ProcessControlPanelComponent,
+  ],
+  providers: [
+    HiringListService,
+    NewRecruitmentFormService,
+  ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    PrimeModule,
+    DragDropModule,
+    ReactiveFormsModule,
+    SharedModulesModule,
+    SharedComponentsModule,
     RouterModule.forChild(routes)
   ]
 })

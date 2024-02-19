@@ -37,15 +37,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    AvatarModule,
-    ButtonModule,
-    SidebarModule,
-    SkeletonModule,
-    InputTextModule,
-    TieredMenuModule,
-    ProgressBarModule,
-  ],
   exports: [
     AvatarModule,
     ButtonModule,
@@ -60,8 +51,8 @@ export class PrimeModule { }
 
 @NgModule({
   declarations: [
-    DashboardHeaderComponent,
     DashboardRootComponent,
+    DashboardHeaderComponent,
     DashboardSidebarComponent
   ],
   providers: [

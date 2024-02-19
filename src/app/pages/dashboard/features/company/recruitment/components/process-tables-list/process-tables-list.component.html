@@ -1,0 +1,93 @@
+@if (hiringList.length > 0) {
+
+    <section class="my-8">
+
+        <div class="flex gap-2 justify-content-center align-items-center mb-6">
+            <h1>Processos em andamento</h1>
+            <i pTooltip="Clique em um processo da lista para gerencia-lo" class="material-icons cursor-pointer">help</i>
+        </div>
+    
+        <p-table 
+            [value]="hiringList"
+            [breakpoint]="'960px'" 
+            responsiveLayout="stack" 
+            [styleClass]="'p-datatable-striped p-datatable-sm'">
+    
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="text-sm">Título</th>
+                    <th class="text-sm">Categoria</th>
+                    <th class="text-sm">Senioridade</th>
+                    <th class="text-sm">Candidatos</th>
+                    <th class="text-sm">Responsável</th>
+                    <th class="text-sm">Início</th>
+                    <th class="text-sm">Atualização</th>
+                    <th class="text-sm">Encerramento</th>
+                    <th class="text-sm">Status</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-process>
+    
+                <tr [routerLink]="['/dashboard/company/recruitment/', process.id]"
+                    class="hover:bg-primary cursor-pointer">
+    
+                    <td class="text-xs lg:text-base">
+                        <span class="my-3 text-xs font-bold p-column-title">Título</span>
+                        <p class="text-xs">{{process.title}}</p>
+                    </td>
+    
+                    <td class="text-xs lg:text-base">
+                        <span class="my-3 text-xs font-bold p-column-title">Categoria</span>
+                        <p class="text-xs">{{process.category}}</p>
+                    </td>
+    
+                    <td class="text-xs lg:text-base">
+                        <span class="my-3 text-xs font-bold p-column-title">Senioridade</span>
+                        <p class="text-xs">{{process.seniority}}</p>
+                    </td>
+    
+                    <td class="text-xs lg:text-base">
+                        <span class="my-3 text-xs font-bold p-column-title">Candidatos</span>                        
+                        <p class="text-xs">{{process.subscribersCount}}</p>
+                    </td>
+    
+                    <td class="text-xs lg:text-base">
+                        <span class="my-3 text-xs font-bold p-column-title">Responsável</span>                        
+                        <p class="text-xs">{{process.recruiter}}</p>
+                    </td>
+    
+                    <td class="text-xs lg:text-base">
+                        <span class="my-3 text-xs font-bold p-column-title">Início</span>
+                        <p class="text-xs">{{process.createdAt | DD_MM_YYYY}}</p>
+                    </td>
+    
+                    <td class="text-xs lg:text-base">
+                        <span class="my-3 text-xs font-bold p-column-title">Atualização</span>
+                        <p class="text-xs">{{process.updatedAt | DD_MM_YYYY}}</p>
+                    </td>
+    
+                    <td class="text-xs lg:text-base">
+                        <span class="my-3 text-xs font-bold p-column-title">Encerramento</span>
+                        <p class="text-xs">{{process.deadline | DD_MM_YYYY}}</p>
+                    </td>
+    
+                    <td>
+                        <span class="my-3 text-xs font-bold p-column-title">Status</span>
+                        <p-tag class="text-lg"
+                            [value]="getLabel(process.steps[currentProcessStepIndex].identifier)"
+                            [styleClass]="getSeverity(process.steps[currentProcessStepIndex].identifier)"
+                        />
+                    </td>
+    
+                </tr>
+            </ng-template>
+        </p-table>
+    
+    </section>
+
+} @else {
+
+    <section class="my-8">
+        <h4>Nenhum processo seletivo foi encontrado.</h4>
+    </section>
+}

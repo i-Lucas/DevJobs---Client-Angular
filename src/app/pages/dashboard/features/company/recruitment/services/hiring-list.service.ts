@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable()
 export class HiringListService {
 
-  private mock = this.getMockList(10);
+  private mock = this.getMockList(50);
   private hiringList: BehaviorSubject<HiringProcess[]> = new BehaviorSubject<HiringProcess[]>(this.mock);
 
   public getHiringList(): Observable<HiringProcess[]> {
@@ -41,7 +41,20 @@ export class HiringListService {
       steps: [
         {
           identifier: 'OPEN_FOR_APPLICATIONS',
-          candidatesLists: []
+          candidatesLists: [
+            {
+              id: 'OPEN_FOR_APPLICATIONS_Inscritos',
+              name: 'Inscritos',
+              candidates: [],
+              description: 'Lista dos candidatos inscritos na vaga.'
+            },
+            {
+              id: 'OPEN_FOR_APPLICATIONS_Qualificados',
+              candidates: [],
+              name: 'Qualificados',
+              description: 'Lista dos candidatos qualificados para a próxima etapa.'
+            },
+          ]
         }
       ]
     };
@@ -126,9 +139,8 @@ export class HiringListService {
       case 'FROZEN':
         return 'bg-red-400';
     }
-
   }
-
+  
   private getProcessStepIndex() {
 
     const hiringProcessStatusTranslations: Record<HiringProcessSteps, number> = {

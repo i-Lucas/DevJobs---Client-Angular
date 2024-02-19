@@ -1,10 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { ButtonModule } from 'primeng/button';
 
 import { RootDeveloperHomeComponent } from './components/root-developer-home/root-developer-home.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: RootDeveloperHomeComponent
+  }
+];
 
 @NgModule({
   declarations: [
@@ -12,15 +19,8 @@ import { RootDeveloperHomeComponent } from './components/root-developer-home/roo
   ],
   imports: [
     CommonModule,
-
     ButtonModule,
-
-    RouterModule.forChild([
-      {
-        path: '',
-        component: RootDeveloperHomeComponent
-      }
-    ]),
+    RouterModule.forChild(routes),
   ]
 })
 export default class HomeModule { }

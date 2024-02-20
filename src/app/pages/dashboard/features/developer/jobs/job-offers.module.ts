@@ -11,6 +11,7 @@ import { DividerModule } from 'primeng/divider';
 
 import { RootJobsComponent } from './components/root-offers/root-jobs.component';
 import { SearchPanelComponent } from './components/search-panel/search-panel.component';
+import { JobOfferPageComponent } from './components/job-offer-page/job-offer-page.component';
 
 import { JobOfferService } from './services/job-offer.service';
 
@@ -18,13 +19,18 @@ const routes: Routes = [
   {
     path: '',
     component: RootJobsComponent
+  },
+  {
+    path: ':id',
+    component: JobOfferPageComponent
   }
 ]
 
 @NgModule({
   declarations: [
     RootJobsComponent,
-    SearchPanelComponent
+    SearchPanelComponent,
+    JobOfferPageComponent
   ],
   imports: [
     CommonModule,

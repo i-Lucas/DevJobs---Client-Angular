@@ -1,4 +1,4 @@
-<main class="flex flex-column gap-4 md:flex-row-reverse min-h-screen">
+<main class="flex flex-column gap-4 md:flex-row-reverse min-h-screen p-4">
 
     <section class="md:max-w-23rem border-round pb-2">
 
@@ -23,6 +23,8 @@
 
     </section>
 
+    <p-divider class="hidden lg:block" layout="vertical" />
+
     <section class="w-full p-4 border-round">
 
         @if (loading) {
@@ -40,6 +42,7 @@
         }
         
     </section>
+    
 </main>
 
 @if(enableEditingMode) {

@@ -1,0 +1,84 @@
+<main class="p-4">
+
+    <section>
+        <jobs-search-panel />
+    </section>
+
+    <section>
+
+        <div class="flex flex-column align-items-center gap-6">
+
+            @for (offer of jobOffersList; track offer;) {
+
+                <section class="app-border border-round	pt-5 pb-3 px-8 w-9">
+
+                    <div class="flex flex-column gap-5">
+
+                        <div class="flex align-items-center justify-content-between">
+
+                            <div class="flex align-items-center gap-6">
+
+                                <p-image alt="Image" imageClass="h-8rem" src={{offer.picture}} />
+
+                                <div class="flex flex-column gap-3">
+
+                                    <span class="font-bold">{{offer.title}}</span>
+
+                                    <div class="flex align-items-center gap-2 text-sm">
+                                        <i class="material-icons">apartment</i>
+                                        <span>{{offer.company}}</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div pTooltip={{formatListWithLineBreaks(offer.stacklist)}} class="flex flex-wrap gap-2 w-5">
+                                @for (stack of offer.stacklist.slice(0, 15); track stack) {
+                                    <p-chip styleClass="text-xs" label={{stack}} />                                    
+                                }
+                            </div>
+
+                            <div>
+                                <button pButton pRipple label="Ver Vaga" icon="pi pi-eye"></button>
+                            </div>
+
+                        </div>
+
+                        <div>
+
+                            <div>
+
+                                <div class="flex gap-4 text-sm align-items-center">
+
+                                    <div class="flex align-items-center">
+                                        <i class="pi pi-users mr-2"></i>
+                                        <span>{{offer.seniority}}</span>
+                                    </div>
+
+                                    <div class="flex align-items-center gap-2">
+                                        <i class="pi pi-map-marker"></i>
+                                        <span>{{offer.location}}</span>
+                                    </div>
+
+                                    <div class="flex align-items-center">
+                                        <i class="material-icons">attach_money</i>
+                                        <span>{{offer.salaryRange}}</span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            }
+
+        </div>
+
+    </section>
+
+</main>

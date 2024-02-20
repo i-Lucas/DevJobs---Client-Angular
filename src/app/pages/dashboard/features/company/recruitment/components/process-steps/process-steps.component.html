@@ -18,16 +18,25 @@
                     <p-accordionTab> 
                     
                         <ng-template pTemplate="header">
-                            <section class="flex w-full align-items-center justify-content-between px-4">
+                            <section class="flex w-full align-items-center justify-content-between pl-4">
+
+                            <div class="flex align-items-center gap-2">
+
+                                <p-tag class="text-lg"
+                                    [value]="getLabel(step.identifier)"
+                                    [styleClass]="getSeverity(step.identifier)"
+                                />
+    
+                                @if (checkIfIsCurrentStep(step.identifier)) {
+                                    <p-tag icon="pi pi-verified" value="Etapa Atual" />
+                                }
+
+                            </div>
 
                             <p-tag class="text-lg"
-                                [value]="getLabel(step.identifier)"
+                                [value]="'Etapa ' + getStepIndex(step.identifier)"
                                 [styleClass]="getSeverity(step.identifier)"
                             />
-
-                            @if (checkIfIsCurrentStep(step.identifier)) {
-                                <p-tag severity="success" value="Etapa Atual" />            
-                            }
 
                             </section>
                         </ng-template>

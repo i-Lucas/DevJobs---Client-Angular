@@ -1,12 +1,15 @@
 <main class="min-h-screen p-4">
 
     <section>
-        <company-new-hiring-process />
+        <company-new-hiring-process 
+            [loading]="loading"
+        />
     </section>
 
     <section>
 
         <process-tables-list 
+            [loading]="loading"
             [hiringList]="hiringList"
         />
         

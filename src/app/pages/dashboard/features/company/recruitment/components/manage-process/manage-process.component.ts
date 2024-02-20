@@ -5,7 +5,7 @@ import { ActivatedRoute, NavigationCancel, Router } from '@angular/router';
 
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 
-import { HiringListService } from '../../services/hiring-list.service';
+import { HiringProcessService } from '../../services/process/hiring-process.service';
 import { CommonComponentService } from '@app-services/components/base-component.service';
 
 @Component({
@@ -19,9 +19,9 @@ export class ManageProcessComponent implements OnDestroy {
   protected hiringprocess: HiringProcess | undefined;
   protected panelControlForm: FormGroup | undefined;
 
+  protected currentProcessStepIndex: number | undefined; // armazenar o índice da etapa atual
   protected currentProcessStepsList: ProcessStepsList[] | undefined // lista com todos as etapas do processo atual
   protected currentProcessStepIdentifier: HiringProcessSteps | undefined; // armazenar o nome da etapa atual do processo
-  protected currentProcessStepIndex: number | undefined; // armazenar o índice da etapa atual
 
   // previnir que o usuário mude de página sem salvar alterações
   protected unsavedThings = [];
@@ -37,7 +37,7 @@ export class ManageProcessComponent implements OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private hiringService: HiringListService,
+    private hiringService: HiringProcessService,
     private componentService: CommonComponentService,
   ) {
 

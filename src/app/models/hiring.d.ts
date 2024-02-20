@@ -7,6 +7,22 @@ type CategoryList =
   'Design/UI' | 'Design/UX' |
   'Gestão em TI' | 'Marketing'
 
+type HiringProcessSteps =
+  | 'OPEN_FOR_APPLICATIONS'   // Vaga aberta para candidaturas
+  | 'RESUME_SCREENING'        // Triagem inicial de currículos
+  | 'INTERVIEW_SELECTION'     // Seleção de candidatos para entrevistas
+  | 'INITIAL_INTERVIEWS'      // Entrevistas iniciais
+  | 'TECHNICAL_ASSESSMENT'    // Avaliação técnica ou desafio de programação
+  | 'FINAL_INTERVIEWS'        // Entrevistas finais
+  | 'BEHAVIORAL_ASSESSMENT'   // Avaliação de habilidades comportamentais
+  | 'PROJECT_CHALLENGE'       // Desafio de projeto ou prático
+  | 'MANAGER_INTERVIEWS'      // Entrevistas com líderes ou gestores
+  | 'REFERENCE_CHECK'         // Verificação de referências
+  | 'JOB_OFFER'               // Oferta de emprego
+  | 'PROCESS_COMPLETED'       // Processo de contratação concluído
+  | 'CANCELLED'               // Processo de contratação cancelado
+  | 'FROZEN';                 // Processo de contratação congelado ou suspenso temporariamente
+
 interface HiringStackListForm {
   name: string;
   workload: string;
@@ -72,21 +88,18 @@ interface HiringDeveloperSubscriber {
   profileId: string;
 }
 
-type HiringProcessSteps =
-  | 'OPEN_FOR_APPLICATIONS'   // Vaga aberta para candidaturas
-  | 'RESUME_SCREENING'        // Triagem inicial de currículos
-  | 'INTERVIEW_SELECTION'     // Seleção de candidatos para entrevistas
-  | 'INITIAL_INTERVIEWS'      // Entrevistas iniciais
-  | 'TECHNICAL_ASSESSMENT'    // Avaliação técnica ou desafio de programação
-  | 'FINAL_INTERVIEWS'        // Entrevistas finais
-  | 'BEHAVIORAL_ASSESSMENT'   // Avaliação de habilidades comportamentais
-  | 'PROJECT_CHALLENGE'       // Desafio de projeto ou prático
-  | 'MANAGER_INTERVIEWS'      // Entrevistas com líderes ou gestores
-  | 'REFERENCE_CHECK'         // Verificação de referências
-  | 'JOB_OFFER'               // Oferta de emprego
-  | 'PROCESS_COMPLETED'       // Processo de contratação concluído
-  | 'CANCELLED'               // Processo de contratação cancelado
-  | 'FROZEN';                 // Processo de contratação congelado ou suspenso temporariamente
+type HiringProcessStepMenuOptions = 'NEW_LIST' | 'SAVE_LIST' | 'HELP';
 
+// ---------------------------------------------------------------------------------------------------------------------
 
-  type HiringProcessStepMenuOptions = 'NEW_LIST' | 'SAVE_LIST' | 'HELP';
+interface NewHiringProcessResponse {
+
+  stepId: string;
+  processId: string;
+  recruiter: string;
+
+  defaultLists: {
+    qualifiedListId: string;
+    subscribersListId: string;
+  }
+}

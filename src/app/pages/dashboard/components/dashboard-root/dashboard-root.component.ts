@@ -5,10 +5,10 @@ import { HttpService } from '@app-services/http/http.service';
 import { AppStateService } from '@app-services/app/app.service';
 import { ThemeService } from '@app-services/theme/theme.service';
 import { AuthenticationService } from '@app-services/auth/auth.service';
-
-import { DashboardService } from '../../services/dashboard.service';
 import { CommonComponentService } from '@app-services/components/base-component.service';
+
 import { SidebarService } from '../../services/sidebar.service';
+import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard-root',
@@ -58,8 +58,7 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
 
   private getAccountData() {
     this.httpService.get<ApiResponse<GetAccountDataResponse>>('/account/get-account-data')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
+      .pipe(takeUntil(this.destroy$)).subscribe({
         next: (response) => this.handleGetAccountResponse(response),
         error: (error) => this.handleGetAccountError(error)
       })

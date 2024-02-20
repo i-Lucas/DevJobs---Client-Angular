@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-import { HiringListService } from '../../services/hiring-list.service';
+import { HiringProcessService } from '../../services/process/hiring-process.service';
 
 @Component({
   selector: 'process-control-panel',
@@ -15,7 +15,7 @@ export class ProcessControlPanelComponent {
 
   protected hiringProcessStatusLabels = this.hiringService.getHiringProcessDropDownLabels(); // preencher dropdown de alterar etapa
 
-  constructor(private hiringService: HiringListService) { }
+  constructor(private hiringService: HiringProcessService) { }
 
   protected getLabel(step: HiringProcessSteps) {
     return this.hiringService.getLabel(step);

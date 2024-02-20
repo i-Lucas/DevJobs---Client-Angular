@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
 
-import { HiringListService } from '../../services/hiring-list.service';
+import { HiringProcessService } from '../../services/process/hiring-process.service';
 import { CommonComponentService } from '@app-services/components/base-component.service';
 
 @Component({
@@ -21,7 +21,7 @@ export class ProcessStepsComponent {
 
   constructor(
     private router: Router,
-    private hiringService: HiringListService,
+    private hiringService: HiringProcessService,
     private componentService: CommonComponentService,
   ) { }
 
@@ -38,6 +38,10 @@ export class ProcessStepsComponent {
   protected getLabel(step: HiringProcessSteps) {
     return this.hiringService.getLabel(step);
   }
+
+  protected getStepIndex(step: HiringProcessSteps) {
+    return this.hiringService.getIndex(step);
+  }  
 
   protected getSeverity(step: HiringProcessSteps) {
     return this.hiringService.getSeverity(step);

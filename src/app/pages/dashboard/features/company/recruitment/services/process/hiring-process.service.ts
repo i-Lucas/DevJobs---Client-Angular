@@ -1,79 +1,156 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
+
+import { HttpService } from '@app-services/http/http.service';
+import { CommonComponentService } from '@app-services/components/base-component.service';
 
 @Injectable()
-export class HiringListService {
+export class HiringProcessService implements OnDestroy {
 
-  private mock = this.getMockList(50);
-  private hiringList: BehaviorSubject<HiringProcess[]> = new BehaviorSubject<HiringProcess[]>(this.mock);
+  private destroy$ = new Subject<void>();
+  private localLoading = new BehaviorSubject<boolean>(false);
+
+  // private mock = this.getMockList(0);
+  private hiringList: BehaviorSubject<HiringProcess[]> = new BehaviorSubject<HiringProcess[]>([]);
+
+  constructor(
+    private httpService: HttpService,
+    private componentService: CommonComponentService
+  ) {
+
+    this.getCompanyHiringProcessList();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   public getHiringList(): Observable<HiringProcess[]> {
     return this.hiringList.asObservable();
   }
 
-  public getHiringProcessById(id: string): HiringProcess | undefined {
-    const hiringList = this.hiringList.getValue();
-    return hiringList.find(process => process.id === id);
+  public getLoading(): Observable<boolean> {
+    return this.localLoading.asObservable();
   }
 
-  public addHiringProcess(hiringProcess: HiringProcessForm): void {
+  public getHiringProcessById(id: string): HiringProcess | undefined {
+    return this.hiringList.getValue().find(process => process.id === id);
+  }
 
-    const currentList = this.hiringList.getValue();
-    const now = new Date().getTime().toString();
+  // -------------------------------------------------------------------------------------------------------------------
 
-    const newProcess: HiringProcess = {
+  public addHiringProcess(formData: HiringProcessForm): Promise<boolean> {
 
-      ...hiringProcess,
+    const {
+      title, description, category, seniority, salaryRange, negotiable, contractType, locationType,
+      workload, deadline, pcd, benefits, differences, requirements, stacklist
+    } = formData;
 
-      createdAt: now,
-      updatedAt: now,
-      id: now,
-
-      subscribersCount: 0,
-      recruiter: 'lucas@dev.com',
-
-      // importante: sempre criar um novo processo com a etapa 'OPEN_FOR_APPLICATIONS'
-      // para o array de steps ter pelo menos 1 item
-
-      // sempre usar o unshift ao mudar de etapa, pois a etapa mais recente deve ser sempre 
-      // o primeiro item da lista de etapas
-
-      steps: [
-        {
-          identifier: 'OPEN_FOR_APPLICATIONS',
-          candidatesLists: [
-            {
-              id: 'OPEN_FOR_APPLICATIONS_Inscritos',
-              name: 'Inscritos',
-              candidates: [],
-              description: 'Lista dos candidatos inscritos na vaga.'
-            },
-            {
-              id: 'OPEN_FOR_APPLICATIONS_Qualificados',
-              candidates: [],
-              name: 'Qualificados',
-              description: 'Lista dos candidatos qualificados para a próxima etapa.'
-            },
-          ]
-        }
-      ]
+    const body = {
+      title, description, category, seniority, salaryRange, negotiable, contractType, locationType,
+      workload, deadline, pcd, benefits, differences, requirements, stacklist
     };
 
-    currentList.push(newProcess);
-    this.hiringList.next(currentList);
+    return new Promise((resolve, reject) => {
+
+      this.updateLoading(true);
+      this.httpService.post<ApiResponse<NewHiringProcessResponse>>('/hiring/new', body)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response) => {
+            this.handleNewHiringProcessResponse(response, formData);
+            this.updateLoading(false);
+            resolve(true);
+          },
+          error: (error) => {
+            this.showErrorMessage(error);
+            this.updateLoading(false);
+            reject(error);
+          }
+        });
+    });
   }
 
-  public updateHiringProcess(updatedProcess: HiringProcess): void {
+  // public addHiringProcess(formData: HiringProcessForm): void {
 
-    const currentList = this.hiringList.getValue();
-    const indexToUpdate = currentList.findIndex((process) => process.id === updatedProcess.id);
+  //   const {
+  //     title, description, category, seniority, salaryRange, negotiable, contractType, locationType,
+  //     workload, deadline, pcd, benefits, differences, requirements, stacklist
+  //   } = formData;
 
-    if (indexToUpdate !== -1) {
-      currentList[indexToUpdate] = updatedProcess;
+  //   const body = {
+  //     title, description, category, seniority, salaryRange, negotiable, contractType, locationType,
+  //     workload, deadline, pcd, benefits, differences, requirements, stacklist
+  //   };
+
+  //   this.updateLoading(true);
+  //   this.httpService.post<ApiResponse<NewHiringProcessResponse>>('/hiring/new', body)
+  //     .pipe(takeUntil(this.destroy$))
+  //     .subscribe({
+  //       next: (response) => {
+  //         this.handleNewHiringProcessResponse(response, formData);
+  //         this.updateLoading(false);
+
+  //       },
+  //       error: (error) => {
+  //         this.showErrorMessage(error);
+  //         this.updateLoading(false);
+  //       }
+  //     });
+  // }
+
+  private handleNewHiringProcessResponse({ message, data }: ApiResponse<NewHiringProcessResponse>, formData: HiringProcessForm) {
+
+    if (data) {
+
+      this.componentService.showMessage({ type: 'success', detail: message });
+      const newProcess = this.createClientHiringProcess(formData, data);
+
+      const currentList = [...this.hiringList.getValue(), newProcess];
       this.hiringList.next(currentList);
     }
   }
 
+  private createClientHiringProcess(formData: HiringProcessForm, data: NewHiringProcessResponse): HiringProcess {
+
+    const now = new Date().getTime().toString();
+
+    const defaultLists: HiringProcessStepLists[] = [
+      {
+        id: data.defaultLists.subscribersListId,
+        candidates: [],
+        name: 'Inscritos',
+        description: 'Lista dos candidatos inscritos na vaga.'
+      },
+      {
+        id: data.defaultLists.qualifiedListId,
+        candidates: [],
+        name: 'Qualificados',
+        description: 'Lista dos candidatos qualificados para a próxima etapa.'
+      },
+    ]
+
+    return {
+
+      ...formData,
+      createdAt: now,
+      updatedAt: now,
+      id: data.processId,
+      subscribersCount: 0,
+      recruiter: data.recruiter,
+      steps: [
+        {
+          identifier: 'OPEN_FOR_APPLICATIONS',
+          candidatesLists: defaultLists
+        }
+      ]
+    };
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+
+  /*
   // elegant
   public updateField(processId: string, fieldName: keyof HiringProcess, value: HiringProcess[keyof HiringProcess]): void {
     const currentList = this.hiringList.getValue();
@@ -84,6 +161,7 @@ export class HiringListService {
       this.hiringList.next(currentList);
     }
   }
+  */
 
   public addProcessStepList(processId: string, stepIndex: number, stepdata: HiringProcessStepLists) {
 
@@ -96,7 +174,6 @@ export class HiringListService {
       currentStep.candidatesLists.push(stepdata);
       this.hiringList.next(currentList);
     }
-
   }
 
   public getHiringProcessDropDownLabels(): { name: string; color: string }[] {
@@ -106,9 +183,14 @@ export class HiringListService {
     }))
   }
 
-  public getLabel(status: HiringProcessSteps) {
+  public getLabel(step: HiringProcessSteps) {
     const hiringProcessStatusTranslations = this.getProcessStepLabel();
-    return hiringProcessStatusTranslations[status];
+    return hiringProcessStatusTranslations[step];
+  }
+
+  public getIndex(step: HiringProcessSteps) {
+    const hiringProcessHashIndex = this.getProcessStepIndex();
+    return hiringProcessHashIndex[step];
   }
 
   public getSeverity(step: HiringProcessSteps) {
@@ -140,27 +222,36 @@ export class HiringListService {
         return 'bg-red-400';
     }
   }
-  
-  private getProcessStepIndex() {
 
-    const hiringProcessStatusTranslations: Record<HiringProcessSteps, number> = {
-      OPEN_FOR_APPLICATIONS: 0,
-      RESUME_SCREENING: 1,
-      INTERVIEW_SELECTION: 2,
-      INITIAL_INTERVIEWS: 3,
-      TECHNICAL_ASSESSMENT: 4,
-      FINAL_INTERVIEWS: 5,
-      BEHAVIORAL_ASSESSMENT: 6,
-      PROJECT_CHALLENGE: 7,
-      MANAGER_INTERVIEWS: 8,
-      REFERENCE_CHECK: 9,
-      JOB_OFFER: 10,
-      PROCESS_COMPLETED: 11,
-      CANCELLED: 12,
-      FROZEN: 13
-    };
+  private getCompanyHiringProcessList() {
 
-    return hiringProcessStatusTranslations
+    this.updateLoading(true);
+    this.httpService.get<ApiResponse<any>>('/hiring/get')
+      .pipe(takeUntil(this.destroy$)).subscribe({
+        next: (response) => {
+          this.handleHiringProcessResponse(response);
+          this.updateLoading(false);
+        },
+        error: (error) => {
+          this.showErrorMessage(error);
+          this.updateLoading(false);
+        }
+      });
+  }
+
+  private handleHiringProcessResponse({ message, data }: ApiResponse<{ processList: HiringProcess[] }>) {
+
+    if (data) {
+
+      this.hiringList.next([...data.processList]);
+      this.componentService.showMessage({ type: 'success', detail: message });
+
+    } else {
+
+      // nenhum processo encontrado
+      this.componentService.showMessage({ type: 'info', detail: message });
+    }
+
   }
 
   private getProcessStepLabel() {
@@ -183,6 +274,37 @@ export class HiringListService {
     };
 
     return hiringProcessStatusTranslations
+  }
+
+  private getProcessStepIndex() {
+
+    const hiringProcessStatusTranslations: Record<HiringProcessSteps, number> = {
+      OPEN_FOR_APPLICATIONS: 0,
+      RESUME_SCREENING: 1,
+      INTERVIEW_SELECTION: 2,
+      INITIAL_INTERVIEWS: 3,
+      TECHNICAL_ASSESSMENT: 4,
+      FINAL_INTERVIEWS: 5,
+      BEHAVIORAL_ASSESSMENT: 6,
+      PROJECT_CHALLENGE: 7,
+      MANAGER_INTERVIEWS: 8,
+      REFERENCE_CHECK: 9,
+      JOB_OFFER: 10,
+      PROCESS_COMPLETED: 11,
+      CANCELLED: 12,
+      FROZEN: 13
+    };
+
+    return hiringProcessStatusTranslations
+  }
+
+  private showErrorMessage(error: ApiError) {
+    console.error(error);
+    this.componentService.showMessage({ type: 'error', detail: error.message });
+  }
+
+  private updateLoading(state: boolean) {
+    this.localLoading.next(state);
   }
 
   private getMockList(number: number): HiringProcess[] {

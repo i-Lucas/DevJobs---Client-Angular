@@ -1,10 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
 
 import { Subject, distinctUntilChanged, takeUntil } from 'rxjs';
 
-import { HiringListService } from '../../services/hiring-list.service';
-import { NewRecruitmentFormService } from '../../services/new-recruitment.service';
+import { HiringProcessService } from '../../services/process/hiring-process.service';
+import { HiringProcessFormService } from '../../services/form/new-process.form.service';
 
 /* 
   TODO 
@@ -19,9 +19,10 @@ import { NewRecruitmentFormService } from '../../services/new-recruitment.servic
 })
 export class NewHiringProcessComponent implements OnDestroy {
 
+  @Input() loading: boolean = false;
   protected destroy$ = new Subject<void>();
 
-  protected startNewProcess: boolean = true;
+  protected startNewProcess: boolean = false;
   protected hiringProcessForm: FormGroup | undefined;
 
   protected workloadList = this.recruitmentFormService.getWorkloadList();
@@ -33,12 +34,12 @@ export class NewHiringProcessComponent implements OnDestroy {
   protected openConfirmationModal: boolean = false;
 
   // inscrições
-  protected minDate: Date | undefined; 
+  protected minDate: Date | undefined;
   protected maxDate: Date | undefined;
 
   constructor(
-    private hiringService: HiringListService,
-    private recruitmentFormService: NewRecruitmentFormService,
+    private hiringService: HiringProcessService,
+    private recruitmentFormService: HiringProcessFormService,
   ) {
 
     this.setupHiringForm();
@@ -58,29 +59,26 @@ export class NewHiringProcessComponent implements OnDestroy {
 
   protected createProcess() {
 
-    this.startNewProcess = false;
-    this.openConfirmationModal = false;
+    const finish = () => {
+      this.startNewProcess = false;
+      this.openConfirmationModal = false;
+    };
 
     if (this.hiringProcessForm) {
 
       const formData = this.hiringProcessForm.value;
 
-      // id, createdAt e updatedAt virão do backend
       const data: HiringProcessForm = {
         ...formData,
-        // id: now,
-        // createdAt: now,
-        // updatedAt: now,
         salaryRange: this.getFormattedSalaryRange(formData),
         deadline: new Date(formData.deadline).getTime().toString()
       };
 
-      console.log(data);
-      this.hiringService.addHiringProcess(data);
-
-      // requisição
-
+      this.hiringService.addHiringProcess(data)
+        .then(() => finish())
+        .catch((error: ApiError) => finish());
     }
+
   }
 
   private setupEnableSuggestionsListener(): void {

@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 
-import { HiringListService } from '../../services/hiring-list.service';
+import { HiringProcessService } from '../../services/process/hiring-process.service';
 
 @Component({
   selector: 'company-root-recruitment',
@@ -9,15 +9,19 @@ import { HiringListService } from '../../services/hiring-list.service';
 })
 export class RootRecruitmentComponent implements OnDestroy {
 
+  protected loading: boolean = false;
   protected destroy$ = new Subject<void>();
-
   protected hiringList: HiringProcess[] = [];
 
-  constructor(private hiringService: HiringListService) {
+  constructor(private hiringService: HiringProcessService) {
 
     this.hiringService.getHiringList()
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => this.hiringList = list);
+
+    this.hiringService.getLoading()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(state => this.loading = state);
   }
 
   ngOnDestroy() {

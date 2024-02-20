@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { HiringListService } from '../../services/hiring-list.service';
+import { HiringProcessService } from '../../services/process/hiring-process.service';
 
 @Component({
   selector: 'process-tables-list',
@@ -7,12 +7,13 @@ import { HiringListService } from '../../services/hiring-list.service';
 })
 export class ProcessTablesListComponent {
 
+  @Input() loading: boolean = false;
   @Input() hiringList: HiringProcess[] = [];
 
   // a etapa atual do processo sempre será o primeiro item do array de etapas
   protected currentProcessStepIndex: number = 0;
 
-  constructor(private hiringService: HiringListService) { }
+  constructor(private hiringService: HiringProcessService) { }
 
   protected getLabel(step: HiringProcessSteps) {
     return this.hiringService.getLabel(step);

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { TagModule } from 'primeng/tag';
 import { MenuModule } from 'primeng/menu';
@@ -23,12 +23,13 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 
-import { HiringListService } from './services/hiring-list.service';
-import { NewRecruitmentFormService } from './services/new-recruitment.service';
+import { HiringProcessService } from './services/process/hiring-process.service';
+import { HiringProcessFormService } from './services/form/new-process.form.service';
 
 import { ManageProcessComponent } from './components/manage-process/manage-process.component';
 import { RootRecruitmentComponent } from './components/root-recruitment/root-recruitment.component';
@@ -75,6 +76,7 @@ const routes: Routes = [
     InputNumberModule,
     SelectButtonModule,
     InputTextareaModule,
+    ProgressSpinnerModule
   ]
 }) export class PrimeModule { }
 
@@ -88,8 +90,8 @@ const routes: Routes = [
     ProcessControlPanelComponent,
   ],
   providers: [
-    HiringListService,
-    NewRecruitmentFormService,
+    HiringProcessService,
+    HiringProcessFormService,
   ],
   imports: [
     CommonModule,

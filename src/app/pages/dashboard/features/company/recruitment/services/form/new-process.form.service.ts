@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 @Injectable()
-export class NewRecruitmentFormService {
+export class HiringProcessFormService {
 
   constructor(private formBuilder: FormBuilder) { }
 

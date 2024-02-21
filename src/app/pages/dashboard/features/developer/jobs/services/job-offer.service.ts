@@ -45,7 +45,7 @@ export class JobOfferService {
           workload: 'Fulltime',
           contractType: 'CLT',
 
-          description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Possimus cumque in mollitia perferendis. Ab minima enim eligendi corporis corrupti, exercitationem fuga possimus numquam suscipit aliquid nihil, vel optio facilis laboriosam. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Possimus cumque in mollitia perferendis. Ab minima enim eligendi corporis corrupti, exercitationem fuga possimus numquam suscipit aliquid nihil, vel optio facilis laboriosam.',
+          description: '<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempore voluptatum natus pariatur neque asperiores perferendis minima at beatae. Quasi illum laborum dicta mollitia sequi, a ipsum! Eveniet sit ipsa nostrum.</p><p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempore voluptatum natus pariatur neque asperiores perferendis minima at beatae. Quasi illum laborum dicta mollitia sequi, a ipsum! Eveniet sit ipsa nostrum.</p>',
 
           differences: [
             "Design e implementação de arquiteturas escaláveis",

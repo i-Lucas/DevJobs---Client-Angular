@@ -14,23 +14,8 @@ export class RootDeveloperProfileComponent implements OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  /**
-  * @param loading
-  * @default true
-  * local state that indicates when the current profile is being loaded
-  */
   protected loading: boolean = true; // important to start as true !
-
-  /**
-  * @param openEditModal
-  * indicates whether the edit modal is open
-  */
   protected openEditModal: boolean = false;
-
-  /**
-  * @param enableEditingMode
-  * indicates whether the user can edit the current profile (owner)
-  */
   protected enableEditingMode: boolean = false;
 
   protected currentProfile: DeveloperProfile | undefined;
@@ -60,11 +45,12 @@ export class RootDeveloperProfileComponent implements OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(profile => {
 
-        if (!profile) return // goto signin ?
+        if (profile) {
+          this.isUserOwnerCurrentProfile(profile, routeProfileId) ?
+            this.handleUserDeveloperProfile(profile) :
+            this.handleNonUserCompanyProfile(routeProfileId);
+        }
 
-        this.isUserOwnerCurrentProfile(profile, routeProfileId) ?
-          this.handleUserDeveloperProfile(profile) :
-          this.handleNonUserCompanyProfile(routeProfileId);
       });
   }
 

@@ -39,7 +39,7 @@ export class CommonSignupService implements OnDestroy {
 
   private handleSignupResponse(response: ApiResponse<string>) {
     this.componentService.showMessage({ type: 'success', detail: response.message });
-    this.componentService.goTo('/auth/signin');
+    this.componentService.navigate('/auth/signin');
   }
 
   private handleSignupError(error: ApiError) {

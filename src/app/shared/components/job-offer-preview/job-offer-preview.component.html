@@ -1,0 +1,83 @@
+<main>
+    <div class="flex flex-column align-items-center gap-6">
+
+        @for (job of jobOffersList; track job;) {
+
+            <section class="app-border border-round w-full lg:pt-5 lg:pb-3 lg:px-8">
+
+                <div class="flex flex-column gap-5 py-4 lg:p-0">
+
+                    <div class="flex flex-column gap-4 align-items-center justify-content-between lg:flex-row lg:gap-0">
+
+                        <div class="flex align-items-center px-2 lg:px-0 lg:gap-6">
+
+                            <p-image alt="Image" imageClass="h-8rem" src={{job.company.picture}} />
+
+                            <div class="flex flex-column gap-3">
+
+                                <span class="font-bold">{{job.offer.title}}</span>
+
+                                <div class="flex align-items-center gap-2 text-sm">
+                                    <i class="material-icons">apartment</i>
+                                    <span                                        
+                                        [class.hover:text-primary]="currentProfileId !== job.company.profile"
+                                        [style.cursor]="currentProfileId === job.company.profile ? 'block' : 'pointer'"
+                                        [pTooltip]="currentProfileId !== job.company.profile ? 'Ver perfil da empresa' : ''"
+                                        (click)="currentProfileId !== job.company.profile && onNavigate.emit({ path:'/dashboard/company/profile/', params: job.company.profile })">
+                                        {{job.company.name}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 p-4 lg:w-5 lg:p-0">
+                            @for (stack of job.offer.stacklist.slice(0, maxStackChip); track stack) {
+                                <p-chip styleClass="text-xs" label={{stack}} />
+                            }
+                            @if (job.offer.stacklist.length > maxStackChip) {
+                                <p-chip 
+                                    label="..."
+                                    icon="pi pi-eye"
+                                    styleClass="text-xs hover:bg-primary"
+                                    pTooltip={{formatListWithLineBreaks(job.offer.stacklist)}}
+                                />
+                            }
+                        </div>
+
+                        <div>
+                            <p-button 
+                                size="small"
+                                label="Ver Vaga"
+                                pTooltip="Ver página da oferta"
+                                (click)="onNavigate.emit({ path:'/dashboard/hiring/jobs/', params: job.offer.id })"
+                            />
+                        </div>
+
+                    </div>
+
+                    <div class="flex justify-content-center gap-4 text-sm align-items-center lg:justify-content-start">
+
+                        <div class="flex align-items-center">
+                            <i class="pi pi-users mr-2"></i>
+                            <span>{{job.offer.seniority}}</span>
+                        </div>
+
+                        <div class="flex align-items-center gap-2">
+                            <i class="pi pi-map-marker"></i>
+                            <span>{{job.offer.location}}</span>
+                        </div>
+
+                        <div class="flex align-items-center">
+                            <i class="material-icons">attach_money</i>
+                            <span>{{job.offer.salaryRange}}</span>
+                        </div>
+
+                    </div>
+                    
+                </div>
+
+            </section>
+        }
+
+    </div>
+</main>

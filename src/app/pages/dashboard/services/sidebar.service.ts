@@ -68,7 +68,7 @@ export class SidebarService {
       profile_field,
       {
         icon: 'work', label: 'Vagas',
-        link: { path: '/dashboard/developer/jobs' },
+        link: { path: '/dashboard/hiring/jobs' },
         tooltip: 'Procure por vagas'
       },
       {

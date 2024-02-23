@@ -18,7 +18,7 @@ export class AuthGuard {
     if (isAuthenticated) return true;
 
     this.authService.removeToken();
-    this.componentService.goTo('/auth');
+    this.componentService.navigate('/auth');
     this.componentService.showMessage({ detail: 'Não Autenticado!', type: 'info' })
     return false;
 

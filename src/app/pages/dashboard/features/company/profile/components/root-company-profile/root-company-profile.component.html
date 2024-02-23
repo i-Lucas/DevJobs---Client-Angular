@@ -37,7 +37,9 @@
         @else {
 
             <company-profile-left-column
-                [currentProfile]="currentProfile" 
+                [openOffers]="openOffers"
+                [currentProfile]="currentProfile"
+                (onNavigate)="onClickNavigate($event)"
             />
         }
         

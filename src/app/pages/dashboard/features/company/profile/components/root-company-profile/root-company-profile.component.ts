@@ -4,7 +4,9 @@ import { Subject, takeUntil } from 'rxjs';
 
 import { HttpService } from '@app-services/http/http.service';
 import { CompanyProfileService } from '../../services/company-profile.service';
+
 import { DashboardService } from 'app/pages/dashboard/services/dashboard.service';
+import { SharedJobOfferService } from '@app-services/dashboard/hiring/job-offer.service';
 import { CommonComponentService } from '@app-services/components/base-component.service';
 
 // fazer cache de perfil ?
@@ -18,15 +20,17 @@ export class RootCompanyProfileComponent implements OnDestroy {
   private destroy$ = new Subject<void>();
 
   protected loading: boolean = true;
+  protected editLoading: boolean = false;
   protected openEditModal: boolean = false;
   protected enableEditingMode: boolean = false;
-  protected currentProfile: CompanyProfile | undefined;
 
-  protected editLoading: boolean = false;
+  protected openOffers: JobOfferData[] | undefined;
+  protected currentProfile: CompanyProfile | undefined;
 
   constructor(
     private route: ActivatedRoute,
     private httpService: HttpService,
+    private jobOfferService: SharedJobOfferService,
     private dashboardService: DashboardService,
     private componentService: CommonComponentService,
     private companyProfileService: CompanyProfileService,
@@ -65,6 +69,7 @@ export class RootCompanyProfileComponent implements OnDestroy {
     this.enableEditingMode = true;
     this.currentProfile = profile as CompanyProfile;
     this.updateLocalStateLoading(false);
+    this.getCompanyOpenOffers(this.currentProfile.id);
   }
 
   private handleNonUserCompanyProfile(routeProfileId: string) {
@@ -82,10 +87,32 @@ export class RootCompanyProfileComponent implements OnDestroy {
       })
   }
 
+  private getCompanyOpenOffers(profileid: string) {
+
+    if (this.currentProfile) {
+
+      if (this.isUserOwnerCurrentProfile(this.currentProfile as AppProfile, profileid)) {
+
+        this.openOffers = this.currentProfile.jobOffers;
+
+        this.jobOfferService.updateJobOfferList(this.currentProfile.jobOffers);
+
+      } else {
+
+        // essa atribuição será feita quando o desenvolvedor clicar em ver perfil da empresa.
+        this.openOffers = this.jobOfferService.getOffersByCompanyProfile(profileid);
+
+      }
+    }
+  }
+
   private handleGetAccountResponse({ data, message }: ApiResponse<CompanyProfile>) {
-    this.currentProfile = data;
-    this.updateLocalStateLoading(false);
-    this.componentService.showMessage({ detail: message, type: 'success' });
+    if (data) {
+      this.currentProfile = data;
+      this.updateLocalStateLoading(false);
+      this.getCompanyOpenOffers(this.currentProfile.id);
+      this.componentService.showMessage({ detail: message, type: 'success' });
+    }
   }
 
   private handleGetAccountError(error: ApiError) {
@@ -100,6 +127,10 @@ export class RootCompanyProfileComponent implements OnDestroy {
 
   protected openInNewWindow(path: string) {
     this.componentService.openInNewWindow(path);
+  }
+
+  protected onClickNavigate({ path, params }: OnPreviewNavigate) {
+    this.componentService.navigateWithParams({ path, params });
   }
 
   protected onCepExternApiError(error: ApiError) {

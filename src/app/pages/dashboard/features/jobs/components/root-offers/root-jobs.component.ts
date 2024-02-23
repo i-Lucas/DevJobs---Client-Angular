@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 
-import { JobOfferService } from '../../services/job-offer.service';
+import { SharedJobOfferService } from '@app-services/dashboard/hiring/job-offer.service';
 
 @Component({
   selector: 'dev-root-jobs',
@@ -11,14 +11,12 @@ import { JobOfferService } from '../../services/job-offer.service';
 export class RootJobsComponent implements OnDestroy {
 
   protected loading: boolean = false;
-  protected maxStackChip: number = 15;
   protected destroy$ = new Subject<void>();
-
   protected jobOffersList: JobOfferData[] = [];
 
   constructor(
     private router: Router,
-    private jobOfferService: JobOfferService
+    private jobOfferService: SharedJobOfferService
   ) {
 
     this.jobOfferService.getJobOffersList()
@@ -31,8 +29,8 @@ export class RootJobsComponent implements OnDestroy {
     this.destroy$.complete();
   }
 
-  protected formatListWithLineBreaks(stacklist: string[]) {
-    return stacklist.map((item, idx) => idx === stacklist.length - 1 ? item : item + '\n').join('');
+  protected onClickNavigate({ path, params }: OnPreviewNavigate) {
+    this.router.navigate([path, params]);
   }
 
 }

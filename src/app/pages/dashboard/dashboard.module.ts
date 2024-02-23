@@ -32,6 +32,10 @@ const routes: Routes = [
         path: 'company',
         loadChildren: () => import('./features/company/company.module')
       },
+      {
+        path: 'hiring',
+        loadChildren: () => import('./features/jobs/job-offers.module')
+      },
     ]
   },
 ];

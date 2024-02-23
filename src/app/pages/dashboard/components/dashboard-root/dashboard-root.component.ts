@@ -127,7 +127,7 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
   private disconnect() {
     this.authService.removeToken();
     this.dashboardService.logout();
-    this.componentService.goTo('/auth');
+    this.componentService.navigate('/auth');
   }
 
 }

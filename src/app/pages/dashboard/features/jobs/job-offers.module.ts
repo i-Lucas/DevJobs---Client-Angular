@@ -7,21 +7,22 @@ import { ImageModule } from 'primeng/image';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { DividerModule } from 'primeng/divider';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 // import { PaginatorModule } from 'primeng/paginator';
 
 import { RootJobsComponent } from './components/root-offers/root-jobs.component';
 import { SearchPanelComponent } from './components/search-panel/search-panel.component';
 import { JobOfferPageComponent } from './components/job-offer-page/job-offer-page.component';
 
-import { JobOfferService } from './services/job-offer.service';
+import { SharedComponentsModule } from 'app/shared/components/shared-components.module';
 
 const routes: Routes = [
   {
-    path: '',
-    component: RootJobsComponent
+    path: 'jobs',
+    component: RootJobsComponent,
   },
   {
-    path: ':id',
+    path: 'jobs/:id',
     component: JobOfferPageComponent
   }
 ]
@@ -40,12 +41,11 @@ const routes: Routes = [
     ButtonModule,
     TooltipModule,
     DividerModule,
+    ProgressSpinnerModule,
     // PaginatorModule,
 
+    SharedComponentsModule,
     RouterModule.forChild(routes)
   ],
-  providers: [
-    JobOfferService
-  ]
 })
 export default class JobOffersModule { }

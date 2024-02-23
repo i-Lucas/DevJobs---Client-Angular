@@ -20,8 +20,12 @@ export class CommonComponentService {
     return location.pathname.includes(path)
   }
 
-  public goTo(path: string) {
+  public navigate(path: string) {
     this.router.navigate([path])
+  }
+
+  public navigateWithParams({ path, params }: OnPreviewNavigate) {
+    this.router.navigate([path, params]);
   }
 
   public showMessage({ type, detail }: ToastProps) {

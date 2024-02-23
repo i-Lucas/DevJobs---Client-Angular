@@ -15,6 +15,7 @@ import { DateService } from '@app-services/date/date.service';
 import { AppStateService } from '@app-services/app/app.service';
 import { AuthenticationService } from '@app-services/auth/auth.service';
 import { FromMSToMonthYearPipe } from '@app-pipes/date-formatter.pipe';
+import { SharedJobOfferService } from '@app-services/dashboard/hiring/job-offer.service';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { FromMSToMonthYearPipe } from '@app-pipes/date-formatter.pipe';
     MessageService,
     AppStateService,
     ConfirmationService,
+    SharedJobOfferService,
     AuthenticationService,
     FromMSToMonthYearPipe,
     {

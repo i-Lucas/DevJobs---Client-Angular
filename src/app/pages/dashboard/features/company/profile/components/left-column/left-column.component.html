@@ -1,26 +1,34 @@
-@if(currentProfile) {
+<main class="flex flex-column gap-4 p-4">
 
-    <div class="md:px-6">
+    @if(currentProfile) {
 
-        <h2>Sobre a empresa</h2>
-        <div class="line-height-4" [innerHTML]="currentProfile.details.about"></div>
+        <section>
+            <h3>Sobre a empresa</h3>
+            <div class="line-height-4" [innerHTML]="currentProfile.details.about"></div>
+        </section>
+    
         <p-divider styleClass="w-11 mt-6 m-auto" />
+    
+        @if (openOffers && openOffers.length > 0) {
 
-        <h2>Ofertas em aberto</h2>
+            <section>
 
-        <div class="flex gap-2">
-            <button pButton [routerLink]="['/dashboard/company/profile', '1b1dd292-7815-4bbe-9551-2ee4410f57f0']">
-                Ver Empresa 1
-            </button>
-            <button pButton [routerLink]="['/dashboard/company/profile', '511a63ed-a096-4ee4-9a23-876bcc18afab']">
-                Ver Empresa 2
-            </button>
-        </div>
-    </div>
-}
+                <h3>Vagas em aberto</h3>
+                <app-job-offer-preview
+                    [jobOffersList]="openOffers"
+                    (onNavigate)="onNavigate.emit($event)"
+                    [currentProfileId]="currentProfile.id"
+                />
 
-@else {
+            </section>
+    
+        }
+    }
+    
+    @else {
+    
+        <h3>perfil não encontrado</h3>
+        <button pButton>buscar novos perfis []</button>
+    }
 
-    <h3>perfil não encontrado</h3>
-    <button pButton>buscar novos perfis []</button>
-}
+</main>

@@ -1,83 +1,95 @@
 <main class="flex flex-column lg:p-4">
 
-    <dev-profile-about
-        [loading]="loading"
-        [profile]="currentProfile"
-        [isOwner]="enableEditingMode"
-        (onEdit)="requestUpdate($event)"
-        (openInNewWindow)="openNewWindow($event)"
-        (copyToClipboard)="copyToClipboard($event)"
-        (onCepExternApiError)="showError($event)"
-    />
+    @if (currentProfile) {
 
-    <section class="flex flex-column lg:flex-row lg:py-4 min-h-screen">
-
-        <!-- coluna da esquerda -->
-        <section class="flex flex-column gap-3 w-full mt-3 lg:mt-0">
-
-            <dev-profile-experiences
-                [loading]="loading"
-                [isOwner]="enableEditingMode"
-                (onAdd)="requestAdd($event)"
-                (onEdit)="requestUpdate($event)"
-                (onDelete)="requestDelete($event)"
-                [experiencesList]="currentProfile?.professional_experiences"                
-            />
-
-            <dev-profile-education 
-                [loading]="loading"         
-                (onAdd)="requestAdd($event)"
-                [isOwner]="enableEditingMode"
-                (onEdit)="requestUpdate($event)"
-                (onDelete)="requestDelete($event)"
-                [educationList]="currentProfile?.academic_education"
-            />
-
-            <dev-profile-projects
-                [loading]="loading"
-                (onAdd)="requestAdd($event)"
-                [isOwner]="enableEditingMode"
-                (onEdit)="requestUpdate($event)"
-                (onDelete)="requestDelete($event)"
-                [projectsList]="currentProfile?.projects"
-            />
-            
+        <dev-profile-about
+            [loading]="loading"
+            [profile]="currentProfile"
+            [isOwner]="enableEditingMode"
+            (onEdit)="requestUpdate($event)"
+            (openInNewWindow)="openNewWindow($event)"
+            (copyToClipboard)="copyToClipboard($event)"
+            (onCepExternApiError)="showError($event)"
+        />
+    
+        <section class="flex flex-column lg:flex-row lg:py-4 min-h-screen">
+    
+            <!-- coluna da esquerda -->
+            <section class="flex flex-column gap-3 w-full mt-3 lg:mt-0">
+    
+                <dev-profile-experiences
+                    [loading]="loading"
+                    [isOwner]="enableEditingMode"
+                    (onAdd)="requestAdd($event)"
+                    (onEdit)="requestUpdate($event)"
+                    (onDelete)="requestDelete($event)"
+                    [experiencesList]="currentProfile.professional_experiences"                
+                />
+    
+                <dev-profile-education 
+                    [loading]="loading"         
+                    (onAdd)="requestAdd($event)"
+                    [isOwner]="enableEditingMode"
+                    (onEdit)="requestUpdate($event)"
+                    (onDelete)="requestDelete($event)"
+                    [educationList]="currentProfile.academic_education"
+                />
+    
+                <dev-profile-projects
+                    [loading]="loading"
+                    (onAdd)="requestAdd($event)"
+                    [isOwner]="enableEditingMode"
+                    (onEdit)="requestUpdate($event)"
+                    (onDelete)="requestDelete($event)"
+                    [projectsList]="currentProfile.projects"
+                />
+                
+            </section>
+    
+            <p-divider class="hidden lg:block" layout="vertical" />
+    
+            <!-- coluna da direita -->
+            <section class="flex flex-column gap-3 w-full mt-3 lg:mt-0 lg:w-6">
+    
+                <dev-profile-languages
+                    [loading]="loading"
+                    (onAdd)="requestAdd($event)"
+                    [isOwner]="enableEditingMode"
+                    (onEdit)="requestUpdate($event)"
+                    (onDelete)="requestDelete($event)"
+                    [languagesList]="currentProfile.languages"
+                />
+    
+                <dev-profile-certificates
+                    [loading]="loading"
+                    (onAdd)="requestAdd($event)"
+                    [isOwner]="enableEditingMode"
+                    (onEdit)="requestUpdate($event)"
+                    (onDelete)="requestDelete($event)"
+                    [certificatesList]="currentProfile.certificates"
+                />
+    
+                <dev-profile-stacklist
+                    [loading]="loading"
+                    (onAdd)="requestAdd($event)"
+                    [isOwner]="enableEditingMode"
+                    (onEdit)="requestUpdate($event)"
+                    (onDelete)="requestDelete($event)"
+                    [stackList]="currentProfile.stack"
+                />
+    
+            </section>
+    
         </section>
+    
+    } @else {
 
-        <p-divider class="hidden lg:block" layout="vertical" />
+        <section>
 
-        <!-- coluna da direita -->
-        <section class="flex flex-column gap-3 w-full mt-3 lg:mt-0 lg:w-6">
-
-            <dev-profile-languages
-                [loading]="loading"
-                (onAdd)="requestAdd($event)"
-                [isOwner]="enableEditingMode"
-                (onEdit)="requestUpdate($event)"
-                (onDelete)="requestDelete($event)"
-                [languagesList]="currentProfile?.languages"
-            />
-
-            <dev-profile-certificates
-                [loading]="loading"
-                (onAdd)="requestAdd($event)"
-                [isOwner]="enableEditingMode"
-                (onEdit)="requestUpdate($event)"
-                (onDelete)="requestDelete($event)"
-                [certificatesList]="currentProfile?.certificates"
-            />
-
-            <dev-profile-stacklist
-                [loading]="loading"
-                (onAdd)="requestAdd($event)"
-                [isOwner]="enableEditingMode"
-                (onEdit)="requestUpdate($event)"
-                (onDelete)="requestDelete($event)"
-                [stackList]="currentProfile?.stack"
-            />
+            <h3>Nada para exibir</h3>
+            <!-- mostrar outros perfis ? ou redirecionar para a dashboard ? -->
 
         </section>
-
-    </section>
+    }
 
 </main>

@@ -52,7 +52,7 @@ export class SigninRootComponent implements OnInit, OnDestroy {
 
     if (this.authService.isAuthenticated()) {
       this.componentService.showMessage({ type: 'success', detail: 'Login Automático' });
-      this.componentService.goTo('/dashboard');
+      this.componentService.navigate('/dashboard');
 
     } else {
       this.authService.disableAutomaticLogin();
@@ -74,7 +74,7 @@ export class SigninRootComponent implements OnInit, OnDestroy {
     if (response.data) {
       this.processSignInConfiguration(response.data.token);
       this.componentService.showMessage({ type: 'success', detail: response.message })
-      this.componentService.goTo('/dashboard')
+      this.componentService.navigate('/dashboard')
     }
   }
 

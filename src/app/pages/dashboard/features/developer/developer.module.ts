@@ -12,10 +12,6 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module')
   },
   {
-    path: 'jobs',
-    loadChildren: () => import('./jobs/job-offers.module')
-  },
-  {
     path: '**',
     redirectTo: '/dashboard'
   }

@@ -70,35 +70,8 @@ export class HiringProcessService implements OnDestroy {
           }
         });
     });
+    
   }
-
-  // public addHiringProcess(formData: HiringProcessForm): void {
-
-  //   const {
-  //     title, description, category, seniority, salaryRange, negotiable, contractType, locationType,
-  //     workload, deadline, pcd, benefits, differences, requirements, stacklist
-  //   } = formData;
-
-  //   const body = {
-  //     title, description, category, seniority, salaryRange, negotiable, contractType, locationType,
-  //     workload, deadline, pcd, benefits, differences, requirements, stacklist
-  //   };
-
-  //   this.updateLoading(true);
-  //   this.httpService.post<ApiResponse<NewHiringProcessResponse>>('/hiring/new', body)
-  //     .pipe(takeUntil(this.destroy$))
-  //     .subscribe({
-  //       next: (response) => {
-  //         this.handleNewHiringProcessResponse(response, formData);
-  //         this.updateLoading(false);
-
-  //       },
-  //       error: (error) => {
-  //         this.showErrorMessage(error);
-  //         this.updateLoading(false);
-  //       }
-  //     });
-  // }
 
   private handleNewHiringProcessResponse({ message, data }: ApiResponse<NewHiringProcessResponse>, formData: HiringProcessForm) {
 

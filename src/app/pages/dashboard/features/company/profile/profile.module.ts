@@ -42,7 +42,7 @@ export class PrimeModule { }
 
 @NgModule({
   providers: [
-    CompanyProfileService
+    CompanyProfileService,
   ],
   declarations: [
     EditModeComponent,

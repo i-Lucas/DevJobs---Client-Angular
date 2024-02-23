@@ -72,8 +72,10 @@ interface CompanyProfile {
     address: CompanyProfileAddress;
     details: CompanyProfileDetails;
     suportInfo: CompanyProfileSupport;
-    ownerInfo: CompanyProfileOwnerInfo;
+    // ownerInfo: CompanyProfileOwnerInfo;
     socialNetwork: CompanyProfileSocial;
+
+    jobOffers: JobOfferData[];
 
     createdAt: string;
     updatedAt: string;

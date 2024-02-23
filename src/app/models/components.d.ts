@@ -1,5 +1,5 @@
 interface DropdownOptionsList {
-    name: string
+    name: string;
 }
 
 interface ToastProps {
@@ -12,7 +12,7 @@ interface DevSignupFormPreviewEvent {
 
     option: 'edit' | 'remove';
     item: DeveloperProfileListFields;
-    identifier: DeveloperProfileListFieldsIdentifier
+    identifier: DeveloperProfileListFieldsIdentifier;
 }
 
 interface DashboardHeaderProps {
@@ -22,31 +22,31 @@ interface DashboardHeaderProps {
 }
 
 interface DashboardHeaderEvents {
-    action: 'TOGGLE_SIDEBAR' | 'CHANGE_THEME' | 'LOGOUT'
+    action: 'TOGGLE_SIDEBAR' | 'CHANGE_THEME' | 'LOGOUT';
 }
 
 interface PMenuOptions {
 
-    label: string;
     icon: string;
+    label: string;
     command?: () => void;
 }
 
 interface SidebarListOptions {
 
-    icon: string,
-    label: string,
-    tooltip: string,
+    icon: string;
+    label: string;
+    tooltip: string;
     link: {
-        path: string,
-        sub_path?: string
+        path: string;
+        sub_path?: string;
     }
 }
 
 interface SidebarProps {
 
-    mode: AccountType
-    profileId: string
+    mode: AccountType;
+    profileId: string;
 }
 
 interface CompanyEditModeOnSave {
@@ -63,6 +63,12 @@ interface DeveloperEditModeOnSave {
 
 interface DeveloperEditModeOnDelete {
 
-    id: string,
+    id: string;
     identifier: DeveloperProfileEditFieldsIdentifier;
+}
+
+interface OnPreviewNavigate {
+
+    path: string;
+    params: string;
 }

@@ -1,0 +1,14 @@
+<main class="p-4">
+
+    <section>
+        <jobs-search-panel />
+    </section>
+
+    <section class="m-auto lg:w-10">
+        <app-job-offer-preview
+            [jobOffersList]="jobOffersList"
+            (onNavigate)="onClickNavigate($event)"
+        />
+    </section>
+
+</main>

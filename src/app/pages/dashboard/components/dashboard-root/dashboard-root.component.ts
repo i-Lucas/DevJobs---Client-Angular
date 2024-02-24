@@ -8,7 +8,7 @@ import { AuthenticationService } from '@app-services/auth/auth.service';
 import { CommonComponentService } from '@app-services/components/base-component.service';
 
 import { SidebarService } from '../../services/sidebar.service';
-import { DashboardService } from '../../services/dashboard.service';
+import { SharedDashboardService } from '@app-services/dashboard/user/user-dashboard.service';
 
 @Component({
   selector: 'app-dashboard-root',
@@ -28,7 +28,7 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
     private appService: AppStateService,
     private sidebarService: SidebarService,
     private authService: AuthenticationService,
-    private dashboardService: DashboardService,
+    private dashboardService: SharedDashboardService,
     private componentService: CommonComponentService,
   ) { }
 
@@ -79,17 +79,21 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
   }
 
   private updateData({ account, profile, user }: GetAccountDataResponse) {
+
     this.updateHeaderProps(user);
     this.dashboardService.updateUser(user);
     this.dashboardService.updateAccount(account);
+
     this.dashboardService.updateProfile({
       ...profile,
       type: account.accountType,
     });
+
     this.sidebarService.updateSidebarProps({
       profileId: profile.id,
       mode: account.accountType,
-    })
+    });
+
   }
 
   private handleGetAccountError(error: ApiError) {

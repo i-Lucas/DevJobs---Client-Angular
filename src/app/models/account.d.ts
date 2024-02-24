@@ -13,7 +13,7 @@ interface AppAccount {
 
 interface GetAccountDataResponse {
 
-    account: Account;
-    user: GlobalAppUser;
+    user: AppUser;
+    account: AppAccount;
     profile: DeveloperProfile | CompanyProfile;
 }

@@ -5,9 +5,9 @@ import { Subject, takeUntil } from 'rxjs';
 import { HttpService } from '@app-services/http/http.service';
 import { CompanyProfileService } from '../../services/company-profile.service';
 
-import { DashboardService } from 'app/pages/dashboard/services/dashboard.service';
 import { SharedJobOfferService } from '@app-services/dashboard/hiring/job-offer.service';
 import { CommonComponentService } from '@app-services/components/base-component.service';
+import { SharedDashboardService } from '@app-services/dashboard/user/user-dashboard.service';
 
 // fazer cache de perfil ?
 
@@ -31,7 +31,7 @@ export class RootCompanyProfileComponent implements OnDestroy {
     private route: ActivatedRoute,
     private httpService: HttpService,
     private jobOfferService: SharedJobOfferService,
-    private dashboardService: DashboardService,
+    private dashboardService: SharedDashboardService,
     private componentService: CommonComponentService,
     private companyProfileService: CompanyProfileService,
   ) {
@@ -55,6 +55,7 @@ export class RootCompanyProfileComponent implements OnDestroy {
       .subscribe(profile => {
 
         if (!profile) return // goto signin ?
+
         this.isUserOwnerCurrentProfile(profile, routeProfileId) ?
           this.handleUserCompanyProfile(profile) :
           this.handleNonUserCompanyProfile(routeProfileId);
@@ -67,8 +68,8 @@ export class RootCompanyProfileComponent implements OnDestroy {
 
   private handleUserCompanyProfile(profile: AppProfile) {
     this.enableEditingMode = true;
-    this.currentProfile = profile as CompanyProfile;
     this.updateLocalStateLoading(false);
+    this.currentProfile = profile as CompanyProfile;
     this.getCompanyOpenOffers(this.currentProfile.id);
   }
 
@@ -93,15 +94,15 @@ export class RootCompanyProfileComponent implements OnDestroy {
 
       if (this.isUserOwnerCurrentProfile(this.currentProfile as AppProfile, profileid)) {
 
+        // as vagas em aberto vem do perfil da empresa
         this.openOffers = this.currentProfile.jobOffers;
-
-        this.jobOfferService.updateJobOfferList(this.currentProfile.jobOffers);
+        this.jobOfferService.updateJobOfferList(this.openOffers);
 
       } else {
 
-        // essa atribuição será feita quando o desenvolvedor clicar em ver perfil da empresa.
+        // caso o usuário não seja o dono da empresa ( developer )
+        // as ofertas virão atráves de outra requisição ( getAllOffers )
         this.openOffers = this.jobOfferService.getOffersByCompanyProfile(profileid);
-
       }
     }
   }

@@ -5,7 +5,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { SharedJobOfferService } from '@app-services/dashboard/hiring/job-offer.service';
 
 @Component({
-  selector: 'dev-root-jobs',
+  selector: 'app-root-jobs',
   templateUrl: './root-jobs.component.html',
 })
 export class RootJobsComponent implements OnDestroy {
@@ -16,7 +16,7 @@ export class RootJobsComponent implements OnDestroy {
 
   constructor(
     private router: Router,
-    private jobOfferService: SharedJobOfferService
+    private jobOfferService: SharedJobOfferService,
   ) {
 
     this.jobOfferService.getJobOffersList()

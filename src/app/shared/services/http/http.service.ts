@@ -12,6 +12,7 @@ import {
 
 } from '@angular/common/http';
 
+import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 
@@ -27,16 +28,16 @@ export class HttpService implements HttpInterceptor {
   private EXTERNAL_API_IDENTIFIER: string = 'EXTERNAL_API';
 
   constructor(
+    private router: Router,
     private http: HttpClient,
     private appService: AppStateService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
   ) { }
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     return next.handle(req.clone({ url: this.getRequestUrl(req) }))
-      .pipe(
-        catchError(error => this.handleHttpError(error)),
+      .pipe(catchError(error => this.handleHttpError(error)),
         finalize(() => this.appService.updateRequestInProgress(false))
       );
   }
@@ -81,6 +82,12 @@ export class HttpService implements HttpInterceptor {
   }
 
   private handleApiError({ error: { status, message } }: HttpErrorResponse): Observable<never> {
+
+    if (status === 401) {
+      this.authService.removeToken();
+      this.router.navigate(['/auth']);
+    }
+
     return throwError(() => ({ status, message }));
   }
 

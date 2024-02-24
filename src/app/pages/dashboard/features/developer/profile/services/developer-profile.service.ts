@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { DashboardService } from 'app/pages/dashboard/services/dashboard.service';
+import { SharedDashboardService } from '@app-services/dashboard/user/user-dashboard.service';
 
 @Injectable()
 export class DeveloperProfileService {
 
-  constructor(private dashboardService: DashboardService) { }
+  constructor(private dashboardService: SharedDashboardService) { }
 
   private getNow() {
     return new Date().getTime().toString();

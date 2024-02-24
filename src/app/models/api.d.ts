@@ -53,8 +53,8 @@ interface RequestDeveloperProfileDelete<T> {
 
 interface UserJwtPayload {
 
-    id: string,
-    email: string,
+    email: string;
+    userId: string;
     accountId: string;
     profileId: string;
 }

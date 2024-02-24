@@ -22,9 +22,10 @@ export class AppStateService {
   public getIsRequestInProgress(): Observable<boolean> {
     return this.isHttpRequestInProgress.asObservable();
   }
-  
+
   public updateRequestInProgress(state: boolean): void {
     this.isHttpRequestInProgress.next(state);
   }
+
 
 }

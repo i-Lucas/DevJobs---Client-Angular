@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 
 import { HttpService } from '@app-services/http/http.service';
-import { DashboardService } from 'app/pages/dashboard/services/dashboard.service';
 import { CommonComponentService } from '@app-services/components/base-component.service';
+import { SharedDashboardService } from '@app-services/dashboard/user/user-dashboard.service';
 
 @Component({
   selector: 'app-root-developer-profile',
@@ -23,7 +23,7 @@ export class RootDeveloperProfileComponent implements OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private httpService: HttpService,
-    private dashboardService: DashboardService,
+    private dashboardService: SharedDashboardService,
     private componentService: CommonComponentService,
   ) {
 

@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from '@app-guards/auth.guard';
 import { SidebarService } from './services/sidebar.service';
-import { DashboardService } from './services/dashboard.service';
 
 import { DashboardRootComponent } from './components/dashboard-root/dashboard-root.component';
 import { DashboardHeaderComponent } from './components/dashboard-header/dashboard-header.component';
@@ -61,8 +60,7 @@ export class PrimeModule { }
   ],
   providers: [
     AuthGuard,
-    SidebarService,
-    DashboardService,
+    SidebarService
   ],
   imports: [
     CommonModule,

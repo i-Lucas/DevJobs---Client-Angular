@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { environment } from '@environments/environment';
+
+import CryptoJS from "crypto-js";
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +35,7 @@ export class AuthenticationService {
   public isTokenExpired(): boolean {
 
     if (!this.getToken()) return true;
-    const decoded = this.parseJwt(this.getToken()!);
+    const decoded = this.parseJwt(this.decrypt(this.getToken()!)!);
     return !decoded || decoded.exp < Math.floor(Date.now() / 1000);
   }
 
@@ -61,8 +64,24 @@ export class AuthenticationService {
     localStorage.removeItem(this.LOCAL_STORAGE_EMAIL);
   }
 
+  public extractUserJwtPayload(): UserJwtPayload | boolean {
+
+    const { accountId, email, userId, profileId } = this.parseJwt(this.decrypt(this.getToken()!)!);
+    if (!userId || !accountId || !profileId || !email) return false;
+    return { email, userId, accountId, profileId };
+  }
+
   private parseJwt(token: string): any {
     return JSON.parse(atob(token.split('.')[1]));
+  }
+
+  private decrypt(token: string) {
+    try {
+      return CryptoJS.AES.decrypt(token, environment.KEY_SECRET!).toString(CryptoJS.enc.Utf8);
+    } catch (error) {
+      this.removeToken();
+      return undefined;
+    }
   }
 
 }

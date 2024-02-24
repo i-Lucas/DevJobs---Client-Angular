@@ -13,9 +13,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpService } from '@app-services/http/http.service';
 import { DateService } from '@app-services/date/date.service';
 import { AppStateService } from '@app-services/app/app.service';
-import { AuthenticationService } from '@app-services/auth/auth.service';
 import { FromMSToMonthYearPipe } from '@app-pipes/date-formatter.pipe';
+import { AuthenticationService } from '@app-services/auth/auth.service';
 import { SharedJobOfferService } from '@app-services/dashboard/hiring/job-offer.service';
+import { SharedDashboardService } from '@app-services/dashboard/user/user-dashboard.service';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { SharedJobOfferService } from '@app-services/dashboard/hiring/job-offer.
     AppStateService,
     ConfirmationService,
     SharedJobOfferService,
+    SharedDashboardService,
     AuthenticationService,
     FromMSToMonthYearPipe,
     {

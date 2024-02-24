@@ -70,7 +70,7 @@ export class HiringProcessService implements OnDestroy {
           }
         });
     });
-    
+
   }
 
   private handleNewHiringProcessResponse({ message, data }: ApiResponse<NewHiringProcessResponse>, formData: HiringProcessForm) {
@@ -205,7 +205,7 @@ export class HiringProcessService implements OnDestroy {
           this.handleHiringProcessResponse(response);
           this.updateLoading(false);
         },
-        error: (error) => {
+        error: (error: ApiError) => {
           this.showErrorMessage(error);
           this.updateLoading(false);
         }

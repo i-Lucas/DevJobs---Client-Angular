@@ -19,6 +19,7 @@ import { ButtonModule } from 'primeng/button';
 import { TabViewModule } from 'primeng/tabview';
 import { DividerModule } from 'primeng/divider';
 import { SkeletonModule } from 'primeng/skeleton';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { DevNewFieldBtnComponent } from './components/dev-new-field-btn/dev-new-field-btn.component';
 import { DevProfilePanelComponent } from './components/dev-profile-panel/dev-profile-panel.component';
@@ -51,6 +52,7 @@ const routes: Routes = [
     DividerModule,
     TabViewModule,
     SkeletonModule,
+    ProgressSpinnerModule
   ],
 })
 export class PrimeModule { }

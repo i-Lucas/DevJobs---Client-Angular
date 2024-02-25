@@ -13,10 +13,10 @@ export class SidebarService {
 
     return [
       { link: { path: baseHome.concat('home') }, icon: 'home', label: 'Início', tooltip: 'Início' },
-      { link: { path: '/dashboard' }, icon: 'forum', label: 'Mensagens', tooltip: 'Acesse sua caixa de mensagens' },
+      { link: { path: '/dashboard/notifications' }, icon: 'forum', label: 'Mensagens', tooltip: 'Acesse sua caixa de mensagens' },
       { link: { path: '/dashboard' }, label: 'Suporte', icon: 'contact_support', tooltip: 'Dúvidas ou problemas? Contate o suporte' },
       { link: { path: '/dashboard' }, label: 'Feedback', icon: 'feedback', tooltip: 'Ajude-nos a melhorar com sua opinião' },
-      { link: { path: '/dashboard' }, icon: 'warning', label: 'Avisos', tooltip: 'Veja se algo deu errado e como resolver' },
+      // { link: { path: '/dashboard' }, icon: 'warning', label: 'Avisos', tooltip: 'Veja se algo deu errado e como resolver' },
     ];
   }
 

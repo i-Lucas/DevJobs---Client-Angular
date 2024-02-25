@@ -35,6 +35,10 @@ const routes: Routes = [
         path: 'hiring',
         loadChildren: () => import('./features/jobs/job-offers.module')
       },
+      {
+        path: 'notifications',
+        loadChildren: () => import('./features/messages/messages.module')
+      }
     ]
   },
 ];

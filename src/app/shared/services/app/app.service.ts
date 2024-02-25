@@ -6,6 +6,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class AppStateService {
 
+  private requestStateQueue: boolean[] = [];
+
   private isHttpRequestInProgress = new BehaviorSubject<boolean>(false);
 
   private GlobalAppSidebarState = new BehaviorSubject<boolean>(false);
@@ -23,9 +25,26 @@ export class AppStateService {
     return this.isHttpRequestInProgress.asObservable();
   }
 
+  /*
   public updateRequestInProgress(state: boolean): void {
     this.isHttpRequestInProgress.next(state);
+  }*/
+
+  public addRequestInProgress(state: boolean): void {
+    this.requestStateQueue.push(state);
+    this.updateQueueAndNotify();
   }
 
+  public removeRequestInProgress(): void {
+    this.requestStateQueue.shift();
+    this.updateQueueAndNotify();
+  }
+
+  private updateQueueAndNotify(): void {
+    const newState = this.requestStateQueue.length > 0 ? true : false;
+    if (newState !== this.isHttpRequestInProgress.value) {
+      this.isHttpRequestInProgress.next(newState);
+    }
+  }
 
 }

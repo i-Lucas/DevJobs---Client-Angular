@@ -1,3 +1,5 @@
+type Severity = 'info' | 'warn' | 'success' | 'error';
+
 interface DropdownOptionsList {
     name: string;
 }
@@ -5,7 +7,7 @@ interface DropdownOptionsList {
 interface ToastProps {
 
     detail: string;
-    type: 'info' | 'warn' | 'success' | 'error';
+    type: Severity;
 }
 
 interface DevSignupFormPreviewEvent {
@@ -71,4 +73,8 @@ interface OnPreviewNavigate {
 
     path: string;
     params: string;
+}
+
+interface OnClickMessageList {
+    messageId: string
 }

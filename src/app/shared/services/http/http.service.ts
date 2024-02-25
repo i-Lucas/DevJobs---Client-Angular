@@ -38,7 +38,7 @@ export class HttpService implements HttpInterceptor {
 
     return next.handle(req.clone({ url: this.getRequestUrl(req) }))
       .pipe(catchError(error => this.handleHttpError(error)),
-        finalize(() => this.appService.updateRequestInProgress(false))
+        finalize(() => this.appService.removeRequestInProgress())
       );
   }
 
@@ -67,7 +67,7 @@ export class HttpService implements HttpInterceptor {
   }
 
   private handleHttpError(error: HttpErrorResponse): Observable<never> {
-    this.appService.updateRequestInProgress(false);
+    this.appService.removeRequestInProgress();
     return error.status === 0 ? this.handleUnknownError() : this.handleApiError(error);
   }
 
@@ -114,7 +114,7 @@ export class HttpService implements HttpInterceptor {
 
   private performRequest<T>(method: string, url: string, body?: object, external: boolean = false): Observable<T> {
 
-    this.appService.updateRequestInProgress(true);
+    this.appService.addRequestInProgress(true);
     const requestObservable = this.http.request<T>(method, url, { headers: this.getHeaders(external), body });
     return requestObservable.pipe(catchError(error => throwError(() => (error))));
   }

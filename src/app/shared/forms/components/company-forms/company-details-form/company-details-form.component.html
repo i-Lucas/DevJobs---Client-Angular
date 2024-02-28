@@ -1,15 +1,15 @@
 @if (detailsForm) {
 
-    <form class="flex flex-column gap-2 m-auto text-sm" [formGroup]="detailsForm">
+    <form class="flex flex-column gap-2 m-auto app-sm" [formGroup]="detailsForm">
 
         <label class="block font-medium mb-1">Empresa</label>
         <input formControlName="fantasy_name" type="text" pInputText class="w-full">
-        <small class="mb-3 text-xs">Nome fantasia ou nome que exibiremos como ofertante de oportunidades. (ex:
+        <small class="mb-3 app-xs">Nome fantasia ou nome que exibiremos como ofertante de oportunidades. (ex:
             DevJobs)</small>
     
         <label class="block font-medium mb-1">Descrição</label>
         <input formControlName="description" type="text" pInputText class="w-full">
-        <small class="mb-3 text-xs">Defina de maneira breve a sua empresa. (Ex: Plataforma de gerenciamento de processos
+        <small class="mb-3 app-xs">Defina de maneira breve a sua empresa. (Ex: Plataforma de gerenciamento de processos
             seletivos)</small>
     
         <label class="block font-medium mb-1">Ano de Fundação</label>
@@ -21,7 +21,7 @@
     
         <label class="block font-medium mb-1">Mercado</label>
         <input formControlName="marketArea" type="text" pInputText class="w-full">
-        <small class="mb-3 text-xs">Selecione o setor de atuação da empresa (ex: Mercado Imobiliário)</small>
+        <small class="mb-3 app-xs">Selecione o setor de atuação da empresa (ex: Mercado Imobiliário)</small>
     
         <label class="block font-medium mb-1">Natureza Jurídica</label>
         <p-dropdown formControlName="legalNature" styleClass="mb-3 w-full" [options]="legalNature"
@@ -36,7 +36,7 @@
     
         <label class="block font-medium mb-1">Sobre</label>
         <textarea formControlName="about" rows="6" cols="30" class="w-full" pInputTextarea [autoResize]="true"></textarea>
-        <small class="mb-3 text-xs">Forneça os detalhes a serem exibidos no perfil da sua empresa.</small>
+        <small class="mb-3 app-xs">Forneça os detalhes a serem exibidos no perfil da sua empresa.</small>
     
     </form>
 }

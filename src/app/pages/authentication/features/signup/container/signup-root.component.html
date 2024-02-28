@@ -2,7 +2,7 @@
     <div class="border-round w-full lg:w-6">
 
         <div class="text-center">
-            <h1 class="text-3xl font-medium mb-1">Cadastre-se</h1>
+            <h1 class="app-2xl font-medium mb-1">Cadastre-se</h1>
         </div>
 
         <div class="flex justify-content-center align-items-center gap-4">
@@ -10,14 +10,14 @@
                 <div class="flex justify-content-center align-items-center gap-2 mb-3"
                     [ngClass]="{'font-bold text-primary': mode === 'DEV'}">
                     <i class="pi pi-user"></i>
-                    <h1 class="text-base font-medium">Developers</h1>
+                    <h1 class="app-sm font-medium">Developers</h1>
                 </div>
             </span>
             <span (click)="changeMode('COMPANY')" routerLink="/auth/signup/company" class="cursor-pointer">
                 <div class="flex justify-content-center align-items-center gap-2 mb-3"
                     [ngClass]="{'font-bold text-primary': mode === 'COMPANY'}">
                     <i class="pi pi-building"></i>
-                    <h1 class="text-base font-medium">Business</h1>
+                    <h1 class="app-sm font-medium">Business</h1>
                 </div>
             </span>
         </div>

@@ -17,6 +17,12 @@ body {
     --sidebar-width: 15vw;
     --margin-top-from-header: 20px;
 
+    // fonts
+    --app-2xl: 1.5rem; // text-2xl
+    --app-lg: 1.125rem; // text-lg
+    --app-sm: .875rem; // text-sm
+    --app-xs: .75rem; // text-xs
+
     color: var(--text-color);
     background-color: var(--surface-ground);
     font-family: 'Raleway', sans-serif;
@@ -29,6 +35,26 @@ body {
         --header-height: 10vh;
     }
 }
+
+// --------------------------------------------------------------------------------- custom fonts
+
+.app-xs {
+    font-size: var(--app-xs);
+}
+
+.app-sm {
+    font-size: var(--app-sm);
+}
+
+.app-lg {
+    font-size: var(--app-lg);
+}
+
+.app-2xl {
+    font-size: var(--app-2xl);
+}
+
+
 
 // --------------------------------------------------------------------------------- custom themes
 

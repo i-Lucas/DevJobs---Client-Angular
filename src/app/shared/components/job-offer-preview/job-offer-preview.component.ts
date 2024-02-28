@@ -13,7 +13,7 @@ export class JobOfferPreviewComponent {
   protected maxStackChip: number = 15;
 
   protected formatListWithLineBreaks(stacklist: string[]) {
-    return stacklist.map((item, idx) => idx === stacklist.length - 1 ? item : item + '\n').join('');
+    return stacklist.slice(this.maxStackChip, stacklist.length).map((item, idx) => idx === stacklist.length - 1 ? item : item + '\n').join('');
   }
 
 }

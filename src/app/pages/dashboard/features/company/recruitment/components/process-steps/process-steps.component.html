@@ -22,7 +22,7 @@
 
                             <div class="flex align-items-center gap-2">
 
-                                <p-tag class="text-lg"
+                                <p-tag class="app-lg"
                                     [value]="getLabel(step.identifier)"
                                     [styleClass]="getSeverity(step.identifier)"
                                 />
@@ -33,7 +33,7 @@
 
                             </div>
 
-                            <p-tag class="text-lg"
+                            <p-tag class="app-lg"
                                 [value]="'Etapa ' + getStepIndex(step.identifier)"
                                 [styleClass]="getSeverity(step.identifier)"
                             />
@@ -67,7 +67,7 @@
                                             <input 
                                                 pInputText
                                                 placeholder="Procurar"                                          
-                                                class="p-inputtext-sm w-full"
+                                                class="p-inputapp-sm w-full"
                                                 [(ngModel)]="searchTerms[list.id]"
                                                 (input)="onSearch(step.identifier, list.id)"
                                             >
@@ -90,7 +90,7 @@
                                                         styleClass="mr-2"
                                                     />
                     
-                                                    <p class="text-sm">{{ candidate.name }}</p>      
+                                                    <p class="app-sm">{{ candidate.name }}</p>      
                     
                                                 </div>
                                                                     

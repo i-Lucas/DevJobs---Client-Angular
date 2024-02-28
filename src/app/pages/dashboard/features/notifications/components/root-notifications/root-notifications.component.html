@@ -26,7 +26,7 @@
     
                             <div class="flex align-items-center gap-3">
                                 <i class="material-icons">{{option.icon}}</i>
-                                <span class="text-sm">{{option.label}}</span>
+                                <span class="app-sm">{{option.label}}</span>
                             </div>
                                
                             @if (notifications && notifications.messages[option.identifier].length > 0 ) {
@@ -92,19 +92,19 @@
                                 <div class="flex w-full justify-content-start align-items-center gap-2 lg:gap-8" >
     
                                     <div class="flex align-items-center w-full gap-2">
-                                        <span class="font-bold text-xs">De :</span>
-                                        <span class="text-sm">{{message.senderEmail}}</span>
+                                        <span class="font-bold app-xs">De :</span>
+                                        <span class="app-sm">{{message.senderEmail}}</span>
                                     </div>
                                     
                                     <div class="flex align-items-center w-full gap-2">
-                                        <span class="font-bold text-xs">Assunto :</span>
-                                        <span class="text-sm">{{message.subject}}</span>
+                                        <span class="font-bold app-xs">Assunto :</span>
+                                        <span class="app-sm">{{message.subject}}</span>
                                     </div>
 
                                     <!--
                                     <div class="flex align-items-center w-full gap-2">
-                                        <span class="font-bold text-xs">Data :</span>
-                                        <span class="text-sm">{{message.createdAt | DD_MM_YYYY}}</span>
+                                        <span class="font-bold app-xs">Data :</span>
+                                        <span class="app-sm">{{message.createdAt | DD_MM_YYYY}}</span>
                                     </div>
                                     -->
                                 </div>

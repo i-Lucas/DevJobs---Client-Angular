@@ -21,15 +21,15 @@
         
                 <ng-template pTemplate="header">
                     <tr>
-                        <th class="text-sm">Título</th>
-                        <th class="text-sm">Categoria</th>
-                        <th class="text-sm">Senioridade</th>
-                        <th class="text-sm">Candidatos</th>
-                        <th class="text-sm">Responsável</th>
-                        <th class="text-sm">Início</th>
-                        <th class="text-sm">Atualização</th>
-                        <th class="text-sm">Encerramento</th>
-                        <th class="text-sm">Status</th>
+                        <th class="app-sm">Título</th>
+                        <th class="app-sm">Categoria</th>
+                        <th class="app-sm">Senioridade</th>
+                        <th class="app-sm">Candidatos</th>
+                        <th class="app-sm">Responsável</th>
+                        <th class="app-sm">Início</th>
+                        <th class="app-sm">Atualização</th>
+                        <th class="app-sm">Encerramento</th>
+                        <th class="app-sm">Status</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-process>
@@ -37,49 +37,49 @@
                     <tr [routerLink]="['/dashboard/company/recruitment/', process.id]"
                         class="hover:bg-primary cursor-pointer">
         
-                        <td class="text-xs lg:text-base">
-                            <span class="my-3 text-xs font-bold p-column-title">Título</span>
-                            <p class="text-xs">{{process.title}}</p>
+                        <td class="app-xs lg:app-sm">
+                            <span class="my-3 app-xs font-bold p-column-title">Título</span>
+                            <p class="app-xs">{{process.title}}</p>
                         </td>
         
-                        <td class="text-xs lg:text-base">
-                            <span class="my-3 text-xs font-bold p-column-title">Categoria</span>
-                            <p class="text-xs">{{process.category}}</p>
+                        <td class="app-xs lg:app-sm">
+                            <span class="my-3 app-xs font-bold p-column-title">Categoria</span>
+                            <p class="app-xs">{{process.category}}</p>
                         </td>
         
-                        <td class="text-xs lg:text-base">
-                            <span class="my-3 text-xs font-bold p-column-title">Senioridade</span>
-                            <p class="text-xs">{{process.seniority}}</p>
+                        <td class="app-xs lg:app-sm">
+                            <span class="my-3 app-xs font-bold p-column-title">Senioridade</span>
+                            <p class="app-xs">{{process.seniority}}</p>
                         </td>
         
-                        <td class="text-xs lg:text-base">
-                            <span class="my-3 text-xs font-bold p-column-title">Candidatos</span>                        
-                            <p class="text-xs">{{process.subscribersCount}}</p>
+                        <td class="app-xs lg:app-sm">
+                            <span class="my-3 app-xs font-bold p-column-title">Candidatos</span>                        
+                            <p class="app-xs">{{process.subscribersCount}}</p>
                         </td>
         
-                        <td class="text-xs lg:text-base">
-                            <span class="my-3 text-xs font-bold p-column-title">Responsável</span>                        
-                            <p class="text-xs">{{process.recruiter}}</p>
+                        <td class="app-xs lg:app-sm">
+                            <span class="my-3 app-xs font-bold p-column-title">Responsável</span>                        
+                            <p class="app-xs">{{process.recruiter}}</p>
                         </td>
         
-                        <td class="text-xs lg:text-base">
-                            <span class="my-3 text-xs font-bold p-column-title">Início</span>
-                            <p class="text-xs">{{process.createdAt | DD_MM_YYYY}}</p>
+                        <td class="app-xs lg:app-sm">
+                            <span class="my-3 app-xs font-bold p-column-title">Início</span>
+                            <p class="app-xs">{{process.createdAt | DD_MM_YYYY}}</p>
                         </td>
         
-                        <td class="text-xs lg:text-base">
-                            <span class="my-3 text-xs font-bold p-column-title">Atualização</span>
-                            <p class="text-xs">{{process.updatedAt | DD_MM_YYYY}}</p>
+                        <td class="app-xs lg:app-sm">
+                            <span class="my-3 app-xs font-bold p-column-title">Atualização</span>
+                            <p class="app-xs">{{process.updatedAt | DD_MM_YYYY}}</p>
                         </td>
         
-                        <td class="text-xs lg:text-base">
-                            <span class="my-3 text-xs font-bold p-column-title">Encerramento</span>
-                            <p class="text-xs">{{process.deadline | DD_MM_YYYY}}</p>
+                        <td class="app-xs lg:app-sm">
+                            <span class="my-3 app-xs font-bold p-column-title">Encerramento</span>
+                            <p class="app-xs">{{process.deadline | DD_MM_YYYY}}</p>
                         </td>
         
                         <td>
-                            <span class="my-3 text-xs font-bold p-column-title">Status</span>
-                            <p-tag class="text-lg"
+                            <span class="my-3 app-xs font-bold p-column-title">Status</span>
+                            <p-tag class="app-lg"
                                 [value]="getLabel(process.steps[currentProcessStepIndex].identifier)"
                                 [styleClass]="getSeverity(process.steps[currentProcessStepIndex].identifier)"
                             />

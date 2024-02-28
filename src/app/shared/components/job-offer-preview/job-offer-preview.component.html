@@ -17,7 +17,7 @@
 
                                 <span class="font-bold">{{job.offer.title}}</span>
 
-                                <div class="flex align-items-center gap-2 text-sm">
+                                <div class="flex align-items-center gap-2 app-sm">
                                     <i class="material-icons">apartment</i>
                                     <span                                        
                                         [class.hover:text-primary]="currentProfileId !== job.company.profile"
@@ -32,13 +32,13 @@
 
                         <div class="flex flex-wrap gap-2 p-4 lg:w-5 lg:p-0">
                             @for (stack of job.offer.stacklist.slice(0, maxStackChip); track stack) {
-                                <p-chip styleClass="text-xs" label={{stack}} />
+                                <p-chip styleClass="app-xs" label={{stack}} />
                             }
                             @if (job.offer.stacklist.length > maxStackChip) {
                                 <p-chip 
                                     label="..."
                                     icon="pi pi-eye"
-                                    styleClass="text-xs hover:bg-primary"
+                                    styleClass="app-xs hover:bg-primary"
                                     pTooltip={{formatListWithLineBreaks(job.offer.stacklist)}}
                                 />
                             }
@@ -55,7 +55,7 @@
 
                     </div>
 
-                    <div class="flex justify-content-center gap-4 text-sm align-items-center lg:justify-content-start">
+                    <div class="flex justify-content-center gap-4 app-sm align-items-center lg:justify-content-start">
 
                         <div class="flex align-items-center">
                             <i class="pi pi-users mr-2"></i>

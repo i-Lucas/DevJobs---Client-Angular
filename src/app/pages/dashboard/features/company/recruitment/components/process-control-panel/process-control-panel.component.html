@@ -12,34 +12,34 @@
         <form class="flex flex-column gap-4 justify-content-between py-4 px-4 xl:flex-row xl:py-2" [formGroup]="panelControlForm">
 
             <section class="flex flex-column gap-2">
-                <label class="block font-bold text-sm mb-1">Título</label>
-                <label class="block font-medium text-xs mb-1">{{hiringprocess.title}}</label>
+                <label class="block font-bold app-sm mb-1">Título</label>
+                <label class="block font-medium app-xs mb-1">{{hiringprocess.title}}</label>
             </section>
 
             <section class="flex flex-column gap-2">
-                <label class="block font-bold text-sm mb-1">Nº de inscritos:</label>
-                <label class="block font-medium text-xs mb-1">{{panelControlForm.value.subscribers}}</label>
+                <label class="block font-bold app-sm mb-1">Nº de inscritos:</label>
+                <label class="block font-medium app-xs mb-1">{{panelControlForm.value.subscribers}}</label>
             </section>
 
             <section class="flex flex-column gap-2">
-                <label class="block font-bold text-sm mb-1">Criado em:</label>
-                <label class="block font-medium text-xs mb-1">{{hiringprocess.createdAt | DD_MM_YYYY}}</label>
+                <label class="block font-bold app-sm mb-1">Criado em:</label>
+                <label class="block font-medium app-xs mb-1">{{hiringprocess.createdAt | DD_MM_YYYY}}</label>
             </section>
 
             <section class="flex flex-column gap-2">
-                <label class="block font-bold text-sm mb-1">Atualizado em:</label>
-                <label class="block font-medium text-xs mb-1">{{hiringprocess.updatedAt | DD_MM_YYYY}}</label>
+                <label class="block font-bold app-sm mb-1">Atualizado em:</label>
+                <label class="block font-medium app-xs mb-1">{{hiringprocess.updatedAt | DD_MM_YYYY}}</label>
             </section>
 
             <section class="flex flex-column gap-2">
-                <label class="block font-bold text-sm mb-1">Responsável</label>
-                <label class="block font-medium text-xs mb-1">{{hiringprocess.recruiter}}</label>
+                <label class="block font-bold app-sm mb-1">Responsável</label>
+                <label class="block font-medium app-xs mb-1">{{hiringprocess.recruiter}}</label>
             </section>
 
             @if (currentProcessStepIdentifier) {
 
                 <section class="flex flex-column gap-2">
-                    <label class="block font-bold text-sm mb-1">Etapa Atual</label>
+                    <label class="block font-bold app-sm mb-1">Etapa Atual</label>
                     <p-tag 
                         [value]="getLabel(currentProcessStepIdentifier)" 
                         [styleClass]="getSeverity(currentProcessStepIdentifier)"
@@ -49,7 +49,7 @@
 
             <section class="flex flex-column gap-2">
 
-                <label class="block font-bold text-sm mb-1">Alterar Etapa</label>
+                <label class="block font-bold app-sm mb-1">Alterar Etapa</label>
 
                 <p-dropdown
                     [options]="hiringProcessStatusLabels" 
@@ -61,7 +61,7 @@
 
                     <ng-template let-item pTemplate="item">
                         <div [class]="item.color" class="p-1">
-                            <p class="font-bold text-xs">{{item.name}}</p>
+                            <p class="font-bold app-xs">{{item.name}}</p>
                         </div>
                     </ng-template>
 
@@ -71,7 +71,7 @@
 
             <section class="flex flex-column gap-2">
 
-                <label class="block font-bold text-sm mb-1">Salvar Alterações</label>
+                <label class="block font-bold app-sm mb-1">Salvar Alterações</label>
                 
                 <p-button 
                     label="Confirmar"
@@ -90,7 +90,7 @@
 
                 <section class="flex flex-column gap-2">
 
-                    <label class="block font-bold text-sm mb-1">Visualizar</label>
+                    <label class="block font-bold app-sm mb-1">Visualizar</label>
 
                     <!-- redirecionar para a página da vaga -->
                     <p-button

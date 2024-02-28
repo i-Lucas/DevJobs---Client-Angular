@@ -3,20 +3,20 @@
     <main class="flex justify-content-around align-items-center">
 
         <section routerLink="/">
-            <h5 class="cursor-pointer">Início</h5>
+            <span class="app-sm font-bold cursor-pointer">Início</span>
         </section>
 
         <section *ngIf="isRoute('/auth/signup')" routerLink="/auth/signin">
-            <h5 class="cursor-pointer">Entrar</h5>
+            <span class="app-sm font-bold cursor-pointer">Entrar</span>
         </section>
 
         <section *ngIf="isRoute('/auth/signin')" routerLink="/auth/signup">
-            <h5 class="cursor-pointer">Cadastrar-se</h5>
+            <span class="app-sm font-bold cursor-pointer">Cadastrar-se</span>
         </section>
 
     </main>
 
     @if (loading) {
-        <p-progressBar mode="indeterminate" [style]="{ height: '3px' }"></p-progressBar>
+        <p-progressBar mode="indeterminate" [style]="{ height: '3px' }" />
     }
 </header>

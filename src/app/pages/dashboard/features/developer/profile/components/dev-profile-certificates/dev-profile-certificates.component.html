@@ -19,7 +19,7 @@
             
             } @else {
     
-                <p class="text-xs">Nenhum registro</p>
+                <p class="app-xs">Nenhum registro</p>
             }
 
         } @else {
@@ -29,20 +29,20 @@
                 <section class="flex flex-column gap-3">
 
                     <div class="flex justify-content-between align-items-center">
-                        <span class="font-bold text-2xl">{{ certificate.institution }}</span>
+                        <span class="font-bold app-2xl">{{ certificate.institution }}</span>
 
                         @if (certificate.link) {
                             
                             <span class=" flex gap-2 cursor-pointer hover:text-primary">
                                 <i class="pi pi-link"></i>
-                                <span (click)="openNewWindow(certificate.link)" class="text-xs">Link</span>
+                                <span (click)="openNewWindow(certificate.link)" class="app-xs">Link</span>
                             </span>
                         }
 
                     </div>
     
-                    <span class="mt-2 text-xs font-bold">{{ certificate.course }}</span>
-                    <span class="text-xs text-600">{{ certificate.workload }}</span>
+                    <span class="mt-2 app-xs font-bold">{{ certificate.course }}</span>
+                    <span class="app-xs text-600">{{ certificate.workload }}</span>
     
                 </section>
 
@@ -125,7 +125,7 @@
 
         @else {
 
-            <p class="text-xs">Nenhum registro</p>
+            <p class="app-xs">Nenhum registro</p>
 
             <dev-new-field-btn
                 [loading]="loading || editLoading"

@@ -14,7 +14,8 @@
                     <span class="material-icons">{{option.icon}}</span>
                 </div>
                 <div class="flex justify-content-start align-items-center w-full pr-4">
-                    <p>{{option.label}}</p>
+                    
+                    <p class="app-sm">{{option.label}}</p>
 
                     @if (unreadMessagesCount && option.badge) {
                         <p-badge severity="danger" class="ml-4" value="{{unreadMessagesCount}}" />

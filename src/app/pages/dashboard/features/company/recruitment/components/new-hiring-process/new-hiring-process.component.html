@@ -22,7 +22,7 @@
 
             @if (hiringProcessForm) {
 
-                <form class="flex flex-column lg:flex-row gap-4 lg:gap-2 m-auto text-sm" [formGroup]="hiringProcessForm">
+                <form class="flex flex-column lg:flex-row gap-4 lg:gap-2 m-auto app-sm" [formGroup]="hiringProcessForm">
 
                     <section class="flex flex-column w-full gap-2">
                         <label class="block font-medium mb-1">Título</label>
@@ -91,7 +91,7 @@
                             </ng-template>
                         </p-chips> -->
                           
-                        <small class="mb-3 text-gray-700 text-xs">Habilidades requisito da vaga. (Ex: Java, C++, Docker)</small>
+                        <small class="mb-3 text-gray-700 app-xs">Habilidades requisito da vaga. (Ex: Java, C++, Docker)</small>
 
                         <div class="flex align-items-center gap-2">
                             <label class="block font-medium mb-1">Lista de Requisitos</label>
@@ -99,15 +99,15 @@
                         </div>
 
                         <p-chips formControlName="requirements" />
-                        <small class="mb-3 text-gray-700 text-xs">Requesitos da vaga. (Ex: Conhecimento avançado em orientação à objetos)</small>
+                        <small class="mb-3 text-gray-700 app-xs">Requesitos da vaga. (Ex: Conhecimento avançado em orientação à objetos)</small>
 
                         <label class="block font-medium mb-1">Lista de Diferenciais</label>
                         <p-chips formControlName="differences" />
-                        <small class="mb-3 text-gray-700 text-xs">Habilidades desejáveis (Ex: Graduação em Telecomunicações)</small>                        
+                        <small class="mb-3 text-gray-700 app-xs">Habilidades desejáveis (Ex: Graduação em Telecomunicações)</small>                        
 
                         <label class="block font-medium mb-1">Lista de Benefícios</label>
                         <p-chips formControlName="benefits" />
-                        <small class="mb-3 text-gray-700 text-xs">Benefícios da vaga. (Ex: Plano Odontológico)</small>
+                        <small class="mb-3 text-gray-700 app-xs">Benefícios da vaga. (Ex: Plano Odontológico)</small>
 
                         <p-divider />
 
@@ -136,7 +136,7 @@
                                                 
                         <label class="block font-medium mt-3 mb-1">Faixa Salarial</label>
 
-                        <label class="block text-xs text-gray-700 font-medium mb-1">Negociável</label>
+                        <label class="block app-xs text-gray-700 font-medium mb-1">Negociável</label>
                         <p-inputSwitch formControlName="negotiable" />
 
                         @if (!hiringProcessForm.value.negotiable) {
@@ -144,7 +144,7 @@
                             <section class="flex flex-column lg:flex-row gap-2 mt-2">
 
                                 <div class="flex flex-column w-full">
-                                    <label class="block text-gray-700 text-xs mb-1">Entre</label>
+                                    <label class="block text-gray-700 app-xs mb-1">Entre</label>
                                     <p-inputNumber
                                         [maxlength]="11"
                                         styleClass="flex-1"
@@ -154,7 +154,7 @@
                                     />
                                 </div>
                                 <div class="flex flex-column w-full">
-                                    <label class="block text-gray-700 text-xs mb-1">Até</label>                             
+                                    <label class="block text-gray-700 app-xs mb-1">Até</label>                             
                                     <p-inputNumber
                                         [maxlength]="11"
                                         styleClass="flex-1"

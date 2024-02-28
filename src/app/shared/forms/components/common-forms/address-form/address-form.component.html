@@ -1,10 +1,10 @@
 @if (addressForm) {
 
-    <form class="flex flex-column gap-2 m-auto text-sm" [formGroup]="addressForm">
+    <form class="flex flex-column gap-2 m-auto app-sm" [formGroup]="addressForm">
 
         <label class="block font-medium mb-2">CEP</label>
         <p-inputMask formControlName="cep" mask="99999-999" styleClass="w-full" placeholder="_____-___" />
-        <small class="mb-3 text-xs">Começar pelo CEP pode te poupar tempo</small>
+        <small class="mb-3 app-xs">Começar pelo CEP pode te poupar tempo</small>
     
         <label class="block font-medium mb-1">Endereço</label>
         <input formControlName="address" type="text" pInputText class="w-full mb-3">

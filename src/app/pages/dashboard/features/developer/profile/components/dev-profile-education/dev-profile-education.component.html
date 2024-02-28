@@ -20,7 +20,7 @@
             
             } @else {
     
-                <p class="text-xs">Nenhum registro</p>
+                <p class="app-xs">Nenhum registro</p>
             }
 
         } @else {
@@ -28,19 +28,19 @@
             @for (education of educationList; track education; let idx = $index) {
 
                 <div class="flex flex-column">
-                    <span class="font-bold text-2xl">{{education.institution}}</span>
-                    <span class="mt-2 text-xs font-bold">{{education.course}}</span>
+                    <span class="font-bold app-2xl">{{education.institution}}</span>
+                    <span class="mt-2 app-xs font-bold">{{education.course}}</span>
 
-                    <div class="mt-2 flex gap-2 text-xs text-600">
+                    <div class="mt-2 flex gap-2 app-xs text-600">
                         <span>De: {{education.from | MM_YYYY}}</span>
                         <span>Até: {{education.to | MM_YYYY}}</span>
                     </div>
 
-                    <span class="text-xs font-bold mt-4">{{education.modality}}</span>
+                    <span class="app-xs font-bold mt-4">{{education.modality}}</span>
 
                     <div class="flex gap-2 mt-2">
-                        <span class="text-xs font-bold">{{education.type}}</span>
-                        <span class="text-xs font-semibold">{{education.status}}</span>
+                        <span class="app-xs font-bold">{{education.type}}</span>
+                        <span class="app-xs font-semibold">{{education.status}}</span>
                     </div>
                 </div>
 
@@ -123,7 +123,7 @@
         }
         @else {
 
-            <p class="text-xs">Nenhum registro</p>
+            <p class="app-xs">Nenhum registro</p>
 
             <dev-new-field-btn
                 [loading]="loading || editLoading"

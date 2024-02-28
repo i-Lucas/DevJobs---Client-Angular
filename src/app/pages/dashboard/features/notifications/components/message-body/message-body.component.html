@@ -24,7 +24,7 @@
                             label="Lida"
                             icon="pi pi-eye"
                             pTooltip='Marcar como lida' tooltipPosition="left"
-                            styleClass="cursor-pointer text-xs hover:bg-primary"
+                            styleClass="cursor-pointer app-xs hover:bg-primary"
 
                             (click)="performAction.emit({
                                 event: $event, 
@@ -38,7 +38,7 @@
                         <p-chip 
                             label="Lida"
                             icon="pi pi-check"
-                            styleClass="text-xs"
+                            styleClass="app-xs"
                         />            
                     }
 
@@ -51,13 +51,13 @@
 
         </section>
    
-        <section class="text-sm line-height-3" [innerHTML]="message.bodyHTML"></section>
+        <section class="app-sm line-height-3" [innerHTML]="message.bodyHTML"></section>
 
         <p-divider layout="horizontal" />
 
         <section class="flex align-items-center justify-content-between">
 
-            <span class="text-xs font-bold">{{formatDate(message.createdAt)}}</span>
+            <span class="app-xs font-bold">{{formatDate(message.createdAt)}}</span>
 
             <div class="flex gap-2">
 

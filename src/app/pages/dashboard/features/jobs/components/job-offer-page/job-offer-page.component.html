@@ -27,7 +27,7 @@
                             <div>
                                 <h4 class="mb-2">{{jobOffer.company.name}}</h4>
                                 <span
-                                    class="hover:text-primary cursor-pointer text-sm"
+                                    class="hover:text-primary cursor-pointer app-sm"
                                     [routerLink]="['/dashboard/company/profile/', jobOffer.company.profile]">
                                     Ver empresa
                                 </span>
@@ -42,25 +42,25 @@
                                 <div class="flex flex-column">
                                     <div class="flex align-items-center gap-2">
                                         <i class="material-icons text-primary">work</i>
-                                        <span>{{jobOffer.offer.category}}</span>
+                                        <span class="app-sm">{{jobOffer.offer.category}}</span>
                                     </div>
-                                    <span class="ml-5 text-xs font-bold">Categoria</span>   
+                                    <span class="ml-5 app-xs font-bold">Categoria</span>   
                                 </div>
             
                                 <div class="flex flex-column">
                                     <div class="flex align-items-center gap-2">
                                         <i class="material-icons text-primary">emoji_events</i>
-                                        <span>{{jobOffer.offer.seniority}}</span>
+                                        <span class="app-sm">{{jobOffer.offer.seniority}}</span>
                                     </div>
-                                    <span class="ml-5 text-xs font-bold">Nível</span>   
+                                    <span class="ml-5 app-xs font-bold">Nível</span>   
                                 </div>
             
                                 <div class="flex flex-column">
                                     <div class="flex align-items-center gap-2">
                                         <i class="material-icons text-primary">paid</i>
-                                        <span>{{jobOffer.offer.salaryRange}}</span>
+                                        <span class="app-sm">{{jobOffer.offer.salaryRange}}</span>
                                     </div>
-                                    <span class="ml-5 text-xs font-bold">Faixa salarial</span>                                
+                                    <span class="ml-5 app-xs font-bold">Faixa salarial</span>                                
                                 </div>
                             </div>
         
@@ -68,25 +68,25 @@
                                 <div class="flex flex-column">
                                     <div class="flex align-items-center gap-2">
                                         <i class="material-icons text-primary">timer</i>
-                                        <span>{{jobOffer.offer.workload}}</span>
+                                        <span class="app-sm">{{jobOffer.offer.workload}}</span>
                                     </div>
-                                    <span class="ml-5 text-xs font-bold">Formato</span>   
+                                    <span class="ml-5 app-xs font-bold">Formato</span>   
                                 </div>
             
                                 <div class="flex flex-column">
                                     <div class="flex align-items-center gap-2">
                                         <i class="material-icons text-primary">description</i>
-                                        <span>{{jobOffer.offer.contractType}}</span>
+                                        <span class="app-sm">{{jobOffer.offer.contractType}}</span>
                                     </div>
-                                    <span class="ml-5 text-xs font-bold">Tipo de Contratação</span>
+                                    <span class="ml-5 app-xs font-bold">Tipo de Contratação</span>
                                 </div>
             
                                 <div class="flex flex-column">
                                     <div class="flex align-items-center gap-2">
                                         <i class="material-icons text-primary">location_on</i>
-                                        <span>{{jobOffer.offer.location}}</span>
+                                        <span class="app-sm">{{jobOffer.offer.location}}</span>
                                     </div>
-                                    <span class="ml-5 text-xs font-bold">Localidade</span>   
+                                    <span class="ml-5 app-xs font-bold">Localidade</span>   
                                 </div>
                             </div>
                         </div>
@@ -111,41 +111,41 @@
                     <div class="flex flex-column gap-3 p-4">
     
                         <div>
-                            <h4>Descrição</h4>
-                            <div [innerHTML]="jobOffer.offer.description" class="text-justify line-height-3 w-11"></div>
+                            <h5>Descrição</h5>
+                            <div [innerHTML]="jobOffer.offer.description" class="text-justify app-sm line-height-3 w-11"></div>
                         </div>
     
                         <div>
-                            <h4>Requisitos</h4>
+                            <h5>Requisitos</h5>
     
                             @for (requirement of jobOffer.offer.requirements; track requirement) {
         
                                 <div class="flex align-items-center gap-2">
                                     <i class="material-icons text-primary">check_circle</i>
-                                    <p>{{requirement}}</p>
+                                    <p class="app-sm">{{requirement}}</p>
                                 </div>
                             }    
                         </div>
     
                         <div>
-                            <h4>Requisitos Técnicos</h4>
+                            <h5>Requisitos Técnicos</h5>
                             <div class="flex w-10 gap-3 flex-wrap lg:w-8">
         
                                 @for (stack of jobOffer.offer.stacklist; track stack) {
-        
-                                    <p-chip styleClass="text-xs" label={{stack}} />
+
+                                    <p-chip styleClass="app-xs" label={{stack}} />
                                 }
         
                             </div>
                         </div>
     
                         <div>
-                            <h4>Diferenciais</h4>
+                            <h5>Diferenciais</h5>
                             @for (difference of jobOffer.offer.differences; track difference) {
         
                                 <div class="flex align-items-center gap-2">
                                     <i class="material-icons text-primary">check_circle</i>
-                                    <p>{{difference}}</p>
+                                    <p class="app-sm">{{difference}}</p>
                                 </div>
                             }
                         </div>

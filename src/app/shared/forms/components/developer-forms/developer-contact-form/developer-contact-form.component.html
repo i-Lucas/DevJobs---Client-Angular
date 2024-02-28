@@ -1,6 +1,6 @@
 @if (contactForm) {
 
-    <form class="flex flex-column gap-2 m-auto text-sm" [formGroup]="contactForm">
+    <form class="flex flex-column gap-2 m-auto app-sm" [formGroup]="contactForm">
 
         <label class="block font-medium mb-1">Email</label>
         <app-email-form (emailAvailabilityError)="onEmailAvailabilityError($event)" />

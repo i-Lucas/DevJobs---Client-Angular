@@ -11,6 +11,7 @@ export class DashboardSidebarComponent implements OnDestroy {
 
   @Input() isOpen: boolean = false;
   @Output() onHide = new EventEmitter<void>();
+  @Input() unreadMessagesCount: number | undefined;
 
   protected destroy$ = new Subject<void>();
   protected sidebarList: SidebarListOptions[] = []

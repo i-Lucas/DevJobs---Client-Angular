@@ -39,10 +39,12 @@ interface SidebarListOptions {
     icon: string;
     label: string;
     tooltip: string;
+    badge?: boolean;
+    badgeCount?: number;
     link: {
         path: string;
         sub_path?: string;
-    }
+    },
 }
 
 interface SidebarProps {

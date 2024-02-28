@@ -1,0 +1,121 @@
+@if (message) {
+
+    <main class="flex flex-column gap-2 app-border border-round p-4">
+
+        <section class="flex justify-content-end align-items-center">
+                
+            @if (message.category !== 'TRASH') {
+
+                @if (loading) {
+
+                    <div class="flex w-full justify-content-end">
+                        <p-progressSpinner 
+                            animationDuration=".5s"
+                            styleClass="w-1rem h-1rem" 
+                            strokeWidth="8" fill="var(--surface-ground)" 
+                        />
+                    </div>
+        
+                } @else {
+                           
+                    @if (message.unread) {
+                        
+                        <p-chip 
+                            label="Lida"
+                            icon="pi pi-eye"
+                            pTooltip='Marcar como lida' tooltipPosition="left"
+                            styleClass="cursor-pointer text-xs hover:bg-primary"
+
+                            (click)="performAction.emit({
+                                event: $event, 
+                                action: 'read',
+                                messageId: message.id
+                            })"
+                        />
+            
+                    } @else {
+                            
+                        <p-chip 
+                            label="Lida"
+                            icon="pi pi-check"
+                            styleClass="text-xs"
+                        />            
+                    }
+
+                }
+
+            } @else {
+
+                <p-tag value="Limpeza Automática Em: 7 dias" />
+            }    
+
+        </section>
+   
+        <section class="text-sm line-height-3" [innerHTML]="message.bodyHTML"></section>
+
+        <p-divider layout="horizontal" />
+
+        <section class="flex align-items-center justify-content-between">
+
+            <span class="text-xs font-bold">{{formatDate(message.createdAt)}}</span>
+
+            <div class="flex gap-2">
+
+                @if (message.category === 'TRASH') {
+
+                    <p-button
+                        size="small"
+                        severity="info"
+                        icon="pi pi-undo"
+                        [loading]="loading"
+                        [disabled]="loading"
+                        pTooltip="Restaurar"
+                        tooltipPosition="left"
+
+                        (click)="performAction.emit({
+                            event: $event, 
+                            action: 'restore',
+                            messageId: message.id
+                        })"
+                    />
+
+                } @else {
+
+                    <p-button
+                        size="small"
+                        severity="info"
+                        [loading]="loading"
+                        [disabled]="loading"
+                        tooltipPosition="left"
+                        [icon]="isFavorite(message.category) ? 'pi pi-star' : 'pi pi-star-fill'"
+                        [pTooltip]="!isFavorite(message.category) ? 'Favoritar' : 'Desfavoritar'"
+
+                        (click)="performAction.emit({
+                            event: $event, messageId: message.id,            
+                            action: !isFavorite(message.category) ? 'favorite' : 'unfavorite', 
+                        })"
+                    />
+                
+                    <p-button
+                        size="small"      
+                        severity="danger"
+                        icon="pi pi-trash"
+                        pTooltip="Excluir"
+                        [loading]="loading"
+                        [disabled]="loading"
+                        tooltipPosition="left"
+
+                        (click)="performAction.emit({
+                            event: $event, 
+                            action: 'delete',
+                            messageId: message.id
+                        })"
+                    />
+                }
+
+            </div>
+
+        </section>
+         
+    </main>
+}

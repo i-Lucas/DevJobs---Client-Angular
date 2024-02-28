@@ -9,6 +9,7 @@ import { DashboardRootComponent } from './components/dashboard-root/dashboard-ro
 import { DashboardHeaderComponent } from './components/dashboard-header/dashboard-header.component';
 import { DashboardSidebarComponent } from './components/dashboard-sidebar/dashboard-sidebar.component';
 
+import { BadgeModule } from 'primeng/badge';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { SidebarModule } from 'primeng/sidebar';
@@ -37,7 +38,7 @@ const routes: Routes = [
       },
       {
         path: 'notifications',
-        loadChildren: () => import('./features/messages/messages.module')
+        loadChildren: () => import('./features/notifications/notifications.module')
       }
     ]
   },
@@ -45,6 +46,7 @@ const routes: Routes = [
 
 @NgModule({
   exports: [
+    BadgeModule,
     AvatarModule,
     ButtonModule,
     SidebarModule,

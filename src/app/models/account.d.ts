@@ -15,5 +15,6 @@ interface GetAccountDataResponse {
 
     user: AppUser;
     account: AppAccount;
+    notifications: NotificationsResponse;
     profile: DeveloperProfile | CompanyProfile;
 }

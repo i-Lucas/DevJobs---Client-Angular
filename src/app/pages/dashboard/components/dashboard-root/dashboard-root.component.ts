@@ -9,6 +9,7 @@ import { CommonComponentService } from '@app-services/components/base-component.
 
 import { SidebarService } from '../../services/sidebar.service';
 import { SharedDashboardService } from '@app-services/dashboard/user/user-dashboard.service';
+import { NotificationsService } from '@app-services/dashboard/notifications/notifications.service';
 
 @Component({
   selector: 'app-dashboard-root',
@@ -20,6 +21,7 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
   protected sidebarOpen: boolean = false;
   protected destroy$ = new Subject<void>();
 
+  protected unreadMessagesCount: number | undefined;
   protected headerProps: DashboardHeaderProps | null = null;
 
   constructor(
@@ -30,6 +32,7 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
     private authService: AuthenticationService,
     private dashboardService: SharedDashboardService,
     private componentService: CommonComponentService,
+    private notificationService: NotificationsService
   ) { }
 
   ngOnInit(): void {
@@ -51,9 +54,14 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
   }
 
   private setupSidebarStateSubscription(): void {
+
     this.appService.getSidebarState()
       .pipe(takeUntil(this.destroy$))
       .subscribe(state => this.sidebarOpen = state);
+
+    this.notificationService.getNotificationsInfo()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(info => this.unreadMessagesCount = info?.unread);
   }
 
   private getAccountData() {
@@ -78,11 +86,12 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
     }
   }
 
-  private updateData({ account, profile, user }: GetAccountDataResponse) {
+  private updateData({ notifications, account, profile, user }: GetAccountDataResponse) {
 
     this.updateHeaderProps(user);
     this.dashboardService.updateUser(user);
     this.dashboardService.updateAccount(account);
+    this.notificationService.updateNotifications(notifications);
 
     this.dashboardService.updateProfile({
       ...profile,

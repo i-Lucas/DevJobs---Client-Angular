@@ -5,8 +5,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { ChipModule } from 'primeng/chip';
 import { ImageModule } from 'primeng/image';
 import { ButtonModule } from 'primeng/button';
-import { DividerModule } from 'primeng/divider';
 import { TooltipModule } from 'primeng/tooltip';
+import { DividerModule } from 'primeng/divider';
+import { SkeletonModule } from 'primeng/skeleton';
+import { PaginatorModule } from 'primeng/paginator';
 
 import { TalentsService } from './services/talents.service';
 
@@ -28,6 +30,8 @@ const routes: Routes = [
     ButtonModule,
     DividerModule,
     TooltipModule,
+    SkeletonModule,
+    PaginatorModule,
   ],
 })
 export class PrimeModule { }

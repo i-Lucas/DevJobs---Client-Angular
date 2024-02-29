@@ -13,11 +13,13 @@ export class RootTalentsComponent implements OnDestroy {
   protected loading: boolean = false;
   private destroy$ = new Subject<void>();
 
+  protected pageSize = 10;
+  protected currentPage = 1;
+  protected totalTalentsCount = 10;
+
   constructor(private talentsService: TalentsService) {
 
-    this.talentsService.getTalents()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(list => this.talents = list);
+    this.loadTalents();
 
     this.talentsService.getLoading()
       .pipe(takeUntil(this.destroy$))
@@ -27,6 +29,32 @@ export class RootTalentsComponent implements OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private loadTalents() {
+
+    this.talentsService.getTalents()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(list => this.talents = list);
+
+    this.talentsService.getCount()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(count => this.totalTalentsCount = count);
+  }
+
+  protected onPageChange(event: any): void {
+    this.currentPage = event.page + 1;
+    this.talentsService.getTalentsByPagination(this.currentPage, this.pageSize);
+  }
+
+  protected getTalentsForPage(page: number): Talent[] {
+
+    const startIndex = (page - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+
+    if (startIndex >= this.talents.length) return this.talents.slice(-10);
+    return this.talents.slice(startIndex, endIndex);
+
   }
 
 }

@@ -9,3 +9,9 @@ interface Talent {
     stacklist: string[]
     languages: string[]
 }
+
+interface TalentResponse {
+
+    count: number;
+    talents: Talent[];
+}

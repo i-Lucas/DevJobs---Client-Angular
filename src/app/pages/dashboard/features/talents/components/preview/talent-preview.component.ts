@@ -11,7 +11,7 @@ export class TalentPreviewComponent {
 
   // @Output() openInNewWindow = new EventEmitter<string>();
 
-  protected maxStackChip: number = 15;
+  protected maxStackChip: number = 10;
 
   protected formatListWithLineBreaks(list: string[], maxItems: number = this.maxStackChip) {
     return list.slice(maxItems, list.length).map((item, idx) => idx === list.length - 1 ? item : item + '\n').join('');

@@ -5,19 +5,40 @@
 
     </section>
 
-    @if (loading) {
+    <section class="m-auto lg:w-10">
 
-        <app-loading-spinner />
+        @if (loading && talents.length === 0) {
 
-    } @else {
+            <app-loading-spinner />
 
-        <section class="m-auto lg:w-10">
+        } @else {
 
-            <talent-preview
-                [talents]="talents"
-            />
+            @if (talents.length > 0) {
+
+                @if (talents.length !== totalTalentsCount) {
     
-        </section>
-    }
+                    <p class="app-xs">Mostrando <strong>{{talents.length}}</strong> de <strong>{{totalTalentsCount}}</strong></p>
+    
+                } @else {
+    
+                    <p class="app-xs">Todos os resultados</p>
+                }
+            }
+    
+            <talent-preview
+                [loading]="loading"
+                [talents]="getTalentsForPage(currentPage)"
+            />
+                <!-- [talents]="talents.slice((currentPage - 1) * pageSize, this.currentPage * this.pageSize)"     -->
+                
+            @if (talents.length > 0) {
+    
+                <p-paginator styleClass="mt-4" [rows]="pageSize" [totalRecords]="totalTalentsCount" (onPageChange)="onPageChange($event)" />
+            }
 
+        }
+
+    </section>
+    
 </main>
+

@@ -1,0 +1,77 @@
+<section class="flex flex-column align-items-center gap-6">
+
+    @for (talent of talents; track talent) {
+
+        <section class="app-border border-round w-full p-4">
+            
+            <section class="flex flex-column xl:flex-row">
+
+                <div class="flex justify-content-center align-items-center p-4 xl:w-3">
+                    <p-image alt="Image" imageClass="h-10rem border-circle" src={{talent.picture}} />
+                </div>
+
+                <div class="w-full px-4">
+                    <p class="app-2xl font-bold">{{talent.name}}</p>
+                    <p class="app-sm">{{talent.occupation}}</p>
+                    <p class="app-sm line-height-3 text-justify mt-5 xl:pr-4">{{talent.about}}</p>
+                </div>
+
+                <div class="flex flex-wrap gap-2 py-6 px-4 xl:px-8">
+                    
+                    @if (talent.stacklist.length >0) {
+
+                        @for (stack of talent.stacklist.slice(0, maxStackChip); track stack) {
+                            <p-chip styleClass="app-xs" label={{stack}} />
+                        }
+
+                        @if (talent.stacklist.length > maxStackChip) {
+
+                            <p-chip 
+                                label="..."
+                                icon="pi pi-wrench"
+                                styleClass="app-xs cursor-pointer hover:bg-primary"
+                                pTooltip={{formatListWithLineBreaks(talent.stacklist)}}
+                            />
+                        }
+                    }
+
+                </div>
+
+                <div class="flex justify-content-center align-items-center py-3 xl:w-3">
+                    <p-button 
+                        size="small"
+                        label="Ver Perfil"
+                        pTooltip="Ver perfil do candidato"
+                        [routerLink]="['/dashboard/developer/profile', talent.id]"
+                    />
+                </div>
+
+            </section>
+
+            <p-divider />
+
+            <section class="flex justify-content-between align-items-center px-4">
+                
+                <div class="flex align-items-center gap-2">
+                    <i class="pi pi-map-marker app-sm"></i>
+                    <span class="app-sm">{{talent.location}}</span>
+                </div>
+
+                @if (talent.languages.length > 0) {
+
+                    <div>
+                        <p-chip
+                            label="..."
+                            icon="pi pi-language"
+                            styleClass="app-xs cursor-pointer hover:bg-primary"
+                            [pTooltip]="formatListWithLineBreaks(talent.languages, 0)"
+                        />
+                    </div>
+                }          
+
+            </section>
+
+        </section>
+    }
+
+</section>

@@ -60,7 +60,7 @@ export class SidebarService {
       },
       {
         icon: 'search', label: 'Talentos',
-        link: { path: '/dashboard' },
+        link: { path: '/dashboard/talents' },
         tooltip: 'Encontre perfis e habilidades'
       }
     ]

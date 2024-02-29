@@ -31,10 +31,10 @@ export class MessageBodyComponent {
       return `${day} ${month} ${year} - ${hour}:${minute}`;
 
     } else if (diffDays === 1) {
-      return `${day} ${month} ${year} - ${hour}:${minute} (ontem)`;
+      return `${day} ${month} ${year} - ${hour}:${minute} ( ontem )`;
 
     } else {
-      return `${day} ${month} ${year} - ${hour}:${minute} (${diffDays} dias atrás)`;
+      return `${day} ${month} ${year} - ${hour}:${minute} ( ${diffDays} dias atrás )`;
     }
   }
 

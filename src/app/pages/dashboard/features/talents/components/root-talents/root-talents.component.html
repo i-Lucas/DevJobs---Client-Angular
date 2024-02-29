@@ -1,0 +1,23 @@
+<main class="p-4">
+
+    <!-- filtro -->
+    <section>
+
+    </section>
+
+    @if (loading) {
+
+        <app-loading-spinner />
+
+    } @else {
+
+        <section class="m-auto lg:w-10">
+
+            <talent-preview
+                [talents]="talents"
+            />
+    
+        </section>
+    }
+
+</main>

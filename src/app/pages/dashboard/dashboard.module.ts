@@ -3,20 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from '@app-guards/auth.guard';
+import { PrimeModule } from './modules/prime.module';
 import { SidebarService } from './services/sidebar.service';
 
 import { DashboardRootComponent } from './components/dashboard-root/dashboard-root.component';
 import { DashboardHeaderComponent } from './components/dashboard-header/dashboard-header.component';
 import { DashboardSidebarComponent } from './components/dashboard-sidebar/dashboard-sidebar.component';
-
-import { BadgeModule } from 'primeng/badge';
-import { AvatarModule } from 'primeng/avatar';
-import { ButtonModule } from 'primeng/button';
-import { SidebarModule } from 'primeng/sidebar';
-import { SkeletonModule } from 'primeng/skeleton';
-import { InputTextModule } from 'primeng/inputtext';
-import { TieredMenuModule } from 'primeng/tieredmenu';
-import { ProgressBarModule } from 'primeng/progressbar';
 
 const routes: Routes = [
   {
@@ -24,10 +16,6 @@ const routes: Routes = [
     component: DashboardRootComponent,
     canActivate: [AuthGuard],
     children: [
-      {
-        path: 'developer',
-        loadChildren: () => import('./features/developer/developer.module')
-      },
       {
         path: 'company',
         loadChildren: () => import('./features/company/company.module')
@@ -37,26 +25,20 @@ const routes: Routes = [
         loadChildren: () => import('./features/jobs/job-offers.module')
       },
       {
+        path: 'talents',
+        loadChildren: () => import('./features/talents/talents.module')
+      },
+      {
+        path: 'developer',
+        loadChildren: () => import('./features/developer/developer.module')
+      },
+      {
         path: 'notifications',
         loadChildren: () => import('./features/notifications/notifications.module')
-      }
+      },
     ]
   },
 ];
-
-@NgModule({
-  exports: [
-    BadgeModule,
-    AvatarModule,
-    ButtonModule,
-    SidebarModule,
-    SkeletonModule,
-    InputTextModule,
-    TieredMenuModule,
-    ProgressBarModule,
-  ]
-})
-export class PrimeModule { }
 
 @NgModule({
   declarations: [
@@ -69,8 +51,8 @@ export class PrimeModule { }
     SidebarService
   ],
   imports: [
-    CommonModule,
     PrimeModule,
+    CommonModule,
     RouterModule.forChild(routes)
   ]
 })

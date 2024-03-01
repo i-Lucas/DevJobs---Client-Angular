@@ -15,6 +15,7 @@
 
                 <h3>Vagas em aberto</h3>
                 <app-job-offer-preview
+                    [loading]="loading"
                     [jobOffersList]="openOffers"
                     (onNavigate)="onNavigate.emit($event)"
                     [currentProfileId]="currentProfile.id"

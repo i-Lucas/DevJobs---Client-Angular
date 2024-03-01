@@ -62,19 +62,17 @@ export class TalentsService implements OnDestroy {
 
   private handleGetAccountResponse({ data, message }: ApiResponse<TalentResponse>) {
 
-    this.loading.next(false);
-
     if (data) {
 
       const current: Talent[] = this.talents.getValue();
 
       current.push(...data.talents);
-
       this.talents.next(current);
       this.count.next(data.count);
-
-      this.componentService.showMessage({ detail: message, type: 'success' });
     }
+
+    this.loading.next(false);
+    this.componentService.showMessage({ detail: message, type: 'success' });
 
   }
 

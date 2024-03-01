@@ -6,8 +6,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class JobOfferPreviewComponent {
 
+  @Input() loading: boolean = false;
   @Input() jobOffersList: JobOfferData[] = [];
   @Input() currentProfileId: string | undefined;
+
   @Output() onNavigate = new EventEmitter<OnPreviewNavigate>()
 
   protected maxStackChip: number = 15;

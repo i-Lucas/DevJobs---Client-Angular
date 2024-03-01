@@ -10,9 +10,12 @@ import { SharedDashboardService } from '@app-services/dashboard/user/user-dashbo
 })
 export class SharedJobOfferService implements OnDestroy {
 
+  private loadedPages: number[] = [];
   protected destroy$ = new Subject<void>();
+  private loading = new BehaviorSubject<boolean>(true);
 
-  private jobOffers: BehaviorSubject<JobOfferData[]> = new BehaviorSubject<JobOfferData[]>([]);
+  private count = new BehaviorSubject<number>(0);
+  private jobOffers: BehaviorSubject<JobOfferResponse['offers']> = new BehaviorSubject<JobOfferData[]>([]);
 
   constructor(
     private httpService: HttpService,
@@ -28,8 +31,16 @@ export class SharedJobOfferService implements OnDestroy {
     this.destroy$.complete();
   }
 
+  public getCount(): Observable<number> {
+    return this.count.asObservable();
+  };
+
   public getJobOffersList(): Observable<JobOfferData[]> {
     return this.jobOffers.asObservable();
+  }
+
+  public getLoading(): Observable<boolean> {
+    return this.loading.asObservable();
   }
 
   public updateJobOfferList(offers: JobOfferData[]) {
@@ -56,13 +67,44 @@ export class SharedJobOfferService implements OnDestroy {
 
           // futuramente, caso seja necessário que a empresa tenha acesso a lista de todas as ofertas é só remover essa regra
           if (accountType && accountType !== 'COMPANY') {
-            this.getAllOffers();
+            this.getOffersByPagination(1, 10);
           }
 
         }
       })
   };
 
+  public getOffersByPagination(page: number, pageSize: number) {
+
+    if (!this.loadedPages.includes(page)) {
+      this.loadedPages.push(page);
+
+      this.loading.next(true);
+      this.httpService.get<ApiResponse<JobOfferResponse>>(`/offer/get/all?page=${page}&pageSize=${pageSize}`)
+        .pipe(takeUntil(this.destroy$)).subscribe({
+          next: (response) => this.handleGetOffersResponse(response),
+          error: (error) => this.handleGetOffersError(error)
+        })
+    }
+  };
+
+  private handleGetOffersResponse({ data, message }: ApiResponse<JobOfferResponse>) {
+
+    if (data) {
+
+      const current: JobOfferData[] = this.jobOffers.getValue();
+
+      current.push(...data.offers);
+      this.jobOffers.next(current);
+      this.count.next(data.count);
+    }
+
+    this.loading.next(false);
+    this.componentService.showMessage({ detail: message, type: 'success' });
+
+  }
+
+  /*
   private getAllOffers() {
 
     this.httpService.get<ApiResponse<JobOfferData[]>>('/offer/get/all')
@@ -71,8 +113,10 @@ export class SharedJobOfferService implements OnDestroy {
         error: (error) => this.handleGetOffersError(error)
       })
   };
+  */
 
   private handleGetOffersError({ message }: ApiError) {
+    this.loading.next(false);
     this.componentService.showMessage({ detail: message, type: 'error' });
   }
 

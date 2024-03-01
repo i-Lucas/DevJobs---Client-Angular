@@ -11,6 +11,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { TooltipModule } from 'primeng/tooltip';
+import { SkeletonModule } from 'primeng/skeleton';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
@@ -28,6 +29,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     DialogModule,
     TooltipModule,
     DividerModule,
+    SkeletonModule,
     ProgressSpinnerModule
   ],
   exports: [

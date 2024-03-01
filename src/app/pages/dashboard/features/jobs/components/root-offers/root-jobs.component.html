@@ -5,10 +5,50 @@
     </section>
 
     <section class="m-auto lg:w-10">
-        <app-job-offer-preview
-            [jobOffersList]="jobOffersList"
-            (onNavigate)="onClickNavigate($event)"
-        />
+
+        @if (loading && jobOffersList.length === 0) {
+
+            <app-loading-spinner />
+
+        } @else {
+
+            @if (jobOffersList.length > 0) {
+
+                @if (jobOffersList.length !== totalOffersCount) {
+    
+                    <div class="flex justify-content-between">
+                        <p class="app-xs">Página <strong>{{currentPage}}</strong> de <strong>{{totalOffersCount / 10 }}</strong></p>
+                        <p class="app-xs">Carregado <strong>{{jobOffersList.length}}</strong> de <strong>{{totalOffersCount}}</strong></p>
+                    </div>
+    
+                } @else {
+    
+                    <div class="flex justify-content-between">
+                        <p class="app-xs">Página <strong>{{currentPage}}</strong> de <strong>{{totalOffersCount / 10 }}</strong></p>
+                        <p class="app-xs">Todos os resultados carregados</p>
+                    </div>
+                }
+
+            } 
+            
+            @else {
+
+                <p class="text-center">Nenhum resultado encontrado</p>
+            }
+
+        }
+
+        @if (jobOffersList.length > 0) {
+    
+            <app-job-offer-preview
+                [loading]="loading"
+                (onNavigate)="onClickNavigate($event)"
+                [jobOffersList]="getOffersForPage(currentPage)"
+            />
+
+            <p-paginator styleClass="mt-4" [rows]="pageSize" [totalRecords]="totalOffersCount" (onPageChange)="onPageChange($event)" />
+        }
+
     </section>
 
 </main>

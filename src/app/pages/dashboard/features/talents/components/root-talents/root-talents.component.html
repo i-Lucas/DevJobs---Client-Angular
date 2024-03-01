@@ -17,25 +17,34 @@
 
                 @if (talents.length !== totalTalentsCount) {
     
-                    <p class="app-xs">Mostrando <strong>{{talents.length}}</strong> de <strong>{{totalTalentsCount}}</strong></p>
+                    <div class="flex justify-content-between">
+                        <p class="app-xs">Página <strong>{{currentPage}}</strong> de <strong>{{totalTalentsCount / 10 }}</strong></p>
+                        <p class="app-xs">Carregado <strong>{{talents.length}}</strong> de <strong>{{totalTalentsCount}}</strong></p>
+                    </div>
     
                 } @else {
     
-                    <p class="app-xs">Todos os resultados</p>
+                    <div class="flex justify-content-between">
+                        <p class="app-xs">Página <strong>{{currentPage}}</strong> de <strong>{{totalTalentsCount / 10 }}</strong></p>
+                        <p class="app-xs">Todos os resultados carregados</p>
+                    </div>
                 }
             }
-    
-            <talent-preview
-                [loading]="loading"
-                [talents]="getTalentsForPage(currentPage)"
-            />
-                <!-- [talents]="talents.slice((currentPage - 1) * pageSize, this.currentPage * this.pageSize)"     -->
+
+            @else {
+
+                <p class="text-center">Nenhum resultado encontrado</p>
+            }
                 
             @if (talents.length > 0) {
-    
+
+                <talent-preview
+                    [loading]="loading"
+                    [talents]="getTalentsForPage(currentPage)"
+                />
+
                 <p-paginator styleClass="mt-4" [rows]="pageSize" [totalRecords]="totalTalentsCount" (onPageChange)="onPageChange($event)" />
             }
-
         }
 
     </section>

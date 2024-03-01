@@ -18,28 +18,12 @@ export class RootTalentsComponent implements OnDestroy {
   protected totalTalentsCount = 10;
 
   constructor(private talentsService: TalentsService) {
-
     this.loadTalents();
-
-    this.talentsService.getLoading()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(state => this.loading = state);
   }
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  private loadTalents() {
-
-    this.talentsService.getTalents()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(list => this.talents = list);
-
-    this.talentsService.getCount()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(count => this.totalTalentsCount = count);
   }
 
   protected onPageChange(event: any): void {
@@ -55,6 +39,21 @@ export class RootTalentsComponent implements OnDestroy {
     if (startIndex >= this.talents.length) return this.talents.slice(-10);
     return this.talents.slice(startIndex, endIndex);
 
+  }
+
+  private loadTalents() {
+
+    this.talentsService.getTalents()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(list => this.talents = list);
+
+    this.talentsService.getCount()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(count => this.totalTalentsCount = count);
+
+    this.talentsService.getLoading()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(state => this.loading = state);
   }
 
 }

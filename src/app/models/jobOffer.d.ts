@@ -30,3 +30,9 @@ interface JobOfferData {
     }
 
 }
+
+interface JobOfferResponse {
+
+    count: number;
+    offers: JobOfferData[],
+}

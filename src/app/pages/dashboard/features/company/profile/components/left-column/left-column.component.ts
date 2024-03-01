@@ -6,6 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class LeftColumnComponent {
   
+  @Input() loading: boolean = false;
   @Input() openOffers: JobOfferData[] | undefined;
   @Input() currentProfile: CompanyProfile | undefined;
   @Output() onNavigate = new EventEmitter<OnPreviewNavigate>()

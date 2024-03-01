@@ -11,36 +11,70 @@
 
                         <div class="flex align-items-center px-2 lg:px-0 lg:gap-6">
 
-                            <p-image alt="Image" imageClass="h-8rem" src={{job.company.picture}} />
+                            @if (loading) {
+
+                                <p-skeleton width="10rem" height="10rem" />
+                                
+                            } @else {
+
+                                <p-image alt="Image" imageClass="h-8rem" src={{job.company.picture}} />
+                            }
 
                             <div class="flex flex-column gap-3">
 
-                                <span class="font-bold">{{job.offer.title}}</span>
+                                @if (loading) {
+
+                                    <p-skeleton width="15rem" height="2rem" styleClass="mb-2" />
+
+                                } @else {
+
+                                    <span class="font-bold">{{job.offer.title}}</span>
+                                }
 
                                 <div class="flex align-items-center gap-2 app-sm">
-                                    <i class="material-icons">apartment</i>
-                                    <span                                        
-                                        [class.hover:text-primary]="currentProfileId !== job.company.profile"
-                                        [style.cursor]="currentProfileId === job.company.profile ? 'block' : 'pointer'"
-                                        [pTooltip]="currentProfileId !== job.company.profile ? 'Ver perfil da empresa' : ''"
-                                        (click)="currentProfileId !== job.company.profile && onNavigate.emit({ path:'/dashboard/company/profile/', params: job.company.profile })">
-                                        {{job.company.name}}
-                                    </span>
+       
+                                    @if (loading) {
+
+                                        <p-skeleton width="10rem" height="2rem" styleClass="mb-2" />
+
+                                    } @else {
+                                        
+                                        <i class="material-icons">apartment</i>
+
+                                        <span                                        
+                                            [class.hover:text-primary]="currentProfileId !== job.company.profile"
+                                            [style.cursor]="currentProfileId === job.company.profile ? 'block' : 'pointer'"
+                                            [pTooltip]="currentProfileId !== job.company.profile ? 'Ver perfil da empresa' : ''"
+                                            (click)="currentProfileId !== job.company.profile && onNavigate.emit({ path:'/dashboard/company/profile/', params: job.company.profile })">
+                                            {{job.company.name}}
+                                        </span>
+                                    }
                                 </div>
                             </div>
                         </div>
 
                         <div class="flex flex-wrap gap-2 p-4 lg:w-5 lg:p-0">
-                            @for (stack of job.offer.stacklist.slice(0, maxStackChip); track stack) {
-                                <p-chip styleClass="app-xs" label={{stack}} />
-                            }
-                            @if (job.offer.stacklist.length > maxStackChip) {
-                                <p-chip 
-                                    label="..."
-                                    icon="pi pi-eye"
-                                    styleClass="app-xs hover:bg-primary"
-                                    pTooltip={{formatListWithLineBreaks(job.offer.stacklist)}}
-                                />
+
+                            @if (loading) {
+
+                                <p-skeleton width="25rem" height="8rem" styleClass="mt-2" /> 
+        
+                            } @else {
+
+                                @for (stack of job.offer.stacklist.slice(0, maxStackChip); track stack) {
+
+                                    <p-chip styleClass="app-xs" label={{stack}} />
+                                }
+
+                                @if (job.offer.stacklist.length > maxStackChip) {
+
+                                    <p-chip 
+                                        label="..."
+                                        icon="pi pi-eye"
+                                        styleClass="app-xs hover:bg-primary"
+                                        pTooltip={{formatListWithLineBreaks(job.offer.stacklist)}}
+                                    />
+                                }
                             }
                         </div>
 
@@ -48,6 +82,8 @@
                             <p-button 
                                 size="small"
                                 label="Ver Vaga"
+                                [loading]="loading"
+                                [disabled]="loading"
                                 pTooltip="Ver página da oferta"
                                 (click)="onNavigate.emit({ path:'/dashboard/hiring/jobs/', params: job.offer.id })"
                             />
@@ -57,20 +93,41 @@
 
                     <div class="flex justify-content-center gap-4 app-sm align-items-center lg:justify-content-start">
 
-                        <div class="flex align-items-center">
-                            <i class="pi pi-users mr-2"></i>
-                            <span>{{job.offer.seniority}}</span>
-                        </div>
+                        @if (loading) {
 
-                        <div class="flex align-items-center gap-2">
-                            <i class="pi pi-map-marker"></i>
-                            <span>{{job.offer.location}}</span>
-                        </div>
+                            <p-skeleton width="15rem" height="2rem" styleClass="mb-2" />
 
-                        <div class="flex align-items-center">
-                            <i class="material-icons">attach_money</i>
-                            <span>{{job.offer.salaryRange}}</span>
-                        </div>
+                        } @else {
+
+                            <div class="flex align-items-center">
+                                <i class="pi pi-users mr-2"></i>
+                                <span>{{job.offer.seniority}}</span>
+                            </div>
+                        }
+
+                        @if (loading) {
+
+                            <p-skeleton width="15rem" height="2rem" styleClass="mb-2" />
+
+                        } @else {
+
+                            <div class="flex align-items-center gap-2">
+                                <i class="pi pi-map-marker"></i>
+                                <span>{{job.offer.location}}</span>
+                            </div>
+                        }
+
+                        @if (loading) {
+
+                            <p-skeleton width="15rem" height="2rem" styleClass="mb-2" />
+
+                        } @else {
+
+                            <div class="flex align-items-center">
+                                <i class="material-icons">attach_money</i>
+                                <span>{{job.offer.salaryRange}}</span>
+                            </div>
+                        }
 
                     </div>
                     

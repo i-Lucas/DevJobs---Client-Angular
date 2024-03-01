@@ -2,13 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ChipModule } from 'primeng/chip';
-import { ImageModule } from 'primeng/image';
-import { ButtonModule } from 'primeng/button';
-import { TooltipModule } from 'primeng/tooltip';
-import { DividerModule } from 'primeng/divider';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-// import { PaginatorModule } from 'primeng/paginator';
+import { PrimeModule } from './modules/prime.module';
 
 import { RootJobsComponent } from './components/root-offers/root-jobs.component';
 import { SearchPanelComponent } from './components/search-panel/search-panel.component';
@@ -35,15 +29,7 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
-
-    ChipModule,
-    ImageModule,
-    ButtonModule,
-    TooltipModule,
-    DividerModule,
-    ProgressSpinnerModule,
-    // PaginatorModule,
-
+    PrimeModule,
     SharedComponentsModule,
     RouterModule.forChild(routes)
   ],

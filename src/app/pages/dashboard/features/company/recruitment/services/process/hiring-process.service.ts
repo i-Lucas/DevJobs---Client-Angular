@@ -44,12 +44,12 @@ export class HiringProcessService implements OnDestroy {
 
     const {
       title, description, category, seniority, salaryRange, negotiable, contractType, locationType,
-      workload, deadline, pcd, benefits, differences, requirements, stacklist
+      workload, deadline, pcd, benefits, differences, requirements, stacklist, pcdType
     } = formData;
 
     const body = {
       title, description, category, seniority, salaryRange, negotiable, contractType, locationType,
-      workload, deadline, pcd, benefits, differences, requirements, stacklist
+      workload, deadline, pcd, benefits, differences, requirements, stacklist, pcdType
     };
 
     return new Promise((resolve, reject) => {
@@ -351,6 +351,7 @@ export class HiringProcessService implements OnDestroy {
         // enableSuggestions: true,
         deadline: "1705460400000",
         pcd: false,
+        pcdType: '',
         createdAt: now,
         updatedAt: now,
 

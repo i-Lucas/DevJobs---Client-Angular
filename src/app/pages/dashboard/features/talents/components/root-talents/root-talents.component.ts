@@ -15,7 +15,7 @@ export class RootTalentsComponent implements OnDestroy {
 
   protected pageSize = 10;
   protected currentPage = 1;
-  protected totalTalentsCount = 10;
+  protected totalTalentsCount = 0;
 
   constructor(private talentsService: TalentsService) {
     this.loadTalents();
@@ -30,6 +30,10 @@ export class RootTalentsComponent implements OnDestroy {
     this.currentPage = event.page + 1;
     this.talentsService.getTalentsByPagination(this.currentPage, this.pageSize);
   }
+
+  protected getNumberOfPages() {
+    return Math.ceil(this.totalTalentsCount / this.pageSize);
+  }  
 
   protected getTalentsForPage(page: number): Talent[] {
 

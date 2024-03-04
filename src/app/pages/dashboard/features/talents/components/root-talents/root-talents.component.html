@@ -18,14 +18,14 @@
                 @if (talents.length !== totalTalentsCount) {
     
                     <div class="flex justify-content-between">
-                        <p class="app-xs">Página <strong>{{currentPage}}</strong> de <strong>{{totalTalentsCount / 10 }}</strong></p>
+                        <p class="app-xs">Página <strong>{{currentPage}}</strong> de <strong>{{getNumberOfPages()}}</strong></p>
                         <p class="app-xs">Carregado <strong>{{talents.length}}</strong> de <strong>{{totalTalentsCount}}</strong></p>
                     </div>
     
                 } @else {
     
                     <div class="flex justify-content-between">
-                        <p class="app-xs">Página <strong>{{currentPage}}</strong> de <strong>{{totalTalentsCount / 10 }}</strong></p>
+                        <p class="app-xs">Página <strong>{{currentPage}}</strong> de <strong>{{getNumberOfPages()}}</strong></p>
                         <p class="app-xs">Todos os resultados carregados</p>
                     </div>
                 }

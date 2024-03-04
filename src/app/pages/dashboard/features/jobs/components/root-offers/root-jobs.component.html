@@ -1,8 +1,10 @@
 <main class="p-4">
 
+    <!-- 
     <section>
         <jobs-search-panel />
     </section>
+     -->
 
     <section class="m-auto lg:w-10">
 
@@ -17,14 +19,14 @@
                 @if (jobOffersList.length !== totalOffersCount) {
     
                     <div class="flex justify-content-between">
-                        <p class="app-xs">Página <strong>{{currentPage}}</strong> de <strong>{{totalOffersCount / 10 }}</strong></p>
+                        <p class="app-xs">Página <strong>{{currentPage}}</strong> de <strong>{{getNumberOfPages()}}</strong></p>
                         <p class="app-xs">Carregado <strong>{{jobOffersList.length}}</strong> de <strong>{{totalOffersCount}}</strong></p>
                     </div>
     
                 } @else {
     
                     <div class="flex justify-content-between">
-                        <p class="app-xs">Página <strong>{{currentPage}}</strong> de <strong>{{totalOffersCount / 10 }}</strong></p>
+                        <p class="app-xs">Página <strong>{{currentPage}}</strong> de <strong>{{getNumberOfPages()}}</strong></p>
                         <p class="app-xs">Todos os resultados carregados</p>
                     </div>
                 }

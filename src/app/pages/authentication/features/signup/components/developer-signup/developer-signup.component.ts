@@ -2,10 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 
-import MockService from '../../services/mock.service';
-
 import { CommonSignupService } from '../../services/common-signup.service';
-// import { FromMillisecondsToMonthYearPipe } from '@app-pipes/date-formatter.pipe';
 import { CommonComponentService } from '@app-services/components/base-component.service';
 import { DeveloperFormService } from '@app-shared-forms/services/builder/developer-forms/developer-form.service';
 
@@ -34,22 +31,22 @@ export class DeveloperSignupComponent implements OnDestroy {
   protected aboutForm: FormGroup = this.developerFormService.getDeveloperAboutForm();
   protected contactForm: FormGroup = this.developerFormService.getDeveloperContactForm();
 
-  protected stackList: DeveloperProfileStackList[] = this.mock.getStackList(50);
+  protected stackList: DeveloperProfileStackList[] = [];
   protected stackListForm: FormGroup = this.developerFormService.buildDeveloperStacklistForm();
 
-  protected languagesList: DeveloperProfileLanguages[] = []
+  protected languagesList: DeveloperProfileLanguages[] = [];
   protected languagesForm: FormGroup = this.developerFormService.buildDeveloperLanguagesForm();
 
-  protected projectsList: DeveloperProfileProjects[] = this.mock.getProjects(50);
+  protected projectsList: DeveloperProfileProjects[] = [];
   protected projectsForm: FormGroup = this.developerFormService.buildDeveloperProjectsForm();
 
-  protected certificatesList: DeveloperProfileCertificates[] = this.mock.getCertificates(50);
+  protected certificatesList: DeveloperProfileCertificates[] = [];
   protected certificatesForm: FormGroup = this.developerFormService.buildDeveloperCertificatesForm();
 
-  protected jobExperiencesList: DeveloperProfileJobExperiences[] = this.mock.getJobs(50);
+  protected jobExperiencesList: DeveloperProfileJobExperiences[] = [];
   protected jobExperiencesForm: FormGroup = this.developerFormService.buildDeveloperJobExperiencesForm();
 
-  protected academicEducationList: DeveloperProfileAcademicEducation[] = this.mock.getEducation(50);
+  protected academicEducationList: DeveloperProfileAcademicEducation[] = [];
   protected academicEducationForm: FormGroup = this.developerFormService.buildDeveloperAcademicEducationForm();
 
   protected stepMessages: string[] = [
@@ -68,7 +65,6 @@ export class DeveloperSignupComponent implements OnDestroy {
   protected currentStep: number = 0;
 
   constructor(
-    private mock: MockService,
     private cdRef: ChangeDetectorRef,
     private componentService: CommonComponentService,
     private commomSignupService: CommonSignupService,

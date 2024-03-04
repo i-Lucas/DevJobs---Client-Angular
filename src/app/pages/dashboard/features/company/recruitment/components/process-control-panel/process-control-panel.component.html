@@ -92,11 +92,11 @@
 
                     <label class="block font-bold app-sm mb-1">Visualizar</label>
 
-                    <!-- redirecionar para a página da vaga -->
                     <p-button
+                        size="small"                            
+                        icon="pi pi-eye"
                         pTooltip="Exbir perfil da vaga"
-                        size="small"                                
-                        icon="pi pi-eye"                                                         
+                        [routerLink]="['/dashboard/hiring/jobs/', hiringprocess.id]"
                     />
                 </section>
 

@@ -16,7 +16,7 @@ export class RootJobsComponent implements OnDestroy {
 
   protected pageSize = 10;
   protected currentPage = 1;
-  protected totalOffersCount = 10;
+  protected totalOffersCount = 0;
 
   constructor(private router: Router, private jobOfferService: SharedJobOfferService) {
     this.loadOffers();
@@ -30,6 +30,10 @@ export class RootJobsComponent implements OnDestroy {
   protected onPageChange(event: any): void {
     this.currentPage = event.page + 1;
     this.jobOfferService.getOffersByPagination(this.currentPage, this.pageSize);
+  }
+
+  protected getNumberOfPages() {
+    return Math.ceil(this.totalOffersCount / this.pageSize);
   }
 
   protected getOffersForPage(page: number): JobOfferData[] {

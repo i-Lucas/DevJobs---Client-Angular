@@ -34,6 +34,10 @@ export class HiringProcessFormService {
     return this.locationTypeList
   }
 
+  public getDisabilityType() {
+    return this.disabilityTypeList;
+  }
+
   public getSuggestionsBenefits(): string[] {
     return this.benefits
   }
@@ -87,39 +91,12 @@ export class HiringProcessFormService {
 
       deadline: ['', [Validators.required]], // prazo limite para inscrição,
       pcd: [false],
+      pcdType: ['']
 
       // createdAt: [''],
       // updatedAt: [''],
     })
   }
-
-  /*
-  private validateMinMaxDate(minDays: number, maxDays: number): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const selectedDate = new Date(control.value);
-      const minDate = new Date();
-      const maxDate = new Date();
-      minDate.setDate(minDate.getDate() + minDays);
-      maxDate.setDate(maxDate.getDate() + maxDays);
-      if (selectedDate < minDate) {
-        return { minDate: true };
-      } else if (selectedDate > maxDate) {
-        return { maxDate: true };
-      } else {
-        return null;
-      }
-    };
-  }
-
-  private validateMinDate(days: number): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const selectedDate = new Date(control.value);
-      const minDate = new Date();
-      minDate.setDate(minDate.getDate() + days);
-      return selectedDate < minDate ? { minDate: true } : null;
-    };
-  }
-  */
 
   private minArrayLength(control: AbstractControl, minLength: number) {
     const array = control.value as string[];
@@ -167,6 +144,15 @@ export class HiringProcessFormService {
     { name: 'Híbrido ' },
     { name: 'Presencial' },
   ]
+
+  private disabilityTypeList: DropdownOptionsList[] = [
+    { name: 'Deficiência física' },
+    { name: 'Deficiência visual' },
+    { name: 'Deficiência auditiva' },
+    { name: 'Deficiência intelectual' },
+    { name: 'Deficiência múltipla' },
+    { name: 'Outro tipo de deficiência' }
+  ];
 
   private differentials = [
     'Certificações relevantes para as tecnologias utilizadas',

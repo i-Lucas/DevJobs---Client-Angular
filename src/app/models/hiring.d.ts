@@ -49,8 +49,9 @@ interface HiringProcessForm {
   locationType: string;
   workload: string;
   deadline: string;
-  pcd: boolean;
 
+  pcd: boolean;
+  pcdType: string;
 }
 
 interface HiringProcessStepLists {

@@ -25,6 +25,7 @@ export class NewHiringProcessComponent implements OnDestroy {
   protected startNewProcess: boolean = false;
   protected hiringProcessForm: FormGroup | undefined;
 
+  protected pcdType = this.recruitmentFormService.getDisabilityType();
   protected workloadList = this.recruitmentFormService.getWorkloadList();
   protected categoryList = this.recruitmentFormService.getCategoryList();
   protected seniorityList = this.recruitmentFormService.getSeniorityList();

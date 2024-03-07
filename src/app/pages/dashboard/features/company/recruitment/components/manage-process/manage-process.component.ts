@@ -17,7 +17,7 @@ export class ManageProcessComponent implements OnDestroy {
   private destroy$ = new Subject<void>();
 
   protected hiringprocess: HiringProcess | undefined;
-  protected panelControlForm: FormGroup | undefined;
+  // protected panelControlForm: FormGroup | undefined;
 
   protected currentProcessStepIndex: number | undefined; // armazenar o índice da etapa atual
   protected currentProcessStepsList: ProcessStepsList[] | undefined // lista com todos as etapas do processo atual
@@ -51,21 +51,6 @@ export class ManageProcessComponent implements OnDestroy {
     this.destroy$.complete();
   }
 
-  private buildForm() {
-
-    this.panelControlForm = this.formBuilder.group({
-
-      id: [''],
-      title: [''],
-
-      step: [this.getLabel(this.currentProcessStepIdentifier!)],
-      subscribers: this.hiringprocess?.subscribersCount,
-
-      createdAt: [''],
-      updatedAt: [''],
-    })
-  }
-
   protected getLabel(step: HiringProcessSteps) {
     return this.hiringService.getLabel(step);
   }
@@ -76,15 +61,10 @@ export class ManageProcessComponent implements OnDestroy {
 
     if (this.hiringprocess) {
 
-      // a etapa atual é sempre o primeiro item da lista de etapas.
-      // de modo que as etapas anteriores ficam sempre no final
-
-      const firstStepIndex = 0;
-      this.currentProcessStepIndex = firstStepIndex;
-      this.currentProcessStepIdentifier = this.hiringprocess.steps[firstStepIndex].identifier;
       this.currentProcessStepsList = this.hiringprocess.steps;
-      this.buildForm();
-
+      this.currentProcessStepIdentifier = this.hiringprocess.currentStep;
+      this.currentProcessStepIndex = this.hiringprocess.steps.findIndex(step => step.identifier === this.currentProcessStepIdentifier);
+      
     } else {
 
       this.router.navigate(['/dashboard/company/recruitment']);
@@ -107,7 +87,7 @@ export class ManageProcessComponent implements OnDestroy {
       );
     }
 
-    console.log(this.currentProcessStepsList![this.currentProcessStepIndex!].candidatesLists)
+    console.log(this.currentProcessStepsList![this.currentProcessStepIndex!].candidatesLists);
 
   }
 

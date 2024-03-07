@@ -4,6 +4,10 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
+    path: 'home',
+    loadChildren: () => import('./home/home.module')
+  },
+  {
     path: 'profile/:id',
     loadChildren: () => import('./profile/profile.module')
   },
@@ -18,7 +22,9 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  declarations: [],
+  declarations: [
+
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes)

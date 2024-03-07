@@ -31,6 +31,7 @@ interface PMenuOptions {
 
     icon: string;
     label: string;
+    disabled?: boolean;
     command?: () => void;
 }
 
@@ -40,6 +41,7 @@ interface SidebarListOptions {
     label: string;
     tooltip: string;
     badge?: boolean;
+    disabled?: boolean;
     badgeCount?: number;
     link: {
         path: string;

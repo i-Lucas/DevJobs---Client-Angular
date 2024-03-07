@@ -5,21 +5,29 @@
         @for (option of sidebarList; track option) {
             
             <section
-                pTooltip={{option.tooltip}}
-                class="flex py-2 hover:bg-primary cursor-pointer"
-                [routerLink]="option.link.sub_path ? [option.link.path, option.link.sub_path] : [option.link.path]" 
+                class="flex py-2"
+                pTooltip="{{option.disabled ? 'Em breve' : option.tooltip}}"
+                [ngClass]="option.disabled ? 'cursor-not' : 'hover:bg-primary cursor-pointer' "
+                [routerLink]="option.disabled ? null : (option.link.sub_path ? [option.link.path, option.link.sub_path] : [option.link.path])"
             >
     
                 <div class="flex justify-content-center align-items-center w-15rem">
-                    <span class="material-icons">{{option.icon}}</span>
-                </div>
-                <div class="flex justify-content-start align-items-center w-full pr-4">
-                    
-                    <p class="app-sm">{{option.label}}</p>
 
                     @if (unreadMessagesCount && option.badge) {
-                        <p-badge severity="danger" class="ml-4" value="{{unreadMessagesCount}}" />
+                        
+                        <p-badge severity="danger" value="{{unreadMessagesCount}}" />
+
+                    } @else {
+
+                        <span [ngClass]="option.disabled ? 'text-color-secondary' : null" class="material-icons">{{option.icon}}</span>
                     }
+
+                </div>
+
+                <div class="flex justify-content-start align-items-center w-full pr-4">
+                    
+                    <p [ngClass]="option.disabled ? 'text-color-secondary' : null" class="app-sm">{{option.label}}</p>
+
                 </div>
     
             </section>

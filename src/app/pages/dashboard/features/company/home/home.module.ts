@@ -2,18 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
+import { RootHomeComponent } from './components/root-home/root-home.component';
+
 const routes: Routes = [
   {
-    path: 'home',
-    loadChildren: () => import('./home/home.module')
-  },
-  {
-    path: 'profile/:id',
-    loadChildren: () => import('./profile/profile.module')
-  },
-  {
-    path: '**',
-    redirectTo: '/dashboard/developer/home'
+    path: '',
+    component: RootHomeComponent
   }
 ]
 
@@ -24,4 +18,4 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ]
 })
-export default class DeveloperModule { }
+export default class HomeModule { }

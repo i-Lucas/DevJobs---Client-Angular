@@ -80,8 +80,8 @@
                         <td>
                             <span class="my-3 app-xs font-bold p-column-title">Status</span>
                             <p-tag class="app-lg"
-                                [value]="getLabel(process.steps[currentProcessStepIndex].identifier)"
-                                [styleClass]="getSeverity(process.steps[currentProcessStepIndex].identifier)"
+                                [value]="getLabel(process.currentStep)"
+                                [styleClass]="getSeverity(process.currentStep)"
                             />
                         </td>
         

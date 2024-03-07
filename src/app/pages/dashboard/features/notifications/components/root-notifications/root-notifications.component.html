@@ -71,7 +71,7 @@
     
                 @for (message of messagesbeingDisplayed; track message) {
      
-                    <div [ngClass]="message.unread ? 'border-dashed' : '' "
+                    <div [ngClass]="message.unread ? 'border-dashed border-primary' : 'line-through' "
                         class="app-border border-round cursor-pointer hover:bg-primary">
     
                         <div class="flex">

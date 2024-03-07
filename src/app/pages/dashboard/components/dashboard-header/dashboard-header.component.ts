@@ -12,13 +12,16 @@ export class DashboardHeaderComponent {
   protected menuOptions: PMenuOptions[] = [
     {
       label: 'Conta',
+      disabled: true,
       icon: 'pi pi-fw pi-user',
     },
     {
+      disabled: true,
       label: 'Configurações',
-      icon: 'pi pi-wrench'
+      icon: 'pi pi-wrench',
     },
     {
+      disabled: true,
       label: 'Opções',
       icon: 'pi pi-fw pi-pencil',
     },

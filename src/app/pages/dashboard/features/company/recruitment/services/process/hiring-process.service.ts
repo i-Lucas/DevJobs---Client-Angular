@@ -94,13 +94,15 @@ export class HiringProcessService implements OnDestroy {
         id: data.defaultLists.subscribersListId,
         candidates: [],
         name: 'Inscritos',
-        description: 'Lista dos candidatos inscritos na vaga.'
+        identifier: 'SUBSCRIBERS',
+        description: 'Lista dos candidatos inscritos na vaga.',
       },
       {
-        id: data.defaultLists.qualifiedListId,
+        id: data.defaultLists.favoritesListId,
         candidates: [],
-        name: 'Qualificados',
-        description: 'Lista dos candidatos qualificados para a próxima etapa.'
+        name: 'Favoritos',
+        identifier: 'OTHER',
+        description: 'Exemplo de lista personalizada de candidatos favoritos',
       },
     ]
 
@@ -112,6 +114,7 @@ export class HiringProcessService implements OnDestroy {
       id: data.processId,
       subscribersCount: 0,
       recruiter: data.recruiter,
+      currentStep: 'OPEN_FOR_APPLICATIONS',
       steps: [
         {
           identifier: 'OPEN_FOR_APPLICATIONS',
@@ -164,6 +167,40 @@ export class HiringProcessService implements OnDestroy {
   public getIndex(step: HiringProcessSteps) {
     const hiringProcessHashIndex = this.getProcessStepIndex();
     return hiringProcessHashIndex[step];
+  }
+
+  public getNextStep(currentStep: HiringProcessSteps) {
+
+    const currentIndex = this.getIndex(currentStep);
+    const nextIndex = currentIndex + 1;
+
+    const hiringProcessHashIndex = this.getProcessStepIndex();
+
+    if (nextIndex < (Object.keys(hiringProcessHashIndex).length - 1)) {
+
+      const nextStep = Object.keys(hiringProcessHashIndex)[nextIndex] as HiringProcessSteps
+      return this.getLabel(nextStep);
+
+    } else {
+      return this.getLabel(currentStep);
+    }
+  }
+
+  public getNextStepSeverity(currentStep: HiringProcessSteps) {
+
+    const currentIndex = this.getIndex(currentStep);
+    const nextIndex = currentIndex + 1;
+
+    const hiringProcessHashIndex = this.getProcessStepIndex();
+
+    if (nextIndex < (Object.keys(hiringProcessHashIndex).length - 1)) {
+
+      const nextStep = Object.keys(hiringProcessHashIndex)[nextIndex] as HiringProcessSteps
+      return this.getSeverity(nextStep);
+
+    } else {
+      return this.getSeverity(currentStep);
+    }
   }
 
   public getSeverity(step: HiringProcessSteps) {
@@ -280,6 +317,7 @@ export class HiringProcessService implements OnDestroy {
     this.localLoading.next(state);
   }
 
+  /*
   private getMockList(number: number): HiringProcess[] {
 
     const list: HiringProcess[] = []
@@ -443,5 +481,6 @@ export class HiringProcessService implements OnDestroy {
     return list
 
   }
+  */
 
 }

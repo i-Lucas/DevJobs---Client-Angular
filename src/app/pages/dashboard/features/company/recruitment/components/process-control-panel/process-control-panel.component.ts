@@ -9,7 +9,6 @@ import { HiringProcessService } from '../../services/process/hiring-process.serv
 })
 export class ProcessControlPanelComponent {
 
-  @Input() panelControlForm: FormGroup | undefined;
   @Input() hiringprocess: HiringProcess | undefined;
   @Input() currentProcessStepIdentifier: HiringProcessSteps | undefined;
 
@@ -17,11 +16,48 @@ export class ProcessControlPanelComponent {
 
   constructor(private hiringService: HiringProcessService) { }
 
-  protected getLabel(step: HiringProcessSteps) {
+  protected getCurrentStepLabel(step: HiringProcessSteps) {
     return this.hiringService.getLabel(step);
   }
 
-  protected getSeverity(step: HiringProcessSteps) {
+  protected getCurrentStepSeverity(step: HiringProcessSteps) {
     return this.hiringService.getSeverity(step);
   }
+
+  protected getNextStepLabel(step: HiringProcessSteps) {
+    return this.hiringService.getNextStep(step);
+  }
+
+  protected getNextStepSeverity(step: HiringProcessSteps) {
+    return this.hiringService.getNextStepSeverity(step);
+  }
+
+  protected isProcessFrozen(): boolean {
+    return this.hiringprocess?.currentStep === 'FROZEN' ? true : false;
+  }
+
+  protected isProcessCancelled(): boolean {
+    return this.hiringprocess?.currentStep === 'CANCELLED' ? true : false;
+  }
+
+  protected isProcessCompleted(): boolean {
+    return this.hiringprocess?.currentStep === 'PROCESS_COMPLETED' ? true : false;
+  }
+
+  get listOptionsMenu(): PMenuOptions[] {
+
+    const options: PMenuOptions[] = [
+      { label: 'Congelar Vaga', icon: 'pi pi-pause', command: () => alert('ok') },
+      { label: 'Cancelar Vaga', icon: 'pi pi-times', command: () => alert('ok') },
+      { label: 'Ajuda', icon: 'pi pi-question-circle', command: () => alert('ok') },
+    ];
+
+    if (this.hiringprocess && this.isProcessFrozen()) {
+      options[0].label = 'Descongelar Vaga';
+      options[0].icon = 'pi pi-play';
+    }
+
+    return options;
+  }
+
 }

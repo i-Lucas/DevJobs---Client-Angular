@@ -54,11 +54,14 @@ interface HiringProcessForm {
   pcdType: string;
 }
 
+type ProcessStepListIdentifier = 'SUBSCRIBERS' | 'QUALIFIED' | 'CANDIDATES' | 'OTHER';
+
 interface HiringProcessStepLists {
 
   id: string;
   name: string
   description: string
+  identifier: ProcessStepListIdentifier;
   candidates: HiringDeveloperSubscriber[]
 }
 
@@ -74,8 +77,9 @@ interface HiringProcess extends HiringProcessForm {
 
   recruiter: string
 
-  steps: ProcessStepsList[];
   subscribersCount: number;
+  steps: ProcessStepsList[];
+  currentStep: HiringProcessSteps;
 
   createdAt: string;
   updatedAt: string;
@@ -100,7 +104,7 @@ interface NewHiringProcessResponse {
   recruiter: string;
 
   defaultLists: {
-    qualifiedListId: string;
+    favoritesListId: string;
     subscribersListId: string;
   }
 }

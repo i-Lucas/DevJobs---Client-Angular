@@ -1,10 +1,9 @@
 <main class="min-h-screen flex flex-column gap-4 p-4">
 
-    @if (hiringprocess && panelControlForm) {
+    @if (hiringprocess) {
 
         <process-control-panel
             [hiringprocess]="hiringprocess"
-            [panelControlForm]="panelControlForm"
             [currentProcessStepIdentifier]="currentProcessStepIdentifier"
         />
 

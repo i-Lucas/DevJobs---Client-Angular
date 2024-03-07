@@ -74,15 +74,16 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
 
   private handleGetAccountResponse({ data, message }: ApiResponse<GetAccountDataResponse>) {
 
-    if (data) {
-      this.updateData(data);
-      this.componentService.showMessage({ detail: message, type: 'success' });
+    if (!data) {
 
-    } else {
       this.handleGetAccountError({
         status: 404,
         message: 'Não foi possível obter os dados da conta'
-      })
+      });
+
+    } else {
+      this.updateData(data);
+      this.componentService.showMessage({ detail: message, type: 'success' });
     }
   }
 
@@ -102,7 +103,6 @@ export class DashboardRootComponent implements OnInit, OnDestroy {
       profileId: profile.id,
       mode: account.accountType,
     });
-
   }
 
   private handleGetAccountError(error: ApiError) {

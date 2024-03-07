@@ -41,7 +41,7 @@ export class ProcessStepsComponent {
 
   protected getStepIndex(step: HiringProcessSteps) {
     return this.hiringService.getIndex(step);
-  }  
+  }
 
   protected getSeverity(step: HiringProcessSteps) {
     return this.hiringService.getSeverity(step);
@@ -49,6 +49,10 @@ export class ProcessStepsComponent {
 
   protected checkIfIsCurrentStep(step: HiringProcessSteps) {
     return this.currentProcessStepIdentifier === step;
+  }
+
+  protected checkIfListQualifiesForNextStep(identifier: ProcessStepListIdentifier) {
+    return identifier === 'QUALIFIED' || identifier === 'SUBSCRIBERS'
   }
 
   protected confirmViewProfile(event: Event, candidate: HiringDeveloperSubscriber) {

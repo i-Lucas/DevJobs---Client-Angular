@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 
 import { HiringProcessService } from '../../services/process/hiring-process.service';
 
@@ -12,7 +11,7 @@ export class ProcessControlPanelComponent {
   @Input() hiringprocess: HiringProcess | undefined;
   @Input() currentProcessStepIdentifier: HiringProcessSteps | undefined;
 
-  protected hiringProcessStatusLabels = this.hiringService.getHiringProcessDropDownLabels(); // preencher dropdown de alterar etapa
+  private minDaysToChangeNextStep: number = 3; // tempo mínimo necessário em dias para ser possível mudar de etapa
 
   constructor(private hiringService: HiringProcessService) { }
 
@@ -42,6 +41,54 @@ export class ProcessControlPanelComponent {
 
   protected isProcessCompleted(): boolean {
     return this.hiringprocess?.currentStep === 'PROCESS_COMPLETED' ? true : false;
+  }
+
+  protected checkIfCanChangeToNextStage() {
+
+    const stepCreatedAtDate = this.getCurrentStepCreatedAtDate();
+    if (!stepCreatedAtDate) return false;
+
+    const currentDatePlusDaysInMillis = this.getDatePlusDaysInMillis(this.minDaysToChangeNextStep);
+    return stepCreatedAtDate < currentDatePlusDaysInMillis;
+  };
+
+  private getCurrentStepCreatedAtDate() {
+    const step = this.hiringprocess!.steps.find(step => step.identifier === this.currentProcessStepIdentifier);
+    return step?.createdAt
+  };
+
+  private getDatePlusDaysInMillis(plusDays: number): string {
+
+    const currentDate = new Date();
+    const newCurrentDate = new Date(currentDate);
+    newCurrentDate.setDate(currentDate.getDate() + plusDays);
+    return newCurrentDate.getTime().toString();
+  }
+
+  protected getDaysDifferenceString() {
+
+    if (this.currentProcessStepIdentifier === 'OPEN_FOR_APPLICATIONS') {
+      const deadline = this.hiringprocess!.deadline;
+      const currentDate = new Date().getTime().toString();
+      if (currentDate <= deadline) {
+        const date = new Date(parseInt(deadline)).toLocaleDateString('pt-BR')
+        return 'O prazo de inscrições ainda não foi encerrado: '.concat(date);
+      }
+    }
+
+    const stepCreatedAtDate = this.getCurrentStepCreatedAtDate();
+    if (!stepCreatedAtDate) return "Não foi possível calcular a diferença de dias.";
+
+    const currentDate = new Date();
+    const createdAtDate = new Date(parseInt(stepCreatedAtDate));
+    const timeDiff = Math.abs(createdAtDate.getTime() - currentDate.getTime());
+    const diffInDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    const daysDifference = this.minDaysToChangeNextStep - diffInDays;
+
+    if (daysDifference <= 0) return "Clique para avançar para a próxima etapa.";
+    else return `Ainda faltam ${daysDifference + 1} dias para ser possível mudar de etapa.`;
+
   }
 
   get listOptionsMenu(): PMenuOptions[] {

@@ -86,15 +86,20 @@
                                         />
                                     </section>
 
-                                    <section class="flex flex-column gap-2">
-                                        <label class="block font-bold app-xs mb-1">Próxima Etapa</label>
+                                    <div class="flex flex-column gap-1">
+                                        <div class="flex  align-items-center gap-2">
+                                            <label class="block font-bold app-xs mb-1">Próxima Etapa</label>
+                                            <i pTooltip="{{getDaysDifferenceString()}}" 
+                                            class="small-icon mb-1 material-icons cursor-pointer">help</i>
+                                        </div>
                                         <p-button 
                                             size="small"
                                             label="Avançar"
                                             severity="warning"
-                                            pTooltip="Mudar etapa"
+                                            styleClass="app-xs"
+                                            [disabled]="checkIfCanChangeToNextStage()"
                                         />
-                                    </section>
+                                    </div>
 
                                 }
 

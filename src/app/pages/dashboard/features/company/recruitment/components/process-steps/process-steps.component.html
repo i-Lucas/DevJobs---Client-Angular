@@ -72,22 +72,31 @@
                                                 (cdkDropListDropped)="itemdrop.emit($event)"
                                                 [cdkDropListConnectedTo]="getCandidateListIds(step.candidatesLists)"
                                                 class="list app-border border-round overflow-y-auto py-4 hidden-scroll"
-                                                [cdkDropListDisabled]="checkIfIsCurrentStep(step.identifier) === false">
+                                                [cdkDropListDisabled]="checkIfIsCurrentStep(step.identifier) === false"
+                                                [ngClass]="checkIfListQualifiesForNextStep(list.identifier) ? 'border-primary' : null ">                                            
                                                                 
                                                 <div class="pb-4 px-4 flex flex-column gap-2 justify-content-center align-items-center">
                             
                                                     <div class="flex justify-content-center align-items-center gap-2">
-                                                        <h5>{{ list.name }} ( {{ list.candidates.length }} )</h5>
+                                                        <h5 class="app-xs">{{ list.name }} ( {{ list.candidates.length }} )</h5>
                                                         <i pTooltip="{{list.description}}" class="material-icons small-icon cursor-pointer">help</i>
                                                     </div>
                             
-                                                    <input 
-                                                        pInputText
-                                                        placeholder="Procurar"                                          
-                                                        class="p-inputapp-sm w-full"
-                                                        [(ngModel)]="searchTerms[list.id]"
-                                                        (input)="onSearch(step.identifier, list.id)"
-                                                    >
+                                                    @if (list.candidates.length > 0) {
+
+                                                        <input 
+                                                            pInputText
+                                                            placeholder="Procurar"                                          
+                                                            class="p-inputapp-sm w-full"
+                                                            [(ngModel)]="searchTerms[list.id]"
+                                                            (input)="onSearch(step.identifier, list.id)"
+                                                        >
+
+                                                    } @else {
+
+                                                        <p class="app-xs">Nenhum candidato</p>
+                                                    }
+
                                                 </div>
                             
                                                 @for (candidate of list.candidates; track candidate) {
@@ -107,7 +116,7 @@
                                                                 styleClass="mr-2"
                                                             />
                             
-                                                            <p class="app-sm">{{ candidate.name }}</p>      
+                                                            <p class="app-xs">{{ candidate.name }}</p>      
                             
                                                         </div>
                                                                             

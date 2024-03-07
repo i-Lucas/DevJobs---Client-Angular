@@ -12,8 +12,14 @@
                 <h1>Processos em andamento</h1>
                 <i pTooltip="Clique em um processo da lista para gerencia-lo" class="material-icons cursor-pointer">help</i>
             </div>
-        
+   
             <p-table 
+                [rows]="10"
+                [showCurrentPageReport]="true"
+                [rowsPerPageOptions]="[10, 15, 20]"
+                [paginator]="hiringList.length > 10"
+                currentPageReportTemplate="mostrando {first} a {last} de {totalRecords} entradas" 
+
                 [value]="hiringList"
                 [breakpoint]="'960px'" 
                 responsiveLayout="stack" 
@@ -21,15 +27,20 @@
         
                 <ng-template pTemplate="header">
                     <tr>
-                        <th class="app-sm">Título</th>
+                        <!-- <th class="app-sm">Título</th> -->
+                        <th pSortableColumn="title" class="app-sm">Título<p-sortIcon field="title" /></th>
                         <th class="app-sm">Categoria</th>
                         <th class="app-sm">Senioridade</th>
-                        <th class="app-sm">Candidatos</th>
+                        <!-- <th class="app-sm">Candidatos</th> -->
+                        <th pSortableColumn="subscribersCount" class="app-sm">Candidatos<p-sortIcon field="subscribersCount" /></th>
                         <th class="app-sm">Responsável</th>
-                        <th class="app-sm">Início</th>
-                        <th class="app-sm">Atualização</th>
+                        <!-- <th class="app-sm">Início</th> -->
+                        <th pSortableColumn="createdAt" class="app-sm">Início<p-sortIcon field="createdAt" /></th>
+                        <!-- <th class="app-sm">Atualização</th> -->
+                        <th pSortableColumn="updatedAt" class="app-sm">Atualização<p-sortIcon field="updatedAt" /></th>
                         <th class="app-sm">Encerramento</th>
-                        <th class="app-sm">Status</th>
+                        <th pSortableColumn="currentStep" class="app-sm">Status<p-sortIcon field="currentStep" /></th>
+                        <!-- <th class="app-sm">Status</th> -->
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-process>

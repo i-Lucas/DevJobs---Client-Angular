@@ -118,7 +118,9 @@ export class HiringProcessService implements OnDestroy {
       steps: [
         {
           identifier: 'OPEN_FOR_APPLICATIONS',
-          candidatesLists: defaultLists
+          candidatesLists: defaultLists,
+          createdAt: now,
+          updatedAt: now,
         }
       ]
     };

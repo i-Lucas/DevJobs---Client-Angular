@@ -45,11 +45,16 @@ header {
 }
 
 .p-paginator {
-
+    font-size: var(--app-xs);
     background-color: var(--surface-ground);
 }
 
-.p-menuitem	{
+.p-menuitem {
 
     font-size: var(--app-xs);
+}
+
+.p-confirm-popup-message,
+.p-confirm-popup-icon {
+    font-size: var(--app-sm);
 }

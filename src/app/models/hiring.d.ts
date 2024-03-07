@@ -68,7 +68,10 @@ interface HiringProcessStepLists {
 interface ProcessStepsList {
 
   identifier: HiringProcessSteps
-  candidatesLists: HiringProcessStepLists[]
+  candidatesLists: HiringProcessStepLists[];
+  
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface HiringProcess extends HiringProcessForm {

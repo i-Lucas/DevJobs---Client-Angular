@@ -43,7 +43,10 @@
                     [talents]="getTalentsForPage(currentPage)"
                 />
 
-                <p-paginator styleClass="mt-4" [rows]="pageSize" [totalRecords]="totalTalentsCount" (onPageChange)="onPageChange($event)" />
+                @if (talents.length > 10) {
+
+                    <p-paginator styleClass="mt-4" [rows]="pageSize" [totalRecords]="totalTalentsCount" (onPageChange)="onPageChange($event)" />
+                }
             }
         }
 

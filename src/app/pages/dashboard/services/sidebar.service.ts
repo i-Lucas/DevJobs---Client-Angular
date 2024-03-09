@@ -73,7 +73,7 @@ export class SidebarService {
       },
       {
         icon: 'fact_check', label: 'Candidaturas',
-        link: { path: '/dashboard' },
+        link: { path: '/dashboard/developer/applications' },
         tooltip: 'Acompanhe e gerencie suas candidaturas'
       }
     ]

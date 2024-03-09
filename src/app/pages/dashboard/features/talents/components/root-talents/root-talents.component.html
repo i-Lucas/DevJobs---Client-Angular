@@ -26,7 +26,7 @@
     
                     <div class="flex justify-content-between">
                         <p class="app-xs">Página <strong>{{currentPage}}</strong> de <strong>{{getNumberOfPages()}}</strong></p>
-                        <p class="app-xs">Todos os resultados carregados</p>
+                        <p class="app-xs">Todos resultados carregados</p>
                     </div>
                 }
             }
@@ -43,7 +43,7 @@
                     [talents]="getTalentsForPage(currentPage)"
                 />
 
-                @if (talents.length > 10) {
+                @if (totalTalentsCount > 10) {
 
                     <p-paginator styleClass="mt-4" [rows]="pageSize" [totalRecords]="totalTalentsCount" (onPageChange)="onPageChange($event)" />
                 }

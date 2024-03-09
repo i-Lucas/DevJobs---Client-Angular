@@ -5,13 +5,13 @@
         <ng-template pTemplate="header">
             <div class="flex align-items-center gap-2">
                 <i class="material-icons">settings</i>
-                <p>Painel de Controle</p>
+                <p class="app-xs">Painel de Controle</p>
             </div>
         </ng-template>
 
         <form class="flex flex-column gap-4">
 
-            <p-fieldset legend="Informações">
+            <p-fieldset styleClass="app-xs" legend="Informações">
      
                 <section class="flex justify-content-between px-4">
 
@@ -43,14 +43,14 @@
         
                     <section class="flex flex-column gap-2">
                         <label class="block font-bold app-xs mb-1">Responsável</label>
-                        <label class="block font-medium app-xs mb-1">{{hiringprocess.recruiter}}</label>
+                        <label class="block font-medium app-xs mb-1">{{hiringprocess.sponsor}}</label>
                     </section>
     
                 </section>
 
             </p-fieldset>
 
-            <p-fieldset legend="Etapas">
+            <p-fieldset styleClass="app-xs" legend="Etapas">
      
                 <section class="flex justify-content-between px-4">
 
@@ -97,6 +97,7 @@
                                             label="Avançar"
                                             severity="warning"
                                             styleClass="app-xs"
+                                            (click)="changeProcessToNextStep.emit(getNextStepIdentifier(currentProcessStepIdentifier))"
                                             [disabled]="checkIfCanChangeToNextStage()"
                                         />
                                     </div>
@@ -109,7 +110,7 @@
 
                         @if (!isProcessCompleted() && !isProcessCancelled()) {
 
-                            <section class="flex justify-content-center align-items-center">
+                            <section>
                                 <p-menu #menu [model]="listOptionsMenu" [popup]="true"></p-menu>
                                 <p-button
                                     size="small"

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { HiringProcessService } from '../../services/process/hiring-process.service';
 
@@ -10,6 +10,8 @@ export class ProcessControlPanelComponent {
 
   @Input() hiringprocess: HiringProcess | undefined;
   @Input() currentProcessStepIdentifier: HiringProcessSteps | undefined;
+
+  @Output() changeProcessToNextStep = new EventEmitter<HiringProcessSteps>();
 
   private minDaysToChangeNextStep: number = 3; // tempo mínimo necessário em dias para ser possível mudar de etapa
 
@@ -24,7 +26,11 @@ export class ProcessControlPanelComponent {
   }
 
   protected getNextStepLabel(step: HiringProcessSteps) {
-    return this.hiringService.getNextStep(step);
+    return this.hiringService.getNextStepLabel(step);
+  }
+
+  protected getNextStepIdentifier(step: HiringProcessSteps): HiringProcessSteps {
+    return this.hiringService.getNextStepIdentifier(step);
   }
 
   protected getNextStepSeverity(step: HiringProcessSteps) {
@@ -46,10 +52,9 @@ export class ProcessControlPanelComponent {
   protected checkIfCanChangeToNextStage() {
 
     const stepCreatedAtDate = this.getCurrentStepCreatedAtDate();
-    if (!stepCreatedAtDate) return false;
-
     const currentDatePlusDaysInMillis = this.getDatePlusDaysInMillis(this.minDaysToChangeNextStep);
-    return stepCreatedAtDate < currentDatePlusDaysInMillis;
+    // return stepCreatedAtDate! < currentDatePlusDaysInMillis;
+    return false;
   };
 
   private getCurrentStepCreatedAtDate() {

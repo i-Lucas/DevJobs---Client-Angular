@@ -3,10 +3,27 @@ import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationCancel, Router } from '@angular/router';
 
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import {
+  CdkDropList,
+  CdkDragDrop,
+  moveItemInArray,
+  transferArrayItem
+} from '@angular/cdk/drag-drop';
 
 import { HiringProcessService } from '../../services/process/hiring-process.service';
 import { CommonComponentService } from '@app-services/components/base-component.service';
+
+interface UnsavedMessage {
+  message: string;
+  messageId: string;
+}
+
+interface CreateAndPushUnsavedMessages {
+  messageId: string;
+  currentIndex: number;
+  sourceContainer: CdkDropList,
+  destinationContainer: CdkDropList,
+}
 
 @Component({
   selector: 'app-manage-process',
@@ -15,16 +32,14 @@ import { CommonComponentService } from '@app-services/components/base-component.
 export class ManageProcessComponent implements OnDestroy {
 
   private destroy$ = new Subject<void>();
-
   protected hiringprocess: HiringProcess | undefined;
-  // protected panelControlForm: FormGroup | undefined;
 
   protected currentProcessStepIndex: number | undefined; // armazenar o índice da etapa atual
   protected currentProcessStepsList: ProcessStepsList[] | undefined // lista com todos as etapas do processo atual
   protected currentProcessStepIdentifier: HiringProcessSteps | undefined; // armazenar o nome da etapa atual do processo
 
   // previnir que o usuário mude de página sem salvar alterações
-  protected unsavedThings = [];
+  protected unsavedThings: UnsavedMessage[] = [];
   protected hasUnsavedChanges: boolean = false;
   protected nextRouteToNavigate: string | undefined;
   protected openUnsavedChangesAlert: boolean = false;
@@ -32,6 +47,8 @@ export class ManageProcessComponent implements OnDestroy {
   // criar nova lista
   protected creatingNewCandidateList: boolean = false;
   protected newCandidateListForm: FormGroup | undefined;
+
+  protected currentStepLists: HiringDeveloperSubscriber[] = [];
 
   constructor(
     private router: Router,
@@ -64,7 +81,7 @@ export class ManageProcessComponent implements OnDestroy {
       this.currentProcessStepsList = this.hiringprocess.steps;
       this.currentProcessStepIdentifier = this.hiringprocess.currentStep;
       this.currentProcessStepIndex = this.hiringprocess.steps.findIndex(step => step.identifier === this.currentProcessStepIdentifier);
-      
+
     } else {
 
       this.router.navigate(['/dashboard/company/recruitment']);
@@ -85,10 +102,57 @@ export class ManageProcessComponent implements OnDestroy {
         event.previousIndex,
         event.currentIndex
       );
+
+      const messageId = `${event.container.id}_${event.container.data[event.currentIndex].id}_${event.previousContainer.id}`
+
+      this.hasUnsavedChanges = true;
+      this.updateCandidateProcessStepListId(event.container, event.currentIndex);
+
+      this.createAndPushMessage({
+        destinationContainer: event.container,
+        currentIndex: event.currentIndex,
+        sourceContainer: event.previousContainer,
+        messageId
+      });
     }
 
-    console.log(this.currentProcessStepsList![this.currentProcessStepIndex!].candidatesLists);
+  }
 
+  private updateCandidateProcessStepListId(container: CdkDropList, currentIndex: number) {
+    const transferredCandidate = container.data[currentIndex];
+    transferredCandidate.processStepListId = container.id;
+  }
+
+  private createAndPushMessage({ destinationContainer, currentIndex, messageId, sourceContainer }: CreateAndPushUnsavedMessages) {
+
+    const transferredCandidate = destinationContainer.data[currentIndex];
+
+    const destinationListName = this.getListName(destinationContainer.id)!.name;
+    const sourceListName = this.getListName(sourceContainer.id)!.name;
+
+    const name = `<span class="app-sm font-bold">${transferredCandidate.name}</span>`
+    const toList = `<span class="app-sm font-bold">${destinationListName}</span>`;
+    const fromList = `<span class="app-sm font-bold">${sourceListName}</span>`;
+
+    const message = `Ação: Moveu o candidato ${name} da lista ${fromList} para a lista ${toList} e não salvou.`;
+
+    if (!this.unsavedThings.find(message => message.messageId === messageId)) {
+      this.unsavedThings.push({ message, messageId });
+    }
+  }
+
+  private getListName(listId: string) {
+    return this.currentProcessStepsList![this.currentProcessStepIndex!].candidatesLists.find((list: { id: string; }) => list.id === listId);
+  }
+
+  protected onChangeProcessToNextStep(stepIdentifier: HiringProcessSteps) {
+
+    if (this.hiringprocess) {
+      this.hiringService.changeProcessStep({
+        processId: this.hiringprocess.id,
+        stepIdentifier
+      })
+    }
   }
 
   protected createNewCandidatelist() {
@@ -102,32 +166,70 @@ export class ManageProcessComponent implements OnDestroy {
   }
 
   protected handleMenuClick(event: HiringProcessStepMenuOptions) {
+
     switch (event) {
+
       case 'NEW_LIST':
         this.createNewCandidatelist();
         break;
-    }
+
+      case 'SAVE_LIST':
+
+        if (this.hiringprocess) {
+
+          const allCandidatesOfAllLists: HiringDeveloperSubscriber[] = [];
+          const candidatesLists = this.hiringprocess.steps[this.currentProcessStepIndex!].candidatesLists;
+
+          candidatesLists.forEach((candidatesList: HiringProcessStepLists) => {
+            candidatesList.candidates.forEach((candidate: HiringDeveloperSubscriber) => {
+              allCandidatesOfAllLists.push(candidate);
+            });
+          });
+
+          this.hiringService.saveCandidateList({
+            processId: this.hiringprocess!.id,
+            candidatesLists: allCandidatesOfAllLists
+          })
+        }
+
+        break;
+    };
   }
 
   protected saveNewList() {
 
-    const data: HiringProcessStepLists = {
-      candidates: [],
-      id: new Date().getTime().toString(),
-      ... this.newCandidateListForm?.value
+    if (this.hiringprocess) {
+
+      const newList: HiringProcessStepLists = {
+        candidates: [],
+        id: new Date().getTime().toString(),
+        ...this.newCandidateListForm?.value
+      };
+
+      const data = {
+        name: newList.name,
+        description: newList.description,
+        processId: this.hiringprocess!.id,
+        processStepId: this.hiringprocess!.steps[this.currentProcessStepIndex!].id
+      }
+
+      this.hiringService.createNewList(data)
+        .then((newListId: string) => {
+
+          newList.id = newListId;
+          this.newCandidateListForm = undefined;
+          this.creatingNewCandidateList = false;
+
+          console.log(newListId)
+          this.hiringService.addProcessStepList(this.hiringprocess!.id, this.currentProcessStepIndex!, newList);
+
+        })
+        .catch((error: ApiError) => {
+          console.log(error);
+          this.newCandidateListForm = undefined;
+          this.creatingNewCandidateList = false;
+        });
     }
-
-    this.hiringService.addProcessStepList(
-      this.hiringprocess!.id,
-      this.currentProcessStepIndex!,
-      data
-    )
-
-    this.newCandidateListForm = undefined;
-    this.creatingNewCandidateList = false;
-
-    // fazer requisição, obter o novo ID, para só então atualizar a lista
-    this.componentService.showMessage({ type: 'info', detail: 'Lista personalizada criada com sucesso!' })
   }
 
   public canNavigate() {
@@ -142,7 +244,7 @@ export class ManageProcessComponent implements OnDestroy {
       })
     }
 
-    return this.hasUnsavedChanges
+    return this.hasUnsavedChanges;
   }
 
   protected continueNavigation() {

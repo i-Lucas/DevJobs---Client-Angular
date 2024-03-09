@@ -4,6 +4,7 @@
 
         <process-control-panel
             [hiringprocess]="hiringprocess"
+            (changeProcessToNextStep)="onChangeProcessToNextStep($event)"
             [currentProcessStepIdentifier]="currentProcessStepIdentifier"
         />
 
@@ -73,14 +74,14 @@
 >
     <section class="mb-6">
 
-        <h4 class="text-center">Você tem alterações não salvas:</h4>
+        <h4 class="app-sm text-center">Você tem <span class="text-primary">{{unsavedThings.length > 1 ? unsavedThings.length : null}}</span> alterações não salvas:</h4>
 
         <section class="flex flex-column gap-2">
             @for (item of unsavedThings; track item; let idx = $index) {
     
                 <div class="flex align-items-center gap-2">
                     <i class="material-icons">check_circle</i>                    
-                    <p class="font-bold">{{item}}</p>
+                    <p [innerHTML]="item.message" class="app-xs"></p>
                 </div>
     
                 @if (idx < unsavedThings.length - 1) { 

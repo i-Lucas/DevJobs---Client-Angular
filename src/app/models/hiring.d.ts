@@ -54,8 +54,7 @@ interface HiringProcessForm {
   pcdType: string;
 }
 
-type ProcessStepListIdentifier = 'SUBSCRIBERS' | 'QUALIFIED' | 'CANDIDATES' | 'OTHER';
-
+type ProcessStepListIdentifier = 'SUBSCRIBERS' | 'QUALIFIED' | 'CANDIDATES' | 'FAVORITES' | 'OTHER';
 interface HiringProcessStepLists {
 
   id: string;
@@ -67,9 +66,11 @@ interface HiringProcessStepLists {
 
 interface ProcessStepsList {
 
+  id: string;
+
   identifier: HiringProcessSteps
   candidatesLists: HiringProcessStepLists[];
-  
+
   createdAt: string;
   updatedAt: string;
 }
@@ -78,7 +79,8 @@ interface HiringProcess extends HiringProcessForm {
 
   id: string;
 
-  recruiter: string
+  sponsor: string;
+  rhEmail: string;
 
   subscribersCount: number;
   steps: ProcessStepsList[];
@@ -91,9 +93,18 @@ interface HiringProcess extends HiringProcessForm {
 interface HiringDeveloperSubscriber {
 
   id: string;
+  
   name: string;
   picture: string;
+
+  email: string;
   profileId: string;
+  accountId: string;
+  
+  processStepListId: string;
+
+  createdAt: string;
+  updatedAt: string;
 }
 
 type HiringProcessStepMenuOptions = 'NEW_LIST' | 'SAVE_LIST' | 'HELP';

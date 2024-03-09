@@ -1,8 +1,34 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
+
+import {
+  map,
+  Subject,
+  takeUntil,
+  catchError,
+  Observable,
+  throwError,
+  BehaviorSubject,
+} from 'rxjs';
 
 import { HttpService } from '@app-services/http/http.service';
 import { CommonComponentService } from '@app-services/components/base-component.service';
+
+interface SaveProcessStepCandidateList {
+  processId: string;
+  candidatesLists: HiringDeveloperSubscriber[];
+}
+
+interface CreateNewStepList {
+  name: string;
+  processId: string;
+  description: string;
+  processStepId: string;
+}
+
+interface ChangeProcessStep {
+  processId: string;
+  stepIdentifier: HiringProcessSteps
+}
 
 @Injectable()
 export class HiringProcessService implements OnDestroy {
@@ -36,6 +62,89 @@ export class HiringProcessService implements OnDestroy {
 
   public getHiringProcessById(id: string): HiringProcess | undefined {
     return this.hiringList.getValue().find(process => process.id === id);
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+
+  public createNewList(data: CreateNewStepList): Promise<string> {
+
+    return new Promise((resolve, reject) => {
+
+      this.updateLoading(true);
+      this.httpService.post<ApiResponse<{ newListId: string }>>('/hiring/create/list', { ...data, identifier: 'OTHER' })
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response) => {
+            this.updateLoading(false);
+            resolve(response.data!.newListId);
+            this.componentService.showMessage({ type: 'success', detail: response.message });
+          },
+          error: (error) => {
+            this.showErrorMessage(error);
+            this.updateLoading(false);
+            reject(error);
+          }
+        });
+    });
+  }
+
+  /*
+  public createNewList(data: CreateNewStepList): Observable<string> {
+
+    this.updateLoading(true);
+    return this.httpService.post<ApiResponse<{ newListId: string }>>('/hiring/create/list', { ...data, identifier: 'OTHER' })
+      .pipe(
+        takeUntil(this.destroy$),
+        map(response => {
+          this.updateLoading(false);
+          this.componentService.showMessage({ type: 'success', detail: response.message });
+          return response.data?.newListId || '';
+        }),
+        catchError(error => {
+          this.showErrorMessage(error);
+          this.updateLoading(false);
+          return throwError(error);
+        })
+      );
+  };
+  */
+
+  // -------------------------------------------------------------------------------------------------------------------
+
+  public changeProcessStep({ processId, stepIdentifier }: ChangeProcessStep) {
+
+    this.updateLoading(true);
+    this.httpService.post<ApiResponse<null>>('/hiring/update/step', { processId, stepIdentifier })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.updateLoading(false);
+          this.componentService.showMessage({ type: 'success', detail: response.message });
+        },
+        error: (error) => {
+          this.showErrorMessage(error);
+          this.updateLoading(false);
+        }
+      });
+  };
+
+  // -------------------------------------------------------------------------------------------------------------------
+
+  public saveCandidateList({ processId, candidatesLists }: SaveProcessStepCandidateList) {
+
+    this.updateLoading(true);
+    this.httpService.post<ApiResponse<null>>('/hiring/update/list', { processId, candidatesLists })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.updateLoading(false);
+          this.componentService.showMessage({ type: 'success', detail: response.message });
+        },
+        error: (error) => {
+          this.showErrorMessage(error);
+          this.updateLoading(false);
+        }
+      });
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -101,7 +210,7 @@ export class HiringProcessService implements OnDestroy {
         id: data.defaultLists.favoritesListId,
         candidates: [],
         name: 'Favoritos',
-        identifier: 'OTHER',
+        identifier: 'FAVORITES',
         description: 'Exemplo de lista personalizada de candidatos favoritos',
       },
     ]
@@ -109,14 +218,16 @@ export class HiringProcessService implements OnDestroy {
     return {
 
       ...formData,
+      rhEmail: '',
       createdAt: now,
       updatedAt: now,
       id: data.processId,
       subscribersCount: 0,
-      recruiter: data.recruiter,
+      sponsor: data.recruiter,
       currentStep: 'OPEN_FOR_APPLICATIONS',
       steps: [
         {
+          id: data.stepId,
           identifier: 'OPEN_FOR_APPLICATIONS',
           candidatesLists: defaultLists,
           createdAt: now,
@@ -126,20 +237,14 @@ export class HiringProcessService implements OnDestroy {
     };
   }
 
-  // -------------------------------------------------------------------------------------------------------------------
+  public getProcessStepLists(processId: string, stepIndex: number) {
 
-  /*
-  // elegant
-  public updateField(processId: string, fieldName: keyof HiringProcess, value: HiringProcess[keyof HiringProcess]): void {
     const currentList = this.hiringList.getValue();
-    const indexToUpdate = currentList.findIndex((process) => process.id === processId);
+    const process = currentList.find((process) => process.id === processId);
 
-    if (indexToUpdate !== -1) {
-      (currentList[indexToUpdate][fieldName] as HiringProcess[keyof HiringProcess]) = value;
-      this.hiringList.next(currentList);
-    }
+    const currentStep = process?.steps[stepIndex];
+    return currentStep?.candidatesLists
   }
-  */
 
   public addProcessStepList(processId: string, stepIndex: number, stepdata: HiringProcessStepLists) {
 
@@ -171,7 +276,23 @@ export class HiringProcessService implements OnDestroy {
     return hiringProcessHashIndex[step];
   }
 
-  public getNextStep(currentStep: HiringProcessSteps) {
+  public getNextStepIdentifier(currentStep: HiringProcessSteps) {
+
+    const currentIndex = this.getIndex(currentStep);
+    const nextIndex = currentIndex + 1;
+
+    const hiringProcessHashIndex = this.getProcessStepIndex();
+
+    if (nextIndex < (Object.keys(hiringProcessHashIndex).length - 1)) {
+      return Object.keys(hiringProcessHashIndex)[nextIndex] as HiringProcessSteps;
+
+    } else {
+      return Object.keys(hiringProcessHashIndex)[currentIndex] as HiringProcessSteps
+    }
+
+  }
+
+  public getNextStepLabel(currentStep: HiringProcessSteps) {
 
     const currentIndex = this.getIndex(currentStep);
     const nextIndex = currentIndex + 1;
@@ -205,36 +326,6 @@ export class HiringProcessService implements OnDestroy {
     }
   }
 
-  public getSeverity(step: HiringProcessSteps) {
-
-    switch (step) {
-
-      case 'OPEN_FOR_APPLICATIONS':
-      case 'RESUME_SCREENING':
-      case 'INTERVIEW_SELECTION':
-        return 'bg-indigo-400';
-
-      case 'INITIAL_INTERVIEWS':
-      case 'TECHNICAL_ASSESSMENT':
-      case 'FINAL_INTERVIEWS':
-        return 'bg-yellow-400';
-
-      case 'BEHAVIORAL_ASSESSMENT':
-      case 'PROJECT_CHALLENGE':
-      case 'MANAGER_INTERVIEWS':
-        return 'bg-cyan-400';
-
-      case 'REFERENCE_CHECK':
-      case 'JOB_OFFER':
-      case 'PROCESS_COMPLETED':
-        return 'bg-green-400';
-
-      case 'CANCELLED':
-      case 'FROZEN':
-        return 'bg-red-400';
-    }
-  }
-
   private getCompanyHiringProcessList() {
 
     this.updateLoading(true);
@@ -264,6 +355,36 @@ export class HiringProcessService implements OnDestroy {
       this.componentService.showMessage({ type: 'info', detail: message });
     }
 
+  }
+
+  public getSeverity(step: HiringProcessSteps) {
+
+    switch (step) {
+
+      case 'OPEN_FOR_APPLICATIONS':
+      case 'RESUME_SCREENING':
+      case 'INTERVIEW_SELECTION':
+        return 'bg-indigo-400';
+
+      case 'INITIAL_INTERVIEWS':
+      case 'TECHNICAL_ASSESSMENT':
+      case 'FINAL_INTERVIEWS':
+        return 'bg-yellow-400';
+
+      case 'BEHAVIORAL_ASSESSMENT':
+      case 'PROJECT_CHALLENGE':
+      case 'MANAGER_INTERVIEWS':
+        return 'bg-cyan-400';
+
+      case 'REFERENCE_CHECK':
+      case 'JOB_OFFER':
+      case 'PROCESS_COMPLETED':
+        return 'bg-green-400';
+
+      case 'CANCELLED':
+      case 'FROZEN':
+        return 'bg-red-400';
+    }
   }
 
   private getProcessStepLabel() {
@@ -318,171 +439,5 @@ export class HiringProcessService implements OnDestroy {
   private updateLoading(state: boolean) {
     this.localLoading.next(state);
   }
-
-  /*
-  private getMockList(number: number): HiringProcess[] {
-
-    const list: HiringProcess[] = []
-    const now = new Date().getTime().toString();
-
-    function factory(index: number) {
-
-      const allHiringProcessStatuses: HiringProcessSteps[] = [
-        'OPEN_FOR_APPLICATIONS', 'RESUME_SCREENING', 'INTERVIEW_SELECTION', 'INITIAL_INTERVIEWS',
-        'TECHNICAL_ASSESSMENT', 'FINAL_INTERVIEWS', 'BEHAVIORAL_ASSESSMENT', 'PROJECT_CHALLENGE',
-        'MANAGER_INTERVIEWS', 'REFERENCE_CHECK', 'JOB_OFFER', 'PROCESS_COMPLETED', 'CANCELLED', 'FROZEN',
-      ];
-
-      const names = [
-        'Lucas Oliveira', 'Rafael Trabuco', 'Nicolas Nunes', 'Laura Jerônima',
-        'Arthur Novaes', 'Igor Simões Oliveira', 'Juliana Tranquedo',
-        'Isabela Menezes Oliveira', 'Gabriel Santos da Paixão', 'Carolina Lima da Silva', 'Felipe Pereira',
-        'Luiza Souza', 'Matheus Costa', 'Amanda Oliveira', 'Pedro Rocha',
-        'Mariana Almeida', 'André Silva', 'Natália Martins de Souza', 'Fernando Oliveira',
-        'Camila Pereira', 'José Santos', 'Beatriz Costa', 'Ricardo Mendes Andrade',
-        'Ana Luiza Silva', 'Eduardo Lima Silva', 'Vitória Pereira', 'Bruno Oliveira',
-        'Clara Nunes de Souza', 'Henrique Santos Oliveira', 'Giovanna Costa', 'Pedro Henrique Melo',
-        'Larissa Silva', 'João Oliveira', 'Manuela Lima', 'Rafaela Pereira',
-        'Vinícius Costa Almeida', 'Bianca Alves', 'Gustavo Oliveira', 'Cecília Lima Da silva'
-      ];
-
-      function getRandomStep(): HiringProcessSteps {
-        const randomIndex = Math.floor(Math.random() * allHiringProcessStatuses.length);
-        return allHiringProcessStatuses[randomIndex];
-      }
-
-      function randomNames() {
-        const randomIndex = Math.floor(Math.random() * names.length);
-        return names[randomIndex];
-      }
-
-      function randomSubscribes(quantity: number) {
-        const subs = [];
-
-        for (let index = 0; index < quantity; index++) {
-
-          subs.push({
-            id: index.toString(),
-            name: randomNames(),
-            profileId: '1c866c33-02c4-404f-9573-05f481606016',
-            picture: 'https://picsum.photos/200/300/?random'
-          });
-        }
-
-        return subs;
-      }
-
-      const subscribers = randomSubscribes((index + 1) * 10)
-
-      const data: HiringProcess = {
-
-        id: index.toString(),
-        title: "Processo Nº " + index,
-        description: "Descrição do processo",
-        category: "Front-End",
-        seniority: "Júnior",
-        salaryRange: "Negociável",
-        salaryRange_from: "",
-        salaryRange_to: "",
-        negotiable: true,
-        contractType: "PJ",
-        locationType: "Híbrido ",
-        workload: "Full-Time",
-        // enableSuggestions: true,
-        deadline: "1705460400000",
-        pcd: false,
-        pcdType: '',
-        createdAt: now,
-        updatedAt: now,
-
-        recruiter: 'laura@dev.com',
-        subscribersCount: subscribers.length,
-
-        // a etapa atual deve ser sempre o primeiro item da lista ! ( unshift para inserir )
-        steps: [
-          {
-            identifier: 'RESUME_SCREENING', // etapa 2
-            candidatesLists: [
-              {
-                id: 'RESUME_SCREENING_Candidatos',
-                name: 'Candidatos',
-                candidates: [...subscribers],
-                description: 'Lista dos candidatos que permanecem concorrendo à vaga.'
-              },
-              {
-                id: 'RESUME_SCREENING_Qualificados',
-                candidates: [],
-                name: 'Qualificados',
-                description: 'Lista dos candidatos qualificados para a próxima etapa.'
-              },
-              {
-                id: 'RESUME_SCREENING_Favoritos',
-                candidates: [],
-                name: 'Favoritos',
-                description: 'Exemplo de lista personalizada.'
-              }
-            ],
-          },
-          {
-            identifier: 'OPEN_FOR_APPLICATIONS', // etapa 1
-            candidatesLists: [
-              {
-                id: 'OPEN_FOR_APPLICATIONS_Inscritos',
-                name: 'Inscritos',
-                candidates: [...subscribers],
-                description: 'Lista dos candidatos inscritos na vaga.'
-              },
-              {
-                id: 'OPEN_FOR_APPLICATIONS_Favoritos',
-                candidates: [],
-                name: 'Favoritos',
-                description: 'Exemplo de lista personalizada.'
-              }
-            ],
-          },
-        ],
-
-        differences: [
-          "Design e implementação de arquiteturas escaláveis",
-          "Certificações relevantes para as tecnologias utilizadas",
-          "Implementação de pipelines CI/CD", "Conhecimento em práticas DevOps",
-          "Certificação Scrum", "Proatividade", "Certificações em segurança, como CISSP",
-          "Experiência comprovada em projetos relevantes", "Conhecimento em microservices",
-          "Experiência em práticas de segurança cibernética", "Participação em projetos open source",
-        ],
-        stacklist: [
-          "HTML", "CSS", "JavaScript", "TypeScript", "React",
-          "Angular", "Vue", "Svelte", "Ember", "Backbone",
-          "jQuery", "Bootstrap", "Tailwind CSS", "Webpack", "Babel"
-        ],
-        requirements: [
-          "Experiência com trabalho em equipe", "Habilidade para aprender rapidamente",
-          "Boa comunicação interpessoal", "Conhecimento básico em redes e sistemas",
-          "Capacidade de documentar código e processos", "Interesse em aprimorar habilidades técnicas continuamente",
-          "Conhecimento de padrões de desenvolvimento de software", "Familiaridade com metodologias ágeis (Scrum, Kanban)",
-        ],
-        benefits: [
-          "Desconto em Farmácia", "Plano Odontológico", "Vale Transporte em Cartão Flexível",
-          "Eventos e Atividades de Integração", "Licença Sem Vencimento", "Café e Lanches no Escritório",
-          "Descontos em Graduações e Pós-graduações", "Bolsa de 90% para Estudos de Idiomas", "Home Office",
-          "Assistência Médica", "Horário de Trabalho Flexível", "Participação nos Lucros e Resultados (PLR)",
-          "Ajuda de Custo", "Horário Flexível", "Seguro de Vida", "Licença Maternidade/Paternidade Estendida",
-          "Auxílio Creche", "Plano de Carreira", "Cultura Organizacional Inovadora", "Programas de Bem-Estar no Trabalho",
-        ]
-      }
-
-      return data
-
-    }
-
-    for (let i = 0; i < number; i++) {
-
-      list.push(factory(i))
-    }
-
-    return list
-
-  }
-  */
 
 }

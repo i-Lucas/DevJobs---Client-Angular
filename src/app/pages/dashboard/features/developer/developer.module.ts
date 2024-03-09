@@ -12,6 +12,10 @@ const routes: Routes = [
     loadChildren: () => import('./profile/profile.module')
   },
   {
+    path:'applications',
+    loadChildren: () => import('./applications/applications.module')
+  },
+  {
     path: '**',
     redirectTo: '/dashboard/developer/home'
   }

@@ -3,7 +3,7 @@
     <ng-template pTemplate="header">
         <div class="flex align-items-center gap-2">
             <i class="material-icons">badge</i>
-            <p>Etapas</p>
+            <p class="app-xs">Etapas</p>
         </div>
     </ng-template>
 
@@ -27,7 +27,7 @@
                                     [styleClass]="getSeverity(step.identifier)"
                                 />
 
-                                @if (step.identifier !== 'CANCELLED') {
+                                @if (showProcessTagInfo(step.identifier)) {
     
                                     @if (checkIfIsCurrentStep(step.identifier)) {
                                         <p-tag icon="pi pi-verified" value="Etapa Atual" />
@@ -36,7 +36,7 @@
 
                             </div>
 
-                            @if (step.identifier !== 'CANCELLED') {
+                            @if (showProcessTagInfo(step.identifier)) {
 
                                 <p-tag class="app-lg"
                                     [value]="'Etapa ' + getStepIndex(step.identifier)"
@@ -72,8 +72,8 @@
                                                 (cdkDropListDropped)="itemdrop.emit($event)"
                                                 [cdkDropListConnectedTo]="getCandidateListIds(step.candidatesLists)"
                                                 class="list app-border border-round overflow-y-auto py-4 hidden-scroll"
-                                                [cdkDropListDisabled]="checkIfIsCurrentStep(step.identifier) === false"
-                                                [ngClass]="checkIfListQualifiesForNextStep(list.identifier) ? 'border-primary' : null ">                                            
+                                                [cdkDropListDisabled]="!checkIfIsCurrentStep(step.identifier)"
+                                                [ngClass]="checkIfListQualifiesForNextStep(list.identifier) ? 'border-primary' : 'border-red-300' ">
                                                                 
                                                 <div class="pb-4 px-4 flex flex-column gap-2 justify-content-center align-items-center">
                             

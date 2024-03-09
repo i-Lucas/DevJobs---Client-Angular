@@ -52,7 +52,11 @@ export class ProcessStepsComponent {
   }
 
   protected checkIfListQualifiesForNextStep(identifier: ProcessStepListIdentifier) {
-    return identifier === 'QUALIFIED' || identifier === 'SUBSCRIBERS'
+    return identifier === 'QUALIFIED' || identifier === 'SUBSCRIBERS' || identifier === 'FAVORITES';
+  };
+
+  protected showProcessTagInfo(identifier: HiringProcessSteps) {
+    return identifier !== 'CANCELLED' && identifier !== 'PROCESS_COMPLETED';
   }
 
   protected confirmViewProfile(event: Event, candidate: HiringDeveloperSubscriber) {

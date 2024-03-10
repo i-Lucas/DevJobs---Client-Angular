@@ -72,31 +72,46 @@
     [isOpen]="openUnsavedChangesAlert"
     (onClose)="openUnsavedChangesAlert = false"
 >
-    <section class="mb-6">
 
-        <h4 class="app-sm text-center">Você tem <span class="text-primary">{{unsavedThings.length > 1 ? unsavedThings.length : null}}</span> alterações não salvas:</h4>
+    <section class="p-2">
 
-        <section class="flex flex-column gap-2">
-            @for (item of unsavedThings; track item; let idx = $index) {
-    
-                <div class="flex align-items-center gap-2">
-                    <i class="material-icons">check_circle</i>                    
-                    <p [innerHTML]="item.message" class="app-xs"></p>
-                </div>
-    
-                @if (idx < unsavedThings.length - 1) { 
-                    <p-divider styleClass="m-0" />
+        <section class="mb-6">
+
+            <h4 class="app-sm text-center">Você tem <span class="text-primary">{{unsavedThings.length > 1 ? unsavedThings.length : null}}</span> alterações não salvas:</h4>
+
+            <section class="flex flex-column gap-2">
+                @for (item of unsavedThings; track item; let idx = $index) {
+        
+                    <div class="flex align-items-center gap-2">
+                        <i class="material-icons">check_circle</i>                    
+                        <p [innerHTML]="item.message" class="app-xs"></p>
+                    </div>
+        
+                    @if (idx < unsavedThings.length - 1) { 
+                        <p-divider styleClass="m-0" />
+                    }
                 }
-            }
+            </section>
+
         </section>
+
+        <div class="flex justify-content-between">
+            <p-button 
+                size="small"
+                icon="pi pi-times"
+                label="Ignorar"
+                styleClass="p-button-danger"
+                (click)="continueNavigation()"
+            />
+            <p-button 
+                size="small"
+                icon="pi pi-save"
+                label="Salvar alterações"
+                styleClass="p-button-success"
+                (click)="saveAllLists()"
+            />
+        </div>
 
     </section>
 
-    <p-button 
-        size="small"
-        icon="pi pi-times"
-        label="Continuar navegação"
-        styleClass="p-button-danger"
-        (click)="continueNavigation()"
-    />
 </app-modal>

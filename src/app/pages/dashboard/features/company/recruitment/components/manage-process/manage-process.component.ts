@@ -48,8 +48,6 @@ export class ManageProcessComponent implements OnDestroy {
   protected creatingNewCandidateList: boolean = false;
   protected newCandidateListForm: FormGroup | undefined;
 
-  protected currentStepLists: HiringDeveloperSubscriber[] = [];
-
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -84,7 +82,17 @@ export class ManageProcessComponent implements OnDestroy {
 
     } else {
 
-      this.router.navigate(['/dashboard/company/recruitment']);
+      this.hiringService.getCompanyHiringProcessById(processId)
+        .then((process: HiringProcess) => {
+
+          this.hiringprocess = process;
+          this.currentProcessStepsList = this.hiringprocess.steps;
+          this.currentProcessStepIdentifier = this.hiringprocess.currentStep;
+          this.currentProcessStepIndex = this.hiringprocess.steps.findIndex(step => step.identifier === this.currentProcessStepIdentifier);
+
+        }).catch((error: ApiError) => {
+          this.router.navigate(['/dashboard/company/recruitment']);
+        })
 
     }
   }
@@ -103,10 +111,8 @@ export class ManageProcessComponent implements OnDestroy {
         event.currentIndex
       );
 
-      const messageId = `${event.container.id}_${event.container.data[event.currentIndex].id}_${event.previousContainer.id}`
-
-      this.hasUnsavedChanges = true;
       this.updateCandidateProcessStepListId(event.container, event.currentIndex);
+      const messageId = `${event.container.id}_${event.container.data[event.currentIndex].id}_${event.previousContainer.id}`
 
       this.createAndPushMessage({
         destinationContainer: event.container,
@@ -125,18 +131,18 @@ export class ManageProcessComponent implements OnDestroy {
 
   private createAndPushMessage({ destinationContainer, currentIndex, messageId, sourceContainer }: CreateAndPushUnsavedMessages) {
 
-    const transferredCandidate = destinationContainer.data[currentIndex];
-
-    const destinationListName = this.getListName(destinationContainer.id)!.name;
     const sourceListName = this.getListName(sourceContainer.id)!.name;
+    const transferredCandidate = destinationContainer.data[currentIndex];
+    const destinationListName = this.getListName(destinationContainer.id)!.name;
 
-    const name = `<span class="app-sm font-bold">${transferredCandidate.name}</span>`
-    const toList = `<span class="app-sm font-bold">${destinationListName}</span>`;
     const fromList = `<span class="app-sm font-bold">${sourceListName}</span>`;
+    const toList = `<span class="app-sm font-bold">${destinationListName}</span>`;
+    const name = `<span class="app-sm font-bold">${transferredCandidate.name}</span>`
 
     const message = `Ação: Moveu o candidato ${name} da lista ${fromList} para a lista ${toList} e não salvou.`;
 
     if (!this.unsavedThings.find(message => message.messageId === messageId)) {
+      this.hasUnsavedChanges = true;
       this.unsavedThings.push({ message, messageId });
     }
   }
@@ -147,23 +153,26 @@ export class ManageProcessComponent implements OnDestroy {
 
   protected onChangeProcessToNextStep(stepIdentifier: HiringProcessSteps) {
 
-    if (this.hiringprocess) {
-      this.hiringService.changeProcessStep({
-        processId: this.hiringprocess.id,
-        stepIdentifier
-      })
+    if (this.hasUnsavedChanges) {
+      this.openUnsavedChangesAlert = true;
+
+    } else {
+
+      if (this.hiringprocess) {
+
+        this.hiringService.changeProcessStep({
+          processId: this.hiringprocess.id,
+          stepIdentifier
+        });
+
+      }
     }
   }
 
   protected createNewCandidatelist() {
-
-    this.newCandidateListForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(5)]],
-      description: [''],
-    })
-
+    this.newCandidateListForm = this.formBuilder.group({ name: ['', [Validators.required, Validators.minLength(5)]], description: [''] });
     this.creatingNewCandidateList = true;
-  }
+  };
 
   protected handleMenuClick(event: HiringProcessStepMenuOptions) {
 
@@ -174,26 +183,35 @@ export class ManageProcessComponent implements OnDestroy {
         break;
 
       case 'SAVE_LIST':
-
-        if (this.hiringprocess) {
-
-          const allCandidatesOfAllLists: HiringDeveloperSubscriber[] = [];
-          const candidatesLists = this.hiringprocess.steps[this.currentProcessStepIndex!].candidatesLists;
-
-          candidatesLists.forEach((candidatesList: HiringProcessStepLists) => {
-            candidatesList.candidates.forEach((candidate: HiringDeveloperSubscriber) => {
-              allCandidatesOfAllLists.push(candidate);
-            });
-          });
-
-          this.hiringService.saveCandidateList({
-            processId: this.hiringprocess!.id,
-            candidatesLists: allCandidatesOfAllLists
-          })
-        }
-
+        this.saveAllLists();
         break;
     };
+  }
+
+  protected saveAllLists() {
+    if (this.hiringprocess) {
+
+      const allCandidatesOfAllLists: HiringDeveloperSubscriber[] = [];
+      const candidatesLists = this.hiringprocess.steps[this.currentProcessStepIndex!].candidatesLists;
+
+      candidatesLists.forEach((candidatesList: HiringProcessStepLists) => {
+        candidatesList.candidates.forEach((candidate: HiringDeveloperSubscriber) => {
+          allCandidatesOfAllLists.push(candidate);
+        });
+      });
+
+      this.clearUnsavedChanges();
+      this.hiringService.saveCandidateList({
+        processId: this.hiringprocess!.id,
+        candidatesLists: allCandidatesOfAllLists
+      });
+    }
+  }
+
+  private clearUnsavedChanges() {
+    this.unsavedThings = [];
+    this.hasUnsavedChanges = false;
+    this.openUnsavedChangesAlert = false;
   }
 
   protected saveNewList() {
@@ -239,18 +257,19 @@ export class ManageProcessComponent implements OnDestroy {
 
       this.router.events.subscribe(event => {
         if (event instanceof NavigationCancel) {
-          this.nextRouteToNavigate = event.url
+          this.nextRouteToNavigate = event.url ? event.url : this.router.url;
         }
       })
     }
 
     return this.hasUnsavedChanges;
-  }
+  };
 
   protected continueNavigation() {
+    this.unsavedThings = [];
     this.hasUnsavedChanges = false;
     this.openUnsavedChangesAlert = false;
-    this.router.navigate([this.nextRouteToNavigate ? this.nextRouteToNavigate : '/dashboard'])
+    this.router.navigate([this.nextRouteToNavigate ? this.nextRouteToNavigate : this.router.url]);
   }
 
 }

@@ -88,27 +88,6 @@ export class HiringProcessService implements OnDestroy {
     });
   }
 
-  /*
-  public createNewList(data: CreateNewStepList): Observable<string> {
-
-    this.updateLoading(true);
-    return this.httpService.post<ApiResponse<{ newListId: string }>>('/hiring/create/list', { ...data, identifier: 'OTHER' })
-      .pipe(
-        takeUntil(this.destroy$),
-        map(response => {
-          this.updateLoading(false);
-          this.componentService.showMessage({ type: 'success', detail: response.message });
-          return response.data?.newListId || '';
-        }),
-        catchError(error => {
-          this.showErrorMessage(error);
-          this.updateLoading(false);
-          return throwError(error);
-        })
-      );
-  };
-  */
-
   // -------------------------------------------------------------------------------------------------------------------
 
   public changeProcessStep({ processId, stepIdentifier }: ChangeProcessStep) {
@@ -326,10 +305,32 @@ export class HiringProcessService implements OnDestroy {
     }
   }
 
+  public getCompanyHiringProcessById(processId: string): Promise<HiringProcess> {
+
+    return new Promise((resolve, reject) => {
+
+      this.updateLoading(true);
+      this.httpService.get<ApiResponse<HiringProcess>>('/hiring/get/'.concat(processId))
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response) => {
+            this.updateLoading(false);
+            resolve(response.data as HiringProcess);
+            // this.componentService.showMessage({ type: 'success', detail: response.message });
+          },
+          error: (error) => {
+            this.showErrorMessage(error);
+            this.updateLoading(false);
+            reject(error);
+          }
+        });
+    });
+  }
+
   private getCompanyHiringProcessList() {
 
     this.updateLoading(true);
-    this.httpService.get<ApiResponse<any>>('/hiring/get')
+    this.httpService.get<ApiResponse<{ processList: HiringProcess[] }>>('/hiring/get')
       .pipe(takeUntil(this.destroy$)).subscribe({
         next: (response) => {
           this.handleHiringProcessResponse(response);

@@ -71,7 +71,7 @@
                                                 style="height: 30rem; width: 25rem;"
                                                 (cdkDropListDropped)="itemdrop.emit($event)"
                                                 [cdkDropListConnectedTo]="getCandidateListIds(step.candidatesLists)"
-                                                class="list app-border border-round overflow-y-auto py-4 hidden-scroll"
+                                                class="list app-border border-round overflow-y-auto py-4 hidden-scroll flex-grow-1"
                                                 [cdkDropListDisabled]="!checkIfIsCurrentStep(step.identifier)"
                                                 [ngClass]="checkIfListQualifiesForNextStep(list.identifier) ? 'border-primary' : 'border-red-300' ">
                                                                 
@@ -130,7 +130,7 @@
         
                                     @if (checkIfIsCurrentStep(step.identifier)) {
         
-                                        <section class="flex justify-content-center align-items-center xl:py-0 xl:align-items-start">     
+                                        <section class="flex justify-content-center align-items-center xl:py-2 xl:align-items-start">     
                                             <p-menu #menu [model]="listOptionsMenu" [popup]="true"></p-menu>
                                             <p-button
                                                 size="small"                            

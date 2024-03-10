@@ -27,7 +27,7 @@ interface CreateNewStepList {
 
 interface ChangeProcessStep {
   processId: string;
-  stepIdentifier: HiringProcessSteps
+  stepIdentifier: HiringProcessSteps;
 }
 
 @Injectable()
@@ -90,21 +90,43 @@ export class HiringProcessService implements OnDestroy {
 
   // -------------------------------------------------------------------------------------------------------------------
 
-  public changeProcessStep({ processId, stepIdentifier }: ChangeProcessStep) {
+  public changeProcessStep({ processId, stepIdentifier }: ChangeProcessStep): Promise<boolean> {
 
-    this.updateLoading(true);
-    this.httpService.post<ApiResponse<null>>('/hiring/update/step', { processId, stepIdentifier })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (response) => {
-          this.updateLoading(false);
-          this.componentService.showMessage({ type: 'success', detail: response.message });
-        },
-        error: (error) => {
-          this.showErrorMessage(error);
-          this.updateLoading(false);
-        }
-      });
+    return new Promise((resolve, reject) => {
+
+      this.updateLoading(true);
+      this.httpService.post<ApiResponse<ProcessStepsList>>('/hiring/update/step', { processId, stepIdentifier })
+
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response) => {
+
+            this.updateLoading(false);
+            this.componentService.showMessage({ type: 'success', detail: response.message });
+
+            if (response.data) {
+
+              const newStep = response.data;
+              const currentList = this.hiringList.getValue();
+              const updatedList = currentList.map(process => {
+                if (process.id === processId) {
+                  process.currentStep = newStep.identifier;
+                  process.steps.unshift(newStep);
+                }
+                return process;
+              });
+
+              this.hiringList.next(updatedList);
+              resolve(true);
+            }
+          },
+          error: (error) => {
+            this.showErrorMessage(error);
+            this.updateLoading(false);
+            reject(error);
+          }
+        });
+    });
   };
 
   // -------------------------------------------------------------------------------------------------------------------

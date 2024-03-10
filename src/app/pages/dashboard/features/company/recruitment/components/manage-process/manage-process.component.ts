@@ -11,7 +11,6 @@ import {
 } from '@angular/cdk/drag-drop';
 
 import { HiringProcessService } from '../../services/process/hiring-process.service';
-import { CommonComponentService } from '@app-services/components/base-component.service';
 
 interface UnsavedMessage {
   message: string;
@@ -53,7 +52,6 @@ export class ManageProcessComponent implements OnDestroy {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private hiringService: HiringProcessService,
-    private componentService: CommonComponentService,
   ) {
 
     this.route.params
@@ -75,25 +73,17 @@ export class ManageProcessComponent implements OnDestroy {
     this.hiringprocess = this.hiringService.getHiringProcessById(processId);
 
     if (this.hiringprocess) {
-
-      this.currentProcessStepsList = this.hiringprocess.steps;
-      this.currentProcessStepIdentifier = this.hiringprocess.currentStep;
-      this.currentProcessStepIndex = this.hiringprocess.steps.findIndex(step => step.identifier === this.currentProcessStepIdentifier);
+      this.updateProcessCurrentStep();
 
     } else {
 
       this.hiringService.getCompanyHiringProcessById(processId)
         .then((process: HiringProcess) => {
-
           this.hiringprocess = process;
-          this.currentProcessStepsList = this.hiringprocess.steps;
-          this.currentProcessStepIdentifier = this.hiringprocess.currentStep;
-          this.currentProcessStepIndex = this.hiringprocess.steps.findIndex(step => step.identifier === this.currentProcessStepIdentifier);
-
+          this.updateProcessCurrentStep();          
         }).catch((error: ApiError) => {
           this.router.navigate(['/dashboard/company/recruitment']);
         })
-
     }
   }
 
@@ -158,14 +148,16 @@ export class ManageProcessComponent implements OnDestroy {
 
     } else {
 
-      if (this.hiringprocess) {
+      this.hiringService.changeProcessStep({ stepIdentifier, processId: this.hiringprocess!.id })
+        .then(() => this.getProcessById(this.hiringprocess!.id)); // importante !!
+    }
+  }
 
-        this.hiringService.changeProcessStep({
-          processId: this.hiringprocess.id,
-          stepIdentifier
-        });
-
-      }
+  private updateProcessCurrentStep() {
+    if (this.hiringprocess) {
+      this.currentProcessStepsList = this.hiringprocess.steps;
+      this.currentProcessStepIdentifier = this.hiringprocess.currentStep;
+      this.currentProcessStepIndex = this.hiringprocess.steps.findIndex(step => step.identifier === this.currentProcessStepIdentifier);
     }
   }
 

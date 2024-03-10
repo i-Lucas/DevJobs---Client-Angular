@@ -52,7 +52,7 @@ export class SigninRootComponent implements OnInit, OnDestroy {
 
     if (this.authService.isAuthenticated()) {
       this.componentService.showMessage({ type: 'success', detail: 'Login Automático' });
-      this.componentService.navigate('/dashboard');
+      this.navigateToAccountHome();
 
     } else {
       this.authService.disableAutomaticLogin();
@@ -71,10 +71,12 @@ export class SigninRootComponent implements OnInit, OnDestroy {
   };
 
   private handleSignInResponse(response: ApiResponse<UserToken>) {
+
     if (response.data) {
+
       this.processSignInConfiguration(response.data.token);
       this.componentService.showMessage({ type: 'success', detail: response.message })
-      this.componentService.navigate('/dashboard')
+      this.navigateToAccountHome();
     }
   }
 
@@ -102,6 +104,21 @@ export class SigninRootComponent implements OnInit, OnDestroy {
 
   protected disableBtn() {
     return this.email.length === 0 || this.password.length === 0
+  }
+
+  private navigateToAccountHome() {
+
+    const userJwtPayload = this.authService.extractUserJwtPayload();
+
+    if (!userJwtPayload) {
+      return this.handleSignInError({
+        status: 404,
+        message: 'Falha ao fazer login. Por favor tente novamente.'
+      });
+    }
+
+    const path = userJwtPayload.accountType === 'COMPANY' ? '/dashboard/company/home' : '/dashboard/developer/home';
+    return this.componentService.navigate(path);
   }
 
 }

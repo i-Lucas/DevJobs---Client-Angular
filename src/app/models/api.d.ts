@@ -57,4 +57,5 @@ interface UserJwtPayload {
     userId: string;
     accountId: string;
     profileId: string;
+    accountType: AccountType;
 }

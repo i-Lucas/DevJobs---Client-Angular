@@ -64,12 +64,33 @@ export class AuthenticationService {
     localStorage.removeItem(this.LOCAL_STORAGE_EMAIL);
   }
 
+  /*
   public extractUserJwtPayload(): UserJwtPayload | boolean {
 
-    const { accountId, email, userId, profileId } = this.parseJwt(this.decrypt(this.getToken()!)!);
-    if (!userId || !accountId || !profileId || !email) return false;
-    return { email, userId, accountId, profileId };
-  }
+    const { accountId, email, userId, profileId, accountType } = this.parseJwt(this.decrypt(this.getToken()!)!);
+    if (!userId || !accountId || !profileId || !email || !accountType) return false;
+    return { email, userId, accountId, profileId, accountType };
+  } */
+
+  public extractUserJwtPayload(): UserJwtPayload | null {
+
+    const token = this.getToken();
+    if (!token) return null;
+
+    const decryptedToken = this.decrypt(token);
+    if (!decryptedToken) return null;
+
+    const { accountId, email, userId, profileId, accountType } = this.parseJwt(decryptedToken);
+    if (!userId || !accountId || !profileId || !email || !accountType) return null;
+
+    return {
+      email,
+      userId,
+      accountId,
+      profileId,
+      accountType
+    }
+  };
 
   private parseJwt(token: string): any {
     return JSON.parse(atob(token.split('.')[1]));

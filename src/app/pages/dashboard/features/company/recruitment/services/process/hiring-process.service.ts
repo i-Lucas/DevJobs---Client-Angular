@@ -1,17 +1,19 @@
 import { Injectable, OnDestroy } from '@angular/core';
 
 import {
-  map,
+  of,
   Subject,
+  finalize,
+  mergeMap,
   takeUntil,
-  catchError,
   Observable,
-  throwError,
+  catchError,
   BehaviorSubject,
 } from 'rxjs';
 
 import { HttpService } from '@app-services/http/http.service';
 import { CommonComponentService } from '@app-services/components/base-component.service';
+import { HiringStepProcessService } from '@app-services/dashboard/hiring/hiring-process.service';
 
 interface SaveProcessStepCandidateList {
   processId: string;
@@ -36,12 +38,12 @@ export class HiringProcessService implements OnDestroy {
   private destroy$ = new Subject<void>();
   private localLoading = new BehaviorSubject<boolean>(false);
 
-  // private mock = this.getMockList(0);
   private hiringList: BehaviorSubject<HiringProcess[]> = new BehaviorSubject<HiringProcess[]>([]);
 
   constructor(
     private httpService: HttpService,
-    private componentService: CommonComponentService
+    private componentService: CommonComponentService,
+    private stepProcessService: HiringStepProcessService
   ) {
 
     this.getCompanyHiringProcessList();
@@ -133,19 +135,40 @@ export class HiringProcessService implements OnDestroy {
 
   public saveCandidateList({ processId, candidatesLists }: SaveProcessStepCandidateList) {
 
+    const batchSize = 250; // Defina o tamanho máximo de cada lote
+    const totalCandidates = candidatesLists.length;
+    const numBatches = Math.ceil(totalCandidates / batchSize);
+
+    let completedBatches = 0;
+
     this.updateLoading(true);
-    this.httpService.post<ApiResponse<null>>('/hiring/update/list', { processId, candidatesLists })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (response) => {
-          this.updateLoading(false);
+
+    of(...Array(numBatches).keys()).pipe(
+      mergeMap(index => {
+
+        const startIndex = index * batchSize;
+        const endIndex = Math.min((index + 1) * batchSize, totalCandidates);
+        const batchCandidates = candidatesLists.slice(startIndex, endIndex);
+
+        return this.httpService.post<ApiResponse<null>>('/hiring/update/list', { processId, candidatesLists: batchCandidates })
+          .pipe(catchError(error => of({ error: true, message: 'Ocorreu um erro ao atualizar a lista de candidatos.' })));
+      }),
+      finalize(() => {
+        this.updateLoading(false)
+      })
+    ).subscribe({
+      next: (response) => {
+        completedBatches++;
+        this.updateLoading(false);
+        if (completedBatches === numBatches) {
           this.componentService.showMessage({ type: 'success', detail: response.message });
-        },
-        error: (error) => {
-          this.showErrorMessage(error);
-          this.updateLoading(false);
         }
-      });
+      },
+      error: (error) => {
+        this.updateLoading(false);
+        this.showErrorMessage(error);
+      }
+    });
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -268,8 +291,11 @@ export class HiringProcessService implements OnDestroy {
   }
 
   public getLabel(step: HiringProcessSteps) {
-    const hiringProcessStatusTranslations = this.getProcessStepLabel();
-    return hiringProcessStatusTranslations[step];
+    return this.stepProcessService.getLabel(step);
+  }
+
+  public getSeverity(step: HiringProcessSteps) {
+    return this.stepProcessService.getSeverity(step);
   }
 
   public getIndex(step: HiringProcessSteps) {
@@ -338,7 +364,6 @@ export class HiringProcessService implements OnDestroy {
           next: (response) => {
             this.updateLoading(false);
             resolve(response.data as HiringProcess);
-            // this.componentService.showMessage({ type: 'success', detail: response.message });
           },
           error: (error) => {
             this.showErrorMessage(error);
@@ -378,36 +403,6 @@ export class HiringProcessService implements OnDestroy {
       this.componentService.showMessage({ type: 'info', detail: message });
     }
 
-  }
-
-  public getSeverity(step: HiringProcessSteps) {
-
-    switch (step) {
-
-      case 'OPEN_FOR_APPLICATIONS':
-      case 'RESUME_SCREENING':
-      case 'INTERVIEW_SELECTION':
-        return 'bg-indigo-400';
-
-      case 'INITIAL_INTERVIEWS':
-      case 'TECHNICAL_ASSESSMENT':
-      case 'FINAL_INTERVIEWS':
-        return 'bg-yellow-400';
-
-      case 'BEHAVIORAL_ASSESSMENT':
-      case 'PROJECT_CHALLENGE':
-      case 'MANAGER_INTERVIEWS':
-        return 'bg-cyan-400';
-
-      case 'REFERENCE_CHECK':
-      case 'JOB_OFFER':
-      case 'PROCESS_COMPLETED':
-        return 'bg-green-400';
-
-      case 'CANCELLED':
-      case 'FROZEN':
-        return 'bg-red-400';
-    }
   }
 
   private getProcessStepLabel() {

@@ -8,7 +8,7 @@ import { CommonComponentService } from '@app-services/components/base-component.
 export class TalentsService implements OnDestroy {
 
   private destroy$ = new Subject<void>();
-  private loading = new BehaviorSubject<boolean>(true);
+  private loading = new BehaviorSubject<boolean>(false);
 
   private count = new BehaviorSubject<number>(0);
   private talents = new BehaviorSubject<Talent[]>([]);
@@ -26,7 +26,6 @@ export class TalentsService implements OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-    this.talents.next([]);
   }
 
   public getTalents(): Observable<Talent[]> {

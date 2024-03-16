@@ -8,20 +8,20 @@ type CategoryList =
   'Gestão em TI' | 'Marketing'
 
 type HiringProcessSteps =
-  | 'OPEN_FOR_APPLICATIONS'   // Vaga aberta para candidaturas
-  | 'RESUME_SCREENING'        // Triagem inicial de currículos
-  | 'INTERVIEW_SELECTION'     // Seleção de candidatos para entrevistas
-  | 'INITIAL_INTERVIEWS'      // Entrevistas iniciais
-  | 'TECHNICAL_ASSESSMENT'    // Avaliação técnica ou desafio de programação
-  | 'FINAL_INTERVIEWS'        // Entrevistas finais
-  | 'BEHAVIORAL_ASSESSMENT'   // Avaliação de habilidades comportamentais
-  | 'PROJECT_CHALLENGE'       // Desafio de projeto ou prático
-  | 'MANAGER_INTERVIEWS'      // Entrevistas com líderes ou gestores
-  | 'REFERENCE_CHECK'         // Verificação de referências
-  | 'JOB_OFFER'               // Oferta de emprego
-  | 'PROCESS_COMPLETED'       // Processo de contratação concluído
-  | 'CANCELLED'               // Processo de contratação cancelado
-  | 'FROZEN';                 // Processo de contratação congelado ou suspenso temporariamente
+  | 'OPEN_FOR_APPLICATIONS'                                                     // Vaga aberta para candidaturas
+  | 'RESUME_SCREENING'                                                          // Triagem inicial de currículos
+  | 'INTERVIEW_SELECTION'                                                       // Seleção de candidatos para entrevistas
+  | 'INITIAL_INTERVIEWS'                                                        // Entrevistas iniciais
+  | 'TECHNICAL_ASSESSMENT'                                                      // Avaliação técnica ou desafio de programação
+  | 'FINAL_INTERVIEWS'                                                          // Entrevistas finais
+  | 'BEHAVIORAL_ASSESSMENT'                                                     // Avaliação de habilidades comportamentais
+  | 'PROJECT_CHALLENGE'                                                         // Desafio de projeto ou prático
+  | 'MANAGER_INTERVIEWS'                                                        // Entrevistas com líderes ou gestores
+  | 'REFERENCE_CHECK'                                                           // Verificação de referências
+  | 'JOB_OFFER'                                                                 // Oferta de emprego
+  | 'PROCESS_COMPLETED'                                                         // Processo de contratação concluído
+  | 'CANCELLED'                                                                 // Processo de contratação cancelado
+  | 'FROZEN';                                                                   // Processo de contratação congelado ou suspenso temporariamente
 
 interface HiringStackListForm {
   name: string;
@@ -90,17 +90,26 @@ interface HiringProcess extends HiringProcessForm {
   updatedAt: string;
 }
 
+type CandidateStatus =
+  'REGISTERED'                                                                  // Inscrito
+  | 'REPROVED'                                                                  // Reprovado
+  | 'APPROVED_FOR_NEXT_STAGE'                                                   // Aprovado para próxima etapa
+  | 'APPROVED'                                                                  // Aprovado
+  | 'JOB_FROZEN'                                                                // Aguardando
+  | 'JOB_CANCELED'                                                              // Encerrado
+
 interface HiringDeveloperSubscriber {
 
   id: string;
-  
+
   name: string;
   picture: string;
 
   email: string;
   profileId: string;
   accountId: string;
-  
+
+  status: CandidateStatus
   processStepListId: string;
 
   createdAt: string;

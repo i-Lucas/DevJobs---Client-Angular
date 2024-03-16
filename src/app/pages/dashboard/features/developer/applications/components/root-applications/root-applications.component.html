@@ -1,3 +1,102 @@
 <main class="p-4">
-    <p>root-applications works!</p>
+
+    @if (loading) {
+
+        <app-loading-spinner />
+    
+    } @else {
+    
+        @if (applications.length > 0) {
+    
+            <section class="my-8">
+        
+                <div class="flex gap-2 justify-content-center align-items-center mb-6">
+                    <h1 class="app-lg">Processos em andamento</h1>
+                    <i pTooltip="Clique em um processo da lista para obter informações" class="small-icon material-icons cursor-pointer">help</i>
+                </div>
+       
+                <p-table 
+                    [rows]="10"
+                    [showCurrentPageReport]="true"
+                    [rowsPerPageOptions]="[10, 15, 20]"
+                    [paginator]="applications.length > 10"
+                    currentPageReportTemplate="mostrando {first} a {last} de {totalRecords} entradas" 
+    
+                    [value]="applications"
+                    [breakpoint]="'960px'" 
+                    responsiveLayout="stack" 
+                    [styleClass]="'p-datatable-striped p-datatable-sm'">
+            
+                    <ng-template pTemplate="header">
+                        <tr>                  
+                            <th pSortableColumn="title" class="app-sm">Vaga<p-sortIcon field="title" /></th>                
+                            <th pSortableColumn="company" class="app-sm">Empresa<p-sortIcon field="company" /></th>
+                            <th class="app-sm">Categoria</th>
+                            <th class="app-sm">Senioridade</th>        
+                            <th pSortableColumn="createdAt" class="app-sm">Início<p-sortIcon field="createdAt" /></th>                            
+                            <th pSortableColumn="currentStep" class="app-sm">Etapa<p-sortIcon field="currentStep" /></th>  
+                            <th pSortableColumn="status" class="app-sm">Status<p-sortIcon field="status" /></th> 
+                        </tr>
+                    </ng-template>
+                    
+                    <ng-template pTemplate="body" let-application>
+            
+                        <tr [routerLink]="['/dashboard/developer/applications/', application.processId]"
+                            class="hover:bg-primary cursor-pointer">
+            
+                            <td class="app-xs lg:app-sm">
+                                <span class="my-3 app-xs font-bold p-column-title">Vaga</span>
+                                <p class="app-xs">{{application.title}}</p>
+                            </td>
+
+                            <td class="app-xs lg:app-sm">
+                                <span class="my-3 app-xs font-bold p-column-title">Empresa</span>
+                                <p class="app-xs">{{application.company}}</p>
+                            </td>
+            
+                            <td class="app-xs lg:app-sm">
+                                <span class="my-3 app-xs font-bold p-column-title">Categoria</span>
+                                <p class="app-xs">{{application.category}}</p>
+                            </td>
+            
+                            <td class="app-xs lg:app-sm">
+                                <span class="my-3 app-xs font-bold p-column-title">Senioridade</span>
+                                <p class="app-xs">{{application.seniority}}</p>
+                            </td>
+            
+                            <td class="app-xs lg:app-sm">
+                                <span class="my-3 app-xs font-bold p-column-title">Início</span>
+                                <p class="app-xs">{{application.createdAt | DD_MM_YYYY}}</p>
+                            </td>
+            
+                            <td>
+                                <span class="my-3 app-xs font-bold p-column-title">Etapa</span>
+                                <p-tag class="app-lg"
+                                    [value]="getLabel(application.currentStep)"
+                                    [styleClass]="getSeverity(application.currentStep)"
+                                />
+                            </td>
+
+                            <td>
+                                <span class="my-3 app-xs font-bold p-column-title">Status</span>
+                                <p-tag class="app-lg"
+                                    [value]="getCandidateLabelStatus(application.status)"
+                                    [styleClass]="getCandidateSeverity(application.status)"
+                                />
+                            </td>
+            
+                        </tr>
+                    </ng-template>
+                </p-table>
+            
+            </section>
+        
+        } @else {
+        
+            <section class="my-8">
+                <h4>Nenhuma candidatura foi encontrada.</h4>
+            </section>
+        }
+    }
+
 </main>

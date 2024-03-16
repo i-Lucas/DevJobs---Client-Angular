@@ -8,7 +8,7 @@
 
         @if (application) {
 
-            <div class="flex justify-content-center align-items-center flex-column mb-8">
+            <section class="flex justify-content-center align-items-center flex-column mb-8">
 
                 <div class="flex gap-2 align-items-center">
                     <h1 class="app-lg">Linha do tempo</h1>
@@ -19,64 +19,68 @@
                     <span class="app-sm">{{application[0].company}} - {{application[0].title}}</span>
                 </div>
 
-            </div>
+            </section>
 
-            <p-timeline [value]="application" align="alternate" styleClass="h-screen">
+            <section class="py-4 mb-8">
 
-                <ng-template pTemplate="marker" let-event>
-                    <p class="app-xs font-bold">{{event.createdAt | DD_MM_YYYY}}</p>
-                </ng-template>
+                <p-timeline [value]="application" align="alternate" styleClass="h-screen">
+    
+                    <ng-template pTemplate="marker" let-event>
+                        <p class="app-xs font-bold">{{event.createdAt | DD_MM_YYYY}}</p>
+                    </ng-template>
+    
+                    <ng-template pTemplate="content" let-event>
+    
+                        <p-fieldset styleClass="app-xs" legend="Etapa Atual">
+    
+                            <!-- 
+                            <ng-template pTemplate="header">
+    
+                                <div class="flex align-items-center gap-2">
+    
+                                    <span class="app-sm">Etapa:</span>
+                                    <p-tag class="app-lg"
+                                        [value]="getLabel(event.currentStep)"
+                                        [styleClass]="getSeverity(event.currentStep)"
+                                    />
+    
+                                </div>
+                                                        
+                            </ng-template>
+                            -->
+    
+                            <section class="flex flex-column gap-4">
+    
+                                <p class="app-sm">Etapa: 
+                                    <p-tag class="app-lg"
+                                        [value]="getLabel(event.currentStep)"
+                                        [styleClass]="getSeverity(event.currentStep)"
+                                    />
+                                </p>
+    
+    
+                                <p class="app-sm">Status: 
+                                    <p-tag class="app-lg"
+                                        [value]="getCandidateLabelStatus(event.status)"
+                                        [styleClass]="getCandidateSeverity(event.status)"
+                                    />
+                                </p>
+    
+                                <div>
+                                    <span class="app-sm">Observações:</span>
+                                    <p>Aguarde novas atualizações.</p>
+                                </div>
+                
+                            </section>
+    
+    
+                        </p-fieldset>
+                        
+                    </ng-template>
+                </p-timeline>
 
-                <ng-template pTemplate="content" let-event>
-
-                    <p-fieldset styleClass="app-xs" legend="Etapa Atual">
-
-                        <!-- 
-                        <ng-template pTemplate="header">
-
-                            <div class="flex align-items-center gap-2">
-
-                                <span class="app-sm">Etapa:</span>
-                                <p-tag class="app-lg"
-                                    [value]="getLabel(event.currentStep)"
-                                    [styleClass]="getSeverity(event.currentStep)"
-                                />
-
-                            </div>
-                                                    
-                        </ng-template>
-                        -->
-
-                        <section class="flex flex-column gap-4">
-
-                            <p class="app-sm">Etapa: 
-                                <p-tag class="app-lg"
-                                    [value]="getLabel(event.currentStep)"
-                                    [styleClass]="getSeverity(event.currentStep)"
-                                />
-                            </p>
-
-
-                            <p class="app-sm">Status: 
-                                <p-tag class="app-lg"
-                                    [value]="getCandidateLabelStatus(event.status)"
-                                    [styleClass]="getCandidateSeverity(event.status)"
-                                />
-                            </p>
-
-                            <div>
-                                <span class="app-sm">Observações:</span>
-                                <p>Aguarde novas atualizações.</p>
-                            </div>
-            
-                        </section>
-
-
-                    </p-fieldset>
-                    
-                </ng-template>
-            </p-timeline>
-
+                
+            </section>
         }
 
     }

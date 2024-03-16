@@ -1,5 +1,111 @@
-<main class="p-4">
+@if (loading) {
 
-    <p>root-home works!</p>
+    <app-loading-spinner />
+}
 
-</main>
+@else {
+
+
+    <main class="flex flex-column xl:flex-row p-4">
+
+        <section class="flex w-full flex-column gap-8 xl:p-8 align-items-center">
+    
+            <section class="chart-container">
+                <h1 class="app-sm">Processos em andamento</h1>
+                <div class="py-8">
+                    <p-chart type="bar" [data]="f_data" [options]="f_options" />
+                </div>
+            </section>
+    
+            <section class="w-full">
+                <p-divider />
+            </section>
+    
+            <section class="chart-container">
+                <h1 class="app-sm">Processos em andamento</h1>
+                <div class="py-8">
+                    <p-chart type="line" [data]="x_data" [options]="x_options" />
+                </div>
+            </section>
+    
+            <section class="w-full">
+                <p-divider />
+            </section>
+    
+            <section class="chart-container">
+                <h1 class="app-sm">Processos em andamento</h1>
+                <div class="py-8">
+                    <p-chart type="bar" [data]="b_data" [options]="b_options" />
+                </div>
+            </section>
+    
+            <section class="w-full">
+                <p-divider />
+            </section>
+    
+            <section class="chart-container">
+                <h1 class="app-sm">Processos em andamento</h1>
+                <div class="py-8 xl:p-8">
+                    <div class="xl:px-8">
+                        <p-chart type="doughnut" [data]="t_data" [options]="t_options" />
+                    </div>
+                </div>
+            </section>
+    
+        </section>
+    
+        <p-divider class="hidden lg:block" layout="vertical" />
+        <p-divider class="lg:hidden my-8" layout="horizontal" />
+    
+        <section class="flex w-full flex-column gap-8 xl:p-8 align-items-center">
+    
+            <section class="chart-container">
+                <h1 class="app-sm">Processos em andamento</h1>
+                <div class="py-8 xl:p-8">
+                    <div class="xl:px-8">
+                        <p-chart type="pie" [data]="a_data" [options]="a_options" />
+                    </div>
+                </div>
+            </section>
+    
+            <section class="w-full">
+                <p-divider />
+            </section>
+    
+            <section class="chart-container">
+                <h1 class="app-sm">Processos em andamento</h1>
+                <div class="py-8">
+                    <p-chart type="bar" [data]="l_data" [options]="l_options" />
+                </div>
+            </section>
+    
+            <section class="w-full">
+                <p-divider />
+            </section>
+    
+    
+            <section class="chart-container">
+                <h1 class="app-sm">Processos em andamento</h1>
+                <div class="py-8 xl:p-8">
+                    <div class="xl:px-8">
+                        <p-chart type="polarArea" [data]="g_data" [options]="g_options" />
+                    </div>
+                </div>
+            </section>
+    
+            <section class="w-full">
+                <p-divider />
+            </section>
+    
+            <section class="chart-container">
+                <h1 class="app-sm">Processos em andamento</h1>
+                <div class="py-8">
+                    <p-chart type="bar" [data]="f_data" [options]="f_options" />
+                </div>
+            </section>
+    
+        </section>
+    
+    </main>
+    
+}

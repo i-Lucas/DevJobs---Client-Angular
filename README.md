@@ -25,8 +25,8 @@ Para clonar o projeto, siga as instruções abaixo:
 
 
 ```bash
-git clone git@github.com:i-Lucas/DevJobs---Server-Node.git
-cd DevJobs--Server-Node
+git clone git@github.com:i-Lucas/DevJobs---Client-Angular.git
+cd DevJobs---Client-Angular
 ```
 
 ### Instalação das Dependências

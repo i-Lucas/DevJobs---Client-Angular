@@ -1,4 +1,4 @@
-## DevJobs - Backend
+## DevJobs - Frontend
 
 DevJobs é uma plataforma de gerenciamento de processos seletivos desenvolvida 100% em TypeScript.
 Este projeto visa fornecer uma solução eficiente e prática para gerenciar processos seletivos.

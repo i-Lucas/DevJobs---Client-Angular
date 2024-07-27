@@ -30,6 +30,9 @@ cd DevJobs---Client-Angular
 ```
 
 ### Instalação das Dependências
+
+Node version required: 18.20.4
+
 Instale as dependências do projeto usando o npm:
 
 ```bash
